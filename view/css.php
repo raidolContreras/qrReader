@@ -1,0 +1,1 @@
+<link href="https://devosco.io/fontawesome/css/all.min.css" rel="stylesheet">

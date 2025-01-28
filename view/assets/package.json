@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "fullcalendar": "^6.1.11"
+  },
+  "devDependencies": {
+    "html5-qrcode": "^2.3.8"
+  }
+}
