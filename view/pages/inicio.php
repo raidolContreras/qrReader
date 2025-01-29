@@ -151,7 +151,7 @@
     function initializeScanner() {
       // Configuración avanzada
       const config = {
-        fps: 10,
+        fps: 5,
         // Ajusta el tamaño del recuadro de lectura
         qrbox: (viewfinderWidth, viewfinderHeight) => {
           const minSize = Math.min(viewfinderWidth, viewfinderHeight);
