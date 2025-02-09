@@ -18,7 +18,11 @@ function onScanSuccess(decodedText, decodedResult) {
     if (match) {
         let matricula = match[1];
         $("#qr-result").html(`<span style="color: green;">✅ Matrícula: ${matricula}</span>`).show();
-        console.log(`Matrícula detectada: ${matricula}`);
+        // Abrir modal #resultModal y cargar los datos
+        $("#resultModal").modal("show");
+        // Cargar los datos del estudiante
+        $("#modalResult").text(matricula);
+
 
         // Detenemos el escáner
         let stopButton = $("#html5-qrcode-button-camera-stop");

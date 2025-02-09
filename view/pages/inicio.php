@@ -69,21 +69,24 @@
       border-radius: 10px;
       position: relative;
     }
+
     /* reader landscape */
     @media (orientation: landscape) {
       #reader {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
       }
+
       .container {
         max-width: 900px;
       }
     }
+
     /* portrait */
     @media (orientation: portrait) {
-     .reader-button-wrapper {
+      .reader-button-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -246,6 +249,26 @@
       </button>
     </div>
 
+  </div>
+
+  <!-- modal de resultados con boton de acceso -->
+  <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="resultModalLabel">Resultado del escaneo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="modalResult"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Librería de escaneo -->
