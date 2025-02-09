@@ -96,21 +96,30 @@ function initializeScanner() {
     const config = {
         fps: 10,
         qrbox: (w, h) => {
-          const minSize = Math.min(w, h);
-          return {
-            width: minSize * 0.6,
-            height: minSize * 0.6
-          };
+            const minSize = Math.min(w, h);
+            return {
+                width: minSize * 0.7,
+                height: minSize * 0.7
+            };
         },
-        videoConstraints: { facingMode: "environment" },
-        // supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+        videoConstraints: {
+            facingMode: "environment"
+        },
         // Oculta el "Seleccionar cámara"
-        showCameraPicker: false
-      };
-      
-      html5QrcodeScanner = new Html5QrcodeScanner("reader", config, false);
-      html5QrcodeScanner.render(onScanSuccess, onScanFailure);      
+        showCameraPicker: false,
+        // Opcional: hace que recuerde la última cámara usada
+        rememberLastUsedCamera: true
+    };
 
+    html5QrcodeScanner = new Html5QrcodeScanner("reader", config, false);
+
+    // El método render NO siempre regresa una promesa en versiones antiguas,
+    // pero en las versiones más recientes, sí puede hacerlo.
+    // Si no te funciona con 'then', puedes hacer tu lógica dentro de
+    // onScanSuccess la primera vez que escanee o cuando estés seguro que se abrió la cámara.
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+    // Mensaje de estado
     $("#qr-result").html(
         '<span style="color: blue;">🔍 Escaneando... Toca o pellizca la pantalla para ajustar enfoque</span>'
     ).show();
