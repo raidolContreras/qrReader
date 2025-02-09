@@ -62,16 +62,33 @@
     /* ==== LECTOR QR ==== */
     #reader {
       width: 100%;
-      aspect-ratio: 4/3;
+      /* aspect-ratio: 4/3; */
       /* Para asegurar proporción de cámara */
       margin-top: 20px;
       border: 2px dashedrgb(167, 167, 167);
       border-radius: 10px;
+      position: relative;
+    }
+    /* reader landscape */
+    @media (orientation: landscape) {
+      #reader {
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      position: relative;
+      }
+      .container {
+        max-width: 900px;
+      }
+    }
+    /* portrait */
+    @media (orientation: portrait) {
+     .reader-button-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
     }
 
     #reader__scan_region img {
@@ -219,7 +236,6 @@
 
   <!-- CONTENEDOR PRINCIPAL -->
   <div class="container text-center">
-    <h2>Escanea tu Código</h2>
     <!-- Contenedor para la cámara -->
 
     <div class="reader-button-wrapper">
