@@ -91,22 +91,21 @@ async function autoAdjustFocus() {
 function initializeScanner() {
     const config = {
         fps: 10,
-        qrbox: (viewfinderWidth, viewfinderHeight) => {
-            const minSize = Math.min(viewfinderWidth, viewfinderHeight);
-            return {
-                width: minSize * 0.6,
-                height: minSize * 0.6
-            };
+        qrbox: (w, h) => {
+          const minSize = Math.min(w, h);
+          return {
+            width: minSize * 0.6,
+            height: minSize * 0.6
+          };
         },
-        videoConstraints: {
-            facingMode: "environment"
-        },
+        videoConstraints: { facingMode: "environment" },
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+        // Oculta el "Seleccionar cámara"
         showCameraPicker: false
-    };
-
-    html5QrcodeScanner = new Html5QrcodeScanner("reader", config, false);
-    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+      };
+      
+      html5QrcodeScanner = new Html5QrcodeScanner("reader", config, false);
+      html5QrcodeScanner.render(onScanSuccess, onScanFailure);      
 
     $("#qr-result").html(
         '<span style="color: blue;">🔍 Escaneando... Toca o pellizca la pantalla para ajustar enfoque</span>'
