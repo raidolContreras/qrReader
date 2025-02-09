@@ -240,6 +240,7 @@
 
     <div class="reader-button-wrapper">
       <div id="reader" style="display: none;"></div>
+      <p id="qr-result"></p>
       <button id="start">
         <i class="fas fa-camera"></i> Iniciar escaneo
       </button>
