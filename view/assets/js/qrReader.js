@@ -1,6 +1,5 @@
 let html5QrcodeScanner;
 let currentZoom = 1.0;
-let isScanning = false;
 
 function onScanSuccess(decodedText, decodedResult) {
     const validQrRegex = /^https:\/\/sse\.unimontrer\.edu\.mx\/valides\.aspx\?matricula=(\d+)$/;
@@ -11,9 +10,9 @@ function onScanSuccess(decodedText, decodedResult) {
         $("#qr-result").html(`<span style="color: green;">✅ Matrícula: ${matricula}</span>`);
         console.log(`Matrícula detectada: ${matricula}`);
 
-        if (isScanning) {
-            html5QrcodeScanner.pause();
-            isScanning = false;
+        let stopButton = $("#html5-qrcode-button-camera-stop");
+        if (stopButton.length) {
+            stopButton.click();
         }
     } else {
         $("#qr-result").html('<span style="color: red;">❌ El QR no es correcto</span>');
@@ -26,6 +25,7 @@ function onScanFailure(error) {
     }
 }
 
+// Función simplificada para ajustar el zoom
 async function tryZoom(track, direction = 'in') {
     try {
         const capabilities = track.getCapabilities();
@@ -35,6 +35,7 @@ async function tryZoom(track, direction = 'in') {
         const min = capabilities.zoom.min || 1;
         const max = capabilities.zoom.max || 2.5;
 
+        // Ajustar zoom de manera más suave
         if (direction === 'in') {
             currentZoom = Math.min(currentZoom + 0.1, max);
         } else {
@@ -50,6 +51,7 @@ async function tryZoom(track, direction = 'in') {
 }
 
 function initializeScanner() {
+    // Configuración simplificada
     const config = {
         fps: 10,
         qrbox: (viewfinderWidth, viewfinderHeight) => {
@@ -60,14 +62,13 @@ function initializeScanner() {
             };
         },
         videoConstraints: {
-            facingMode: "environment",
+            facingMode: "environment",  // Solo especificamos la cámara trasera
         },
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
     };
 
     html5QrcodeScanner = new Html5QrcodeScanner("reader", config, false);
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-    isScanning = true;
 
     $("#qr-result").html('<span style="color: blue;">🔍 Escaneando... Toca la pantalla para ajustar zoom</span>');
     $("#qr-result").show();
@@ -91,6 +92,7 @@ $(document).ready(() => {
     const observer = new MutationObserver(() => {
         const videoElement = $("#reader video").get(0);
         if (videoElement) {
+            // Manejar toques en la pantalla
             $(videoElement).on("touchstart", async (e) => {
                 e.preventDefault();
                 
@@ -98,12 +100,14 @@ $(document).ready(() => {
                 const tapLength = currentTime - lastTapTime;
                 
                 if (tapLength < DOUBLE_TAP_DELAY && tapLength > 0) {
+                    // Doble toque - alejar
                     if (videoElement.srcObject) {
                         const track = videoElement.srcObject.getVideoTracks()[0];
                         await tryZoom(track, 'out');
                         $("#qr-result").html('<span style="color: blue;">🔍 Alejando...</span>');
                     }
                 } else {
+                    // Toque simple - acercar
                     if (videoElement.srcObject) {
                         const track = videoElement.srcObject.getVideoTracks()[0];
                         await tryZoom(track, 'in');
