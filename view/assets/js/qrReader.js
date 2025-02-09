@@ -139,7 +139,7 @@ $("#start").click(() => {
 });
 
 let lastTapTime = 0;
-const DOUBLE_TAP_DELAY = 300;
+const DOUBLE_TAP_DELAY = 600;
 
 $(document).ready(() => {
     const observer = new MutationObserver(() => {
