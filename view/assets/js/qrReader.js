@@ -103,7 +103,7 @@ function initializeScanner() {
           };
         },
         videoConstraints: { facingMode: "environment" },
-        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+        // supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
         // Oculta el "Seleccionar cámara"
         showCameraPicker: false
       };
