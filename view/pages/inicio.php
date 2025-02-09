@@ -1,136 +1,234 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <!-- Se restringe el escalado para simular una app nativa -->
+  <!-- Para simular app nativa en móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Escaneo QR</title>
-  <!-- Fuente moderna -->
+  <!-- Fuente moderna (Roboto) -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <!-- Bootstrap CSS (opcional si ya lo tienes en style.css) -->
+  <!-- Bootstrap CSS (opcional) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="view/assets/css/style.css" rel="stylesheet" />
+
   <style>
-    /* Estilos globales */
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #80deea);
+    /* ==== RESET BÁSICO ==== */
+    * {
       margin: 0;
       padding: 0;
-      height: 100vh;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: rgb(219, 219, 219);
+      /* Fondo rosado suave */
+      color: #444;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
     }
-    /* Cabecera estilo app */
+
+    /* ==== ENCABEZADO SIMIL APP ==== */
     .app-header {
-      background-color: #01643d;
+      background-color: #1a5d22;
+      /* Púrpura */
       color: #fff;
       padding: 15px;
       text-align: center;
       font-size: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    /* Contenedor principal */
+
+    /* ==== CONTENEDOR PRINCIPAL ==== */
     .container {
       flex: 1;
       margin: 20px auto;
-      max-width: 600px;
+      max-width: 500px;
       background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
       padding: 20px;
     }
-    /* Estilos para el lector QR */
+
+    .container h2 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: rgb(168, 168, 168);
+    }
+
+    /* ==== LECTOR QR ==== */
     #reader {
       width: 100%;
       aspect-ratio: 4/3;
+      /* Para asegurar proporción de cámara */
       margin-top: 20px;
-      border: 2px solid #01643d;
+      border: 2px dashedrgb(167, 167, 167);
       border-radius: 10px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       position: relative;
     }
+
+    #reader__scan_region img {
+      max-width: 80%;
+    }
+
+    /* ==== RESULTADO QR ==== */
     #qr-result {
       margin-top: 20px;
-      font-size: 18px;
-      color: #01643d;
+      font-size: 1rem;
+      color: rgb(46, 94, 40);
       text-align: center;
-    }
-    #restart-scan {
+      min-height: 40px;
       display: none;
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
+      /* Se mostrará dinámicamente */
+    }
+
+    /* Por defecto (portrait): el botón queda debajo (columna) */
+    .reader-button-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* Centra el contenido horizontalmente */
+      gap: 1rem;
+      /* Separación entre el lector y el botón */
+    }
+
+    /* En modo landscape: el botón queda a un lado (fila) */
+    @media (orientation: landscape) {
+      .reader-button-wrapper {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Opcionalmente ajustas el tamaño relativo del lector */
+      #reader {
+        width: 70%;
+        /* Ejemplo: le das más espacio a la cámara */
+      }
+
+      #start {
+        width: auto;
+        /* Mantienes el botón en un tamaño adecuado */
+        margin-top: 0;
+        /* Elimina márgenes verticales si los tenías */
+      }
+    }
+
+    /* ==== BOTÓN INICIAR ESCANEO ==== */
+    #start {
+      display: inline-block;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 500;
       color: #fff;
-      background-color: #01643d;
+      background-color: rgb(29, 77, 22);
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(138, 43, 226, 0.4);
       cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 15px;
     }
-    #restart-scan:hover {
-      background-color: #014e2c;
+
+    #start:hover {
+      background-color: #7322bc;
+      /* Oscurecer un poco al pasar el cursor */
     }
-    /* Animación para elementos */
+
+    /* ==== ANIMACIONES ==== */
     @keyframes floating {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
     }
+
     #reader__scan_region img {
       animation: floating 2s ease-in-out infinite;
     }
+
+    /* Ocultar ícono info por defecto */
     img[alt="Info icon"] {
       display: none;
     }
+
     @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
     }
+
     .dot {
       display: inline-block;
       margin-left: 2px;
       animation: bounce 1.4s infinite;
     }
-    .dot:nth-child(1) { animation-delay: 0s; }
-    .dot:nth-child(2) { animation-delay: 0.2s; }
-    .dot:nth-child(3) { animation-delay: 0.4s; }
-    /* Ajustes responsivos */
-    @media (max-width: 1024px) and (orientation: landscape) {
-      .container { width: 80%; }
+
+    .dot:nth-child(1) {
+      animation-delay: 0s;
     }
-    @media (max-width: 768px) and (orientation: portrait) {
-      .container { width: 90%; }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
     }
-    @media (max-width: 480px) {
-      .container { width: 100%; margin: 10px; padding: 15px; }
-      .app-header { font-size: 1.2rem; padding: 10px; }
-      #qr-result { font-size: 16px; }
-      #start { width: 100%; }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    /* ==== RESPONSIVE ==== */
+    @media (max-width: 768px) {
+      .container {
+        width: 90%;
+        margin-top: 30px;
+      }
+
+      .app-header {
+        font-size: 1.3rem;
+      }
     }
   </style>
 </head>
+
 <body>
-  <!-- Cabecera tipo app móvil -->
+  <!-- ENCABEZADO -->
   <header class="app-header">
     Escaneo QR
   </header>
-  
-  <!-- Contenedor principal -->
+
+  <!-- CONTENEDOR PRINCIPAL -->
   <div class="container text-center">
+    <h2>Escanea tu Código</h2>
     <!-- Contenedor para la cámara -->
-    <div id="reader" style="display: none;"></div>
-    <!-- Resultado del QR -->
-    <p id="qr-result" style="display: none;">
-      Esperando escaneo<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
-    </p>
-    <!-- Botón para iniciar el escaneo -->
-    <button id="start" class="btn btn-primary mt-3">
-      <i class="fas fa-camera"></i> Iniciar escaneo
-    </button>
+
+    <div class="reader-button-wrapper">
+      <div id="reader" style="display: none;"></div>
+      <button id="start">
+        <i class="fas fa-camera"></i> Iniciar escaneo
+      </button>
+    </div>
+
   </div>
 
   <!-- Librería de escaneo -->
@@ -140,4 +238,3 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-  
