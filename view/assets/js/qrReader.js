@@ -1,6 +1,5 @@
 let html5QrcodeScanner;
 let currentZoom = 1.0;
-const MAX_ZOOM = 2.5; // Zoom máximo permitido
 
 function onScanSuccess(decodedText, decodedResult) {
     const validQrRegex = /^https:\/\/sse\.unimontrer\.edu\.mx\/valides\.aspx\?matricula=(\d+)$/;
@@ -14,101 +13,56 @@ function onScanSuccess(decodedText, decodedResult) {
         let stopButton = $("#html5-qrcode-button-camera-stop");
         if (stopButton.length) {
             stopButton.click();
-        } else {
-            console.warn("El botón 'Stop Scanning' no se encontró.");
         }
     } else {
         $("#qr-result").html('<span style="color: red;">❌ El QR no es correcto</span>');
-        console.warn("QR inválido detectado:", decodedText);
     }
 }
 
 function onScanFailure(error) {
-    // Solo mostrar errores críticos, no los de escaneo normal
     if (error !== "QR code parse error, error = No QR code found") {
         $("#qr-result").html('<span style="color: orange;">⚠️ Acerca o aleja la cámara para enfocar mejor</span>');
     }
 }
 
-async function adjustZoom(track, direction = 'in') {
+// Función simplificada para ajustar el zoom
+async function tryZoom(track, direction = 'in') {
     try {
         const capabilities = track.getCapabilities();
         if (!capabilities.zoom) return;
 
         const settings = track.getSettings();
         const min = capabilities.zoom.min || 1;
-        const max = Math.min(capabilities.zoom.max || 2.5, MAX_ZOOM);
-        const step = (max - min) / 10;
+        const max = capabilities.zoom.max || 2.5;
 
-        if (direction === 'in' && currentZoom < max) {
-            currentZoom = Math.min(currentZoom + step, max);
-        } else if (direction === 'out' && currentZoom > min) {
-            currentZoom = Math.max(currentZoom - step, min);
+        // Ajustar zoom de manera más suave
+        if (direction === 'in') {
+            currentZoom = Math.min(currentZoom + 0.1, max);
+        } else {
+            currentZoom = Math.max(currentZoom - 0.1, min);
         }
 
         await track.applyConstraints({
             advanced: [{ zoom: currentZoom }]
         });
-
-        console.log(`Zoom ajustado a: ${currentZoom}`);
     } catch (error) {
-        console.error("Error al ajustar zoom:", error);
-    }
-}
-
-async function optimizeCameraSettings(videoElement) {
-    if (!videoElement || !videoElement.srcObject) return;
-
-    try {
-        const track = videoElement.srcObject.getVideoTracks()[0];
-        const capabilities = track.getCapabilities();
-
-        // Aplicar configuraciones óptimas para móviles
-        const constraints = {
-            advanced: [{
-                // Priorizar la nitidez sobre la velocidad
-                focusMode: "continuous",
-                exposureMode: "continuous",
-                whiteBalanceMode: "continuous",
-                // Intentar establecer zoom inicial
-                zoom: 1.2
-            }]
-        };
-
-        if (capabilities.torch) {
-            constraints.advanced[0].torch = true;
-        }
-
-        await track.applyConstraints(constraints);
-        
-        // Ajustar el zoom inicial
-        await adjustZoom(track, 'in');
-
-    } catch (error) {
-        console.error("Error al optimizar la cámara:", error);
+        console.log("Zoom no soportado en este dispositivo");
     }
 }
 
 function initializeScanner() {
+    // Configuración simplificada
     const config = {
-        fps: 10, // Reducir FPS para mejor procesamiento
+        fps: 10,
         qrbox: (viewfinderWidth, viewfinderHeight) => {
             const minSize = Math.min(viewfinderWidth, viewfinderHeight);
-            // Área de escaneo más pequeña para mejor enfoque
             return { 
                 width: minSize * 0.6, 
                 height: minSize * 0.6 
             };
         },
         videoConstraints: {
-            facingMode: "environment",
-            width: { ideal: 1280 }, // Resolución óptima para móviles
-            height: { ideal: 720 },
-            advanced: [
-                { focusMode: "continuous" },
-                { exposureMode: "continuous" },
-                { whiteBalanceMode: "continuous" }
-            ],
+            facingMode: "environment",  // Solo especificamos la cámara trasera
         },
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
     };
@@ -138,9 +92,6 @@ $(document).ready(() => {
     const observer = new MutationObserver(() => {
         const videoElement = $("#reader video").get(0);
         if (videoElement) {
-            // Optimizar configuración inicial
-            optimizeCameraSettings(videoElement);
-
             // Manejar toques en la pantalla
             $(videoElement).on("touchstart", async (e) => {
                 e.preventDefault();
@@ -149,20 +100,23 @@ $(document).ready(() => {
                 const tapLength = currentTime - lastTapTime;
                 
                 if (tapLength < DOUBLE_TAP_DELAY && tapLength > 0) {
-                    // Doble toque - reducir zoom
-                    const track = videoElement.srcObject.getVideoTracks()[0];
-                    await adjustZoom(track, 'out');
-                    $("#qr-result").html('<span style="color: blue;">🔍 Alejando...</span>');
+                    // Doble toque - alejar
+                    if (videoElement.srcObject) {
+                        const track = videoElement.srcObject.getVideoTracks()[0];
+                        await tryZoom(track, 'out');
+                        $("#qr-result").html('<span style="color: blue;">🔍 Alejando...</span>');
+                    }
                 } else {
-                    // Toque simple - aumentar zoom
-                    const track = videoElement.srcObject.getVideoTracks()[0];
-                    await adjustZoom(track, 'in');
-                    $("#qr-result").html('<span style="color: blue;">🔍 Acercando...</span>');
+                    // Toque simple - acercar
+                    if (videoElement.srcObject) {
+                        const track = videoElement.srcObject.getVideoTracks()[0];
+                        await tryZoom(track, 'in');
+                        $("#qr-result").html('<span style="color: blue;">🔍 Acercando...</span>');
+                    }
                 }
                 
                 lastTapTime = currentTime;
 
-                // Restaurar mensaje después de un momento
                 setTimeout(() => {
                     $("#qr-result").html('<span style="color: blue;">🔍 Escaneando... Toca para ajustar zoom</span>');
                 }, 1000);
