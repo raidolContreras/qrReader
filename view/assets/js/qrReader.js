@@ -4,7 +4,7 @@ let currentZoom = 1.0;
 let videoTrack = null;          // Se usará para aplicar constraints de zoom
 let failureCount = 0;           // Conteo de errores consecutivos (falta de QR)
 let lastZoomDirection = 'in';   // Dirección del último ajuste automático
-let autoFocusTimer = null;      // Temporizador para el autoenfoque
+let autoFocusTimer = null;      // Temporizador para el autoajuste
 let initialPinchDistance = null; // Para cálculo del pellizco (pinch-to-zoom)
 let initialZoom = currentZoom;  // Zoom de partida en pellizco
 
@@ -99,7 +99,7 @@ async function autoAdjustFocus() {
 
 // Función que inicializa el escáner
 function initializeScanner() {
-    // Configuración del escáner
+    // Configuración del escáner sin opción de seleccionar cámara
     const config = {
         fps: 10,
         qrbox: (viewfinderWidth, viewfinderHeight) => {
@@ -113,6 +113,7 @@ function initializeScanner() {
             facingMode: "environment"  // Utiliza la cámara trasera
         },
         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+        showCameraPicker: false       // Deshabilita la opción de selección de cámara
     };
 
     html5QrcodeScanner = new Html5QrcodeScanner("reader", config, false);
