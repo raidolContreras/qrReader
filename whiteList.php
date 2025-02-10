@@ -6,12 +6,8 @@ session_start();
 $pagina = filter_input(INPUT_GET, 'pagina', FILTER_SANITIZE_STRING);
 $pagina = $pagina ? $pagina : 'inicio';
 
-// Verificar si el usuario está logueado
     includeUserPages($pagina);
-// Función para incluir páginas de usuarios
 function includeUserPages($pagina) {
-    // include 'view/pages/navs/header.php';
-    // include 'view/js.php';
     include 'view/pages/' . $pagina . '.php';
 }
 

@@ -15,7 +15,6 @@
     include 'whiteList.php';
 ?>
 
-<script src="view/assets/js/bootstrap.bundle.min.js"></script>
 <script>
 
     document.onload = pageLoaded();

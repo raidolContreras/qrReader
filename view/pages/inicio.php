@@ -234,7 +234,7 @@
 <body>
   <!-- ENCABEZADO -->
   <header class="app-header">
-    Escaneo QR
+    <img src="view/assets/images/logo.png" alt="Logo" width="150">
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
