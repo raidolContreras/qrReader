@@ -1,28 +1,25 @@
 <?php
+require_once __DIR__ . "/../view/assets/vendor/autoload.php";
 
-require_once "./view/assets/vendor/autoload.php";
+class ConexionSil {
+    static public function conectar() {
 
-use Dotenv\Dotenv;
 
-class ConexionSil
-{
-    static public function conectar()
-    {
-        // Cargar las variables de entorno
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
         $dotenv->load();
-
-        $serverName = $_ENV['DB_HOST'] . ',' . $_ENV['DB_PORT'];
+        
+        $serverName = $_ENV['DB_HOST'];
         $database = $_ENV['DB_NAME'];
         $username = $_ENV['DB_USER'];
         $password = $_ENV['DB_PASS'];
-
+  
         try {
             $conn = new PDO("sqlsrv:Server=$serverName;Database=$database", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
         } catch (PDOException $e) {
-            die("\u274C Error de conexión: " . $e->getMessage());
+            echo "Connection failed: " . $e->getMessage();
         }
     }
-}
+  }
+  

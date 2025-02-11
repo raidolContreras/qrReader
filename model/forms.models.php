@@ -9,7 +9,9 @@ class FormsModel
     {
         try {
             $conn = ConexionSil::conectar();
-            $query = "SELECT * FROM DATOSALU WHERE MATRICULA = :matricula";
+            $query = "SELECT da.*, g.oferta, g.acuerdo, g.clave FROM DATOSALU da
+                        LEFT JOIN grupos g ON g.grupo = da.GRUPO
+                        WHERE MATRICULA =  :matricula";
 
             $stmt = $conn->prepare($query);
             $stmt->bindParam(":matricula", $matricula, PDO::PARAM_STR);

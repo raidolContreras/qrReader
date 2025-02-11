@@ -232,6 +232,7 @@
 </head>
 
 <body>
+
   <!-- ENCABEZADO -->
   <header class="app-header">
     <img src="view/assets/images/logo.png" alt="Logo" width="150">
@@ -251,30 +252,33 @@
 
   </div>
 
-  <!-- modal de resultados con boton de acceso -->
+  <!-- MODAL DE RESULTADOS -->
   <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="resultModalLabel">Resultado del escaneo</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;"><!-- Ajusta el ancho deseado -->
+      <div class="modal-content border-0" style="overflow: hidden; border-radius: 20px;">
+
+        <!-- Encabezado (podemos dejarlo vacío, pues el header visual está en la card interna) -->
+        <div class="modal-header d-none">
+          <!-- Oculto, porque usaremos un diseño personalizado adentro -->
         </div>
-        <div class="modal-body">
-          <p id="modalResult"></p>
+
+        <div class="modal-body p-0">
+          <!-- Contenedor donde se inyecta la vCard -->
+          <div id="modalResult"></div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+
+        <!-- Botón de cierre -->
+        <div class="modal-footer border-0 justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
   </div>
 
+
   <!-- Librería de escaneo -->
   <script src="view/assets/js/html5-qrcode.min.js" type="text/javascript"></script>
   <script src="view/assets/js/qrReader.js"></script>
   <!-- jQuery y Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
