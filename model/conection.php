@@ -1,6 +1,6 @@
 <?php
 
-require_once "../view/assets/vendor/autoload.php";
+require_once "./view/assets/vendor/autoload.php";
 
 use Dotenv\Dotenv;
 
