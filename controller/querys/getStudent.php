@@ -1,14 +1,13 @@
 <?php
 // api.php
-require_once "../controller/forms.controller.php";
-require_once "../model/forms.models.php";
-echo "hola";
+require_once "../forms.controller.php";
+require_once "../../model/forms.models.php";
 
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
-    
+
     switch ($action) {
         case 'getStudentData':
             if (isset($_POST['matricula'])) {
@@ -16,14 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $response = FormsController::getStudentData($matricula);
                 echo json_encode($response);
             } else {
-                echo json_encode(["error" => "Falta el parámetro 'matricula'"]);
+                echo json_encode([
+                    'error' => 'Missing matricula parameter'
+                ]);
+                die;
             }
             break;
-        
+
         default:
-            echo json_encode(["error" => "Acción no válida"]);
+            echo json_encode([
+                'error' => 'No action specified'
+            ]);
             break;
     }
-} else {
-    echo json_encode(["error" => "Solicitud no válida"]);
+    die;
+    echo json_encode([
+        'error' => 'Invalid action'
+    ]);
 }
