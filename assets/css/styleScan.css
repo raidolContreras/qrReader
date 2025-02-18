@@ -261,7 +261,7 @@ body {
 
 /* Footer en dispositivos móviles (por debajo de 768px),
    por defecto se muestra abajo */
-@media (max-width: 768px) {
+@media (max-width: 768px) and (orientation: portrait) {
 
   .app-footer {
     display: block;
