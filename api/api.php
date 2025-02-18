@@ -2,6 +2,7 @@
 // api.php
 require_once "../controller/forms.controller.php";
 require_once "../model/forms.models.php";
+echo "hola";
 
 header("Content-Type: application/json");
 
