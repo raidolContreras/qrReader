@@ -3,58 +3,52 @@
 
 <head>
   <meta charset="UTF-8">
-  <!-- Para simular app nativa en móviles -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Escaneo QR</title>
 
   <!-- Fuente moderna (Roboto) -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
-  <!-- Bootstrap CSS (opcional) -->
-  <link href="assets/css/bootstrap.css" rel="stylesheet" />
+  <!-- Bootstrap CSS -->
+  <link href="assets/css/bootstrap.css" rel="stylesheet">
 
+  <!-- Font Awesome (para íconos) -->
   <link href="https://devosco.io/fontawesome/css/all.min.css" rel="stylesheet">
+
+  <!-- Estilos personalizados -->
   <link href="assets/css/styleScan.css" rel="stylesheet">
   <link rel="icon" href="assets/images/favicon.ico" type="image/png">
-
-  <!-- Font Awesome (opcional, para íconos) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <script src="assets/js/jquery-3.5.1.js"></script>
-
 </head>
 
 <body>
-
   <!-- ENCABEZADO -->
   <header class="app-header">
     <img src="assets/images/logo.png" alt="Logo" width="150">
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
-  <div class="container">
-    <div class="reader-button-wrapper">
+  <main class="container row">
+    <div class="reader-button-wrapper" class="col-12">
       <div id="reader" style="display: none;"></div>
       <p id="qr-result"></p>
-      <button id="start">
-        <i class="fas fa-camera"></i> Iniciar escaneo
-      </button>
+      <div id="reader-div">
+        <img width="250" src="assets/images/scan-qr.gif" alt="Escaneo basado en cámara" style="opacity: 1;">
+        <button id="start">
+          <i class="fas fa-camera"></i> Iniciar escaneo
+        </button>
+      </div>
     </div>
-  </div>
+  </main>
 
   <!-- MODAL DE RESULTADOS -->
   <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
-      <!-- Ajusta el ancho deseado -->
       <div class="modal-content border-0" style="overflow: hidden; border-radius: 20px;">
-        <!-- Encabezado oculto, para diseño personalizado -->
+        <!-- Encabezado oculto para diseño personalizado -->
         <div class="modal-header d-none"></div>
-
         <div class="modal-body p-0">
-          <!-- Contenedor donde se inyecta la vCard -->
           <div id="modalResult"></div>
         </div>
-
-        <!-- Botón de cierre -->
         <div class="modal-footer border-0 justify-content-center">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
@@ -62,36 +56,35 @@
     </div>
   </div>
 
-  <!-- Footer Navigation (solo en móviles) -->
-  <div class="app-footer">
+  <!-- FOOTER NAVIGATION (solo en móviles) -->
+  <footer class="app-footer">
     <nav class="footer-nav">
       <a href="index.php" class="nav-item active">
-        <i class="fas fa-home"></i>
-        <span>Inicio</span>
+        <i class="fal fa-qrcode"></i>
+        <span>Escanear Qr</span>
       </a>
       <a href="routes.php" class="nav-item">
-        <i class="fas fa-route"></i>
-        <span>Rutas</span>
+        <i class="fal fa-file-search"></i>
+        <span>Registros</span>
       </a>
       <a href="profile.php" class="nav-item">
-        <i class="fas fa-user"></i>
+        <i class="fal fa-user"></i>
         <span>Perfil</span>
       </a>
       <a href="logout.php" class="nav-item">
-        <i class="fas fa-sign-out-alt"></i>
+        <i class="fal fa-sign-out-alt"></i>
         <span>Salir</span>
       </a>
     </nav>
-  </div>
+  </footer>
 
-  <script src="assets/js/f4781c35cc.js" crossorigin="anonymous"></script>
-  <!-- Librería de escaneo -->
-  <script src="assets/js/html5-qrcode.min.js" type="text/javascript"></script>
-  <script src="assets/js/qrReader.js"></script>
-
-  <!-- jQuery y Bootstrap JS -->
+  <!-- Scripts: jQuery, Bootstrap y librerías de escaneo -->
+  <script src="assets/js/jquery-3.5.1.js"></script>
   <script src="assets/js/popper.js"></script>
   <script src="assets/js/bootstrap.js"></script>
+  <script src="assets/js/f4781c35cc.js" crossorigin="anonymous"></script>
+  <script src="assets/js/html5-qrcode.min.js"></script>
+  <script src="assets/js/qrReader.js"></script>
 </body>
 
 </html>

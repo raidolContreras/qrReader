@@ -74,6 +74,16 @@ body {
   position: relative;
 }
 
+#reader-div {
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+  position: relative;
+  padding-left: 40px; 
+  padding-right: 40px; 
+  border: 1px solid silver;
+}
+
 /* Ajustes para imágenes dentro de la zona de escaneo */
 #reader__scan_region img {
   max-width: 80%;
@@ -302,7 +312,7 @@ body {
 
   .footer-nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     /* Para ocupar todo el alto y distribuir verticalmente */
     justify-content: space-evenly;
     align-items: center;

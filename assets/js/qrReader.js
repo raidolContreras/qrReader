@@ -133,7 +133,7 @@ function initializeScanner() {
     )
     .show();
   $("#reader").show();
-  $("#start").hide();
+  $("#reader-div").hide();
 
   autoFocusTimer = setInterval(autoAdjustFocus, 2000);
 }
@@ -282,7 +282,7 @@ function mostrarVCard(matricula) {
           >
             <!-- LOGO con posición absoluta -->
             <img 
-              src="view/assets/images/logo.png" 
+              src="assets/images/logo.png" 
               alt="Logo" 
               style="
                 position: absolute; 
