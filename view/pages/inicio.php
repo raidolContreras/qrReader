@@ -6,50 +6,75 @@
   <!-- Para simular app nativa en móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Escaneo QR</title>
+
   <!-- Fuente moderna (Roboto) -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
   <!-- Bootstrap CSS (opcional) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="view/assets/css/bootstrap.css" rel="stylesheet" />
+
+  <!-- Font Awesome (opcional, para íconos) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
   <style>
-    /* ==== RESET BÁSICO ==== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* ===== VARIABLES GLOBALES ===== */
+    :root {
+      --font-family: 'Roboto', sans-serif;
+      --bg-color: rgb(219, 219, 219);
+      --text-color: #444;
+
+      --header-bg: #1a5d22;
+      /* Color principal del encabezado */
+      --header-text: #fff;
+
+      --container-bg: #fff;
+      --container-shadow: rgba(0, 0, 0, 0.1);
+
+      --border-color: rgb(167, 167, 167);
+
+      --accent-color: rgb(46, 94, 40);
+
+      --button-bg: rgb(29, 77, 22);
+      --button-bg-hover: #7322bc;
+      --button-text: #fff;
     }
 
+    /* ===== ESTILOS GENERALES ===== */
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: rgb(219, 219, 219);
-      /* Fondo rosado suave */
-      color: #444;
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      margin: 0;
     }
 
-    /* ==== ENCABEZADO SIMIL APP ==== */
+    /* ==== ENCABEZADO ==== */
     .app-header {
-      background-color: #1a5d22;
-      /* Púrpura */
-      color: #fff;
+      background-color: var(--header-bg);
+      color: var(--header-text);
       padding: 15px;
       text-align: center;
       font-size: 1.5rem;
       font-weight: 500;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 4px var(--container-shadow);
     }
 
     /* ==== CONTENEDOR PRINCIPAL ==== */
     .container {
       flex: 1;
-      margin: 20px auto;
       max-width: 500px;
-      background-color: #fff;
+      background-color: var(--container-bg);
       border-radius: 12px;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px var(--container-shadow);
       padding: 20px;
+      margin: 20px auto;
+      /* Centrado y separación vertical */
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .container h2 {
@@ -62,93 +87,43 @@
     /* ==== LECTOR QR ==== */
     #reader {
       width: 100%;
-      /* aspect-ratio: 4/3; */
-      /* Para asegurar proporción de cámara */
       margin-top: 20px;
-      border: 2px dashedrgb(167, 167, 167);
+      border: 2px dashed var(--border-color);
       border-radius: 10px;
       position: relative;
     }
 
-    /* reader landscape */
-    @media (orientation: landscape) {
-      #reader {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-
-      .container {
-        max-width: 900px;
-      }
-    }
-
-    /* portrait */
-    @media (orientation: portrait) {
-      .reader-button-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      }
-    }
-
+    /* Ajustes para imágenes dentro de la zona de escaneo */
     #reader__scan_region img {
       max-width: 80%;
+      animation: floating 2s ease-in-out infinite;
     }
 
-    /* ==== RESULTADO QR ==== */
+    /* ==== RESULTADO DEL QR ==== */
     #qr-result {
       margin-top: 20px;
       font-size: 1rem;
-      color: rgb(46, 94, 40);
+      color: var(--accent-color);
       text-align: center;
       min-height: 40px;
       display: none;
       /* Se mostrará dinámicamente */
     }
 
-    /* Por defecto (portrait): el botón queda debajo (columna) */
+    /* ==== BOTÓN Y CONTENEDOR DE BOTONES ==== */
     .reader-button-wrapper {
-      display: flex;
       flex-direction: column;
       align-items: center;
-      /* Centra el contenido horizontalmente */
       gap: 1rem;
-      /* Separación entre el lector y el botón */
     }
 
-    /* En modo landscape: el botón queda a un lado (fila) */
-    @media (orientation: landscape) {
-      .reader-button-wrapper {
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-      }
-
-      /* Opcionalmente ajustas el tamaño relativo del lector */
-      #reader {
-        width: 70%;
-        /* Ejemplo: le das más espacio a la cámara */
-      }
-
-      #start {
-        width: auto;
-        /* Mantienes el botón en un tamaño adecuado */
-        margin-top: 0;
-        /* Elimina márgenes verticales si los tenías */
-      }
-    }
-
-    /* ==== BOTÓN INICIAR ESCANEO ==== */
     #start {
       display: inline-block;
       padding: 12px 20px;
       font-size: 1rem;
       font-weight: 500;
-      color: #fff;
-      background-color: rgb(29, 77, 22);
+      color: var(--button-text);
+      background-color: var(--button-bg);
       border: none;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(138, 43, 226, 0.4);
@@ -158,14 +133,13 @@
     }
 
     #start:hover {
-      background-color: #7322bc;
-      /* Oscurecer un poco al pasar el cursor */
+      background-color: var(--button-bg-hover);
     }
 
     /* ==== ANIMACIONES ==== */
     @keyframes floating {
       0% {
-        transform: translateY(0px);
+        transform: translateY(0);
       }
 
       50% {
@@ -173,17 +147,8 @@
       }
 
       100% {
-        transform: translateY(0px);
+        transform: translateY(0);
       }
-    }
-
-    #reader__scan_region img {
-      animation: floating 2s ease-in-out infinite;
-    }
-
-    /* Ocultar ícono info por defecto */
-    img[alt="Info icon"] {
-      display: none;
     }
 
     @keyframes bounce {
@@ -217,16 +182,181 @@
       animation-delay: 0.4s;
     }
 
-    /* ==== RESPONSIVE ==== */
-    @media (max-width: 768px) {
-      .container {
-        width: 90%;
-        margin-top: 30px;
+    /* ==== PIE DE APLICACIÓN (Footer) ==== */
+    .app-footer {
+      display: none;
+      /* Oculto por defecto en pantallas grandes */
+    }
+
+    /* ==== MEDIA QUERIES ==== */
+
+    /* Modo landscape: botones en fila y ajuste del lector */
+    @media (orientation: landscape) {
+      #reader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
       }
 
-      .app-header {
-        font-size: 1.3rem;
+      .container {
+        max-width: 900px;
       }
+
+      .reader-button-wrapper {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #start {
+        width: auto;
+        margin-top: 0;
+      }
+    }
+
+    /* Modo portrait: botones en columna */
+    @media (orientation: portrait) {
+      .reader-button-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+    }
+
+    /* Footer en dispositivos móviles (por debajo de 768px),
+       por defecto se muestra abajo */
+    @media (max-width: 768px) {
+
+      .app-footer {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--header-bg);
+        padding: 12px 0;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .footer-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.8);
+        transition: color 0.3s ease;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: #ffffff;
+      }
+
+      .nav-item i {
+        font-size: 1.25rem;
+        margin-bottom: 4px;
+      }
+
+      .nav-item span {
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+
+      .container {
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 1000px) and (orientation: landscape) {
+
+      /* Encabezado a la izquierda */
+      .app-header {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        /* Se fija al lado izquierdo */
+        width: 80px;
+        /* Ajusta el ancho */
+        padding: 12px 0;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        /* Sombra a la derecha */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--header-bg);
+      }
+
+      .app-header img {
+        rotate: -90deg;
+      }
+
+      /* Footer a la derecha */
+      .app-footer {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 80px;
+        /* Ajusta el ancho según tu preferencia */
+        padding: 12px 0;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--header-bg);
+      }
+
+      .footer-nav {
+        display: flex;
+        flex-direction: column;
+        /* Para ocupar todo el alto y distribuir verticalmente */
+        justify-content: space-evenly;
+        align-items: center;
+        height: 100%;
+        margin: 0;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.8);
+        transition: color 0.3s ease;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: #ffffff;
+      }
+
+      .nav-item i {
+        font-size: 1.25rem;
+        margin-bottom: 4px;
+      }
+
+      .nav-item span {
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+    }
+
+    /* ==== Ocultar ícono de info por defecto (html5-qrcode) ==== */
+    img[alt="Info icon"] {
+      display: none;
     }
   </style>
 </head>
@@ -239,9 +369,7 @@
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
-  <div class="container text-center">
-    <!-- Contenedor para la cámara -->
-
+  <div class="container">
     <div class="reader-button-wrapper">
       <div id="reader" style="display: none;"></div>
       <p id="qr-result"></p>
@@ -249,18 +377,15 @@
         <i class="fas fa-camera"></i> Iniciar escaneo
       </button>
     </div>
-
   </div>
 
   <!-- MODAL DE RESULTADOS -->
   <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;"><!-- Ajusta el ancho deseado -->
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+      <!-- Ajusta el ancho deseado -->
       <div class="modal-content border-0" style="overflow: hidden; border-radius: 20px;">
-
-        <!-- Encabezado (podemos dejarlo vacío, pues el header visual está en la card interna) -->
-        <div class="modal-header d-none">
-          <!-- Oculto, porque usaremos un diseño personalizado adentro -->
-        </div>
+        <!-- Encabezado oculto, para diseño personalizado -->
+        <div class="modal-header d-none"></div>
 
         <div class="modal-body p-0">
           <!-- Contenedor donde se inyecta la vCard -->
@@ -275,10 +400,35 @@
     </div>
   </div>
 
+  <!-- Footer Navigation (solo en móviles) -->
+  <div class="app-footer">
+    <nav class="footer-nav">
+      <a href="index.php" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Inicio</span>
+      </a>
+      <a href="routes.php" class="nav-item">
+        <i class="fas fa-route"></i>
+        <span>Rutas</span>
+      </a>
+      <a href="profile.php" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Perfil</span>
+      </a>
+      <a href="logout.php" class="nav-item">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Salir</span>
+      </a>
+    </nav>
+  </div>
 
   <!-- Librería de escaneo -->
   <script src="view/assets/js/html5-qrcode.min.js" type="text/javascript"></script>
   <script src="view/assets/js/qrReader.js"></script>
+
   <!-- jQuery y Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  <script src="view/assets/js/popper.js"></script>
+  <script src="view/assets/js/bootstrap.js"></script>
+</body>
+
+</html>
