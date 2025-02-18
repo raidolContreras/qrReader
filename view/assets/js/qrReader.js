@@ -256,7 +256,7 @@ function mostrarVCard(matricula) {
 
   // Realiza la petición AJAX
   $.ajax({
-    url: "https://infomontrer.unimontrer.edu.mx/api/api.php",
+    url: "controller/querys/getStudent.php",
     method: "POST",
     data: {
       action: "getStudentData",
