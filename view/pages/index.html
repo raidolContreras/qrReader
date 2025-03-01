@@ -1,26 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Escaneo QR</title>
-
-  <!-- Fuente moderna (Roboto) -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap CSS -->
-  <link href="assets/css/bootstrap.css" rel="stylesheet">
-
-  <!-- Font Awesome (para íconos) -->
-  <link href="https://devosco.io/fontawesome/css/all.min.css" rel="stylesheet">
-
-  <!-- Estilos personalizados -->
-  <link href="assets/css/styleScan.css" rel="stylesheet">
-  <link rel="icon" href="assets/images/favicon.ico" type="image/png">
-  <meta name="theme-color" content="#175f0f">
-</head>
 
 <body>
   <!-- ENCABEZADO -->
@@ -61,32 +38,24 @@
   <!-- FOOTER NAVIGATION (solo en móviles) -->
   <footer class="app-footer">
     <nav class="footer-nav">
-      <a href="index.php" class="nav-item active">
+      <a href="index" class="nav-item active">
         <i class="fas fa-qrcode"></i>
         <span class="active-dot"></span> <!-- Punto indicador -->
       </a>
-      <a href="routes.php" class="nav-item">
+      <a href="routes" class="nav-item">
         <i class="fal fa-exchange-alt"></i>
         <span class="active-dot"></span>
       </a>
-      <a href="profile.php" class="nav-item">
+      <a href="profile" class="nav-item">
         <i class="fal fa-user"></i>
         <span class="active-dot"></span>
       </a>
-      <a href="logout.php" class="nav-item">
+      <a href="logout" class="nav-item">
         <i class="fal fa-sign-out-alt"></i>
         <span class="active-dot"></span>
       </a>
     </nav>
   </footer>
 
-  <!-- Scripts: jQuery, Bootstrap y librerías de escaneo -->
-  <script src="assets/js/jquery-3.5.1.js"></script>
-  <script src="assets/js/popper.js"></script>
-  <script src="assets/js/bootstrap.js"></script>
-  <script src="assets/js/f4781c35cc.js" crossorigin="anonymous"></script>
-  <script src="assets/js/html5-qrcode.min.js"></script>
-  <script src="assets/js/qrReader.js"></script>
-</body>
-
-</html>
+<script src="assets/js/qrReader/html5-qrcode.min.js"></script>
+<script src="assets/js/qrReader/qrReader.js"></script>

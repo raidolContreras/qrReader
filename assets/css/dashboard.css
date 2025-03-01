@@ -1,0 +1,216 @@
+/* ----------------------------------------------------------
+   1) CSS PROPORCIONADO (sin cambios en las reglas existentes)
+   ---------------------------------------------------------- */
+
+body {
+    background-color: #f4f5fa;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+}
+
+.sidebar {
+    width: 260px;
+    background: #ffffff;
+    position: fixed;
+    height: 100vh;
+    padding: 20px;
+    color: #000;
+    transition: width 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar .logo img {
+    max-width: 120px;
+}
+
+.sidebar a {
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    transition: background 0.3s;
+    font-weight: 600;
+}
+
+.sidebar a:hover {
+    background: linear-gradient(157deg, #114c13, #3f8e62);
+    color: white;
+}
+
+.navbar {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.content {
+    margin-left: 280px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+#closeSidebar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 0;
+        padding: 0;
+        border-radius: 20px;
+    }
+
+    .sidebar.active {
+        width: 260px;
+        padding: 20px;
+        z-index: 1000;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    #closeSidebar {
+        display: block !important;
+    }
+}
+
+footer {
+    background-color: #fff;
+    color: #333;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* --------------------------------------------------------------------
+   2) REGLAS AÑADIDAS PARA EL NAVBAR Y EL DROPDOWN (perfil de usuario)
+   -------------------------------------------------------------------- */
+
+/* Contenedor del perfil en el navbar */
+.profile-menu {
+    position: relative;
+    /* Para que el dropdown se posicione absoluto dentro */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    /* Empuja el menú de perfil hacia la derecha */
+    cursor: pointer;
+}
+
+/* Avatar pequeño (visible siempre en la barra) */
+.profile-menu .profile-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Dropdown */
+.profile-menu .dropdown-menu {
+    position: absolute;
+    top: 60px;
+    /* Ajusta para colocarlo debajo del avatar */
+    right: 0;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 15px;
+    min-width: 270px;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    /* Asegura que quede encima de otros elementos */
+}
+
+/* Flecha en la parte superior del dropdown */
+.profile-menu .dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    /* Ajusta la posición vertical de la flecha */
+    right: 20px;
+    /* Ajusta la posición horizontal de la flecha */
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    transform: rotate(45deg);
+    box-shadow: -1px -1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+}
+
+.profile-menu .dropdown-menu.show {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Encabezado del dropdown (donde va el avatar grande y el saludo) */
+.dropdown-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Avatar grande dentro del dropdown */
+.dropdown-header .dropdown-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5px;
+}
+
+/* Texto "Hello, Jhon" */
+.dropdown-header span {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Ajuste del espaciado entre items */
+.dropdown-menu li {
+    margin: 10px 0;
+}
+
+/* Estilos para los enlaces del dropdown */
+.dropdown-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #ededed;
+    border-radius: 6px;
+}
