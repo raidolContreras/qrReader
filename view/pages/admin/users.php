@@ -26,26 +26,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="newUserForm">
                     <div class="mb-3">
                         <label class="form-label">Nombre</label>
-                        <input type="text" class="form-control" required>
+                        <input type="text" name="nombre" id="nombre" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Apellidos</label>
-                        <input type="text" class="form-control" required>
+                        <input type="text" name="apellidos" id="apellidos" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" required>
+                        <input type="email" name="email" id="email" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" required>
+                        <input type="password" name="password" id="password" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Rol</label>
-                        <select class="form-select">
+                        <select name="role" id="role" class="form-select">
                             <option value="admin">Admin</option>
                             <option value="moderador">Moderador</option>
                             <option value="usuario">Usuario</option>
@@ -83,5 +83,36 @@
                 }
             ]
         });
+
+        $('#newUserForm').on('submit', function(event) {
+            event.preventDefault();
+
+            // Serializa el formulario y agrega el parámetro 'action'
+            var formData = $(this).serializeArray();
+            formData.push({
+                name: 'action',
+                value: 'newUser'
+            });
+
+            $.ajax({
+                url: 'controller/selectAction.php',
+                method: 'POST',
+                data: formData,
+                dataType: 'json', // esperamos un JSON del servidor
+                success: function(response) {
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        table.row.add(response.data).draw();
+                        $('#newUserForm')[0].reset();
+                        $('#userModal').modal('hide');
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        });
+
     });
 </script>

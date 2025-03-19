@@ -1,6 +1,5 @@
 <?php 
 
-require 'vendor/autoload.php';
 class Conexion{
 
   static public function conectar(){
