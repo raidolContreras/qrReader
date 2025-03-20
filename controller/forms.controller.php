@@ -11,6 +11,11 @@ class FormsController {
 
 class SecureVault
 {
+    static public function generateSecretKey() {
+        $masterKey = bin2hex(random_bytes(32));
+        return $masterKey;
+    }
+
     static public function encryptData($data, $tipo = 'name')
     {
         if (self::validarDato($data, $tipo)) {
