@@ -1,4 +1,8 @@
 Options All -Indexes
 
 RewriteEngine On
-RewriteRule ^([-a-zA-Z0-9/_&=]+)$ index.php?pagina=$1
+
+# Si la URL es "install" o empieza por "install/", no se reescribe.
+RewriteRule ^install($|/) - [L]
+
+RewriteRule ^([-a-zA-Z0-9/_&=]+)$ index.php?pagina=$1 [L]

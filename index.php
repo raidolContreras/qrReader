@@ -2,7 +2,7 @@
 
 // Verificar si el archivo .env existe
 if (!file_exists(__DIR__ . '/.env')) {
-    header('Location: /install/index.php');
+    header('Location: ./install/');
     exit;
 }
 

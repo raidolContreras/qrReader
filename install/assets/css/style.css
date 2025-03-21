@@ -1,104 +1,293 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #74ABE2, #5563DE);
+/* Variables de colores y estilos */
+:root {
+    --primary-color: #0c624e;
+    --primary-dark: #183f36;
+    --background-gradient: linear-gradient(135deg, #74ABE2, #5563DE);
+    --wave-color: #0c624e;
+    --wave-color-animation: #3c8574;
+    --text-color: #333;
+    --label-color: #555;
+    --border-color: #ddd;
+    --input-border: #bbb;
+    --error-color: #dc3545;
+    --white: #fff;
+  }
+  
+  /* Reset básico */
+  * {
     margin: 0;
     padding: 0;
-}
-
-.container {
-    width: 500px;
-    margin: 50px auto;
-    background: #fff;
-    padding: 30px 40px;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    animation: slideDown 0.8s ease-out;
-}
-
-h1 {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Roboto", sans-serif;
+    background: var(--background-gradient);
+    min-height: 100vh;
+  }
+  
+  /* Contenedor principal (layout 2 columnas) */
+  .main-container {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+  }
+  
+  /* Columna izquierda con un wave decorativo */
+  .left-section {
+    flex: 1;
+    min-width: 300px;
+    position: relative;
+    background: var(--wave-color);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .left-content {
+    max-width: 300px;
     text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-fieldset {
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    margin-bottom: 20px;
     padding: 20px;
-}
-
-legend {
-    padding: 0 10px;
-    font-weight: bold;
-    color: #007BFF;
-}
-
-.form-group {
+    z-index: 1;
+  }
+  
+  .left-content h1 {
     margin-bottom: 15px;
-}
+    font-weight: 700;
+    font-size: 28px;
+  }
+  
+  .left-content p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  
+  /* Efecto wave con pseudo-elemento */
+  .left-section::before {
+    content: "";
+    position: absolute;
+    width: 150%;
+    height: 100%;
+    background: var(--wave-color-animation);
+    top: 0;
+    left: -25%;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    animation: wave 8s infinite ease-in-out alternate;
+    opacity: 0.2;
+  }
+  @keyframes wave {
+    0% {
+      transform: translateY(-50%) rotate(0deg);
+    }
+    100% {
+      transform: translateY(-50%) rotate(10deg);
+    }
+  }
+  
+  /* Columna derecha: contenedor flex que centra .right-content */
+  .right-section {
+    flex: 1;
+    min-width: 300px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: slideIn 0.8s ease-out;
+  }
+  
+  /* NUEVO: Estilo de “tarjeta” para el contenedor del formulario */
+  .right-content {
+    width: 100%;
+    max-width: 600px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 8px; /* Borde redondeado */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Barra de progreso */
+.progress-bar {
+    position: relative;
+    height: 7px;
+    background: #e0e0e0;
+    margin-bottom: 20px; /* Ajusta aquí el espacio bajo la barra */
+    border-radius: 2px;
+  }
+  
+  .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%; /* Se actualizará dinámicamente en tu JS */
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+  }
+  
+  /* Pasos con iconos */
+  .progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px; /* Ajusta aquí la separación con el formulario */
+  }
+  
+  .progress-steps .step {
+    width: 36px;
+    height: 36px;
+    background: #e0e0e0;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    display: flex;
+    flex-direction: column; /* ícono arriba, texto abajo */
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    transition: background 0.3s ease;
+    font-size: 16px;
+    position: relative;
+  }
+  
+  .progress-steps .step span {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+  }
+  
+  .progress-steps .step.active {
+    background: var(--primary-color);
+    color: #fff;
+  }
+  
 
-label {
+  .progress-bar {
+    position: relative;
+    height: 7px;
+    background: #e0e0e0;
+    margin-bottom: 10px; /* Un margen pequeño justo para la barra */
+    border-radius: 2px;
+  }
+  
+  /* Contenedor de la barra + los pasos */
+  .progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 30px; /* Aumenta la separación con el formulario */
+  }
+  
+  
+  /* Formulario en pasos */
+  .form-step {
+    display: none;
+  }
+  .form-step.active {
+    display: block;
+  }
+  
+  fieldset {
+    border: none;
+    margin-bottom: 20px;
+  }
+  legend {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 5px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  label {
     display: block;
     margin-bottom: 5px;
-    color: #555;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="email"] {
+    color: var(--label-color);
+    font-weight: 500;
+  }
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
     width: 100%;
     padding: 10px;
-    border: 1px solid #bbb;
+    border: 1px solid var(--input-border);
     border-radius: 4px;
-    box-sizing: border-box;
+    font-size: 14px;
     transition: border-color 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus {
-    border-color: #007BFF;
+  }
+  input[type="text"]:focus,
+  input[type="password"]:focus,
+  input[type="email"]:focus {
+    border-color: var(--primary-color);
     outline: none;
-}
-
-button {
-    background: #007BFF;
+  }
+  
+  /* Botones */
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .button-group button {
+    background: var(--primary-color);
     color: #fff;
     border: none;
-    padding: 12px;
+    padding: 12px 20px;
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s ease;
-    width: 100%;
     font-size: 16px;
-}
-
-button:hover {
-    background: #0056b3;
-}
-
-#message {
-    text-align: center;
-    margin-bottom: 15px;
-    font-size: 16px;
-}
-
-.success {
-    color: #28a745;
-}
-
-.error {
-    color: #dc3545;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .button-group button:hover {
+    background: var(--primary-dark);
+  }
+  
+  /* Mensajes de error */
+  .error-message {
+    color: var(--error-color);
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  /* Responsividad */
+  @media (max-width: 768px) {
+    .main-container {
+      flex-direction: column;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .left-section,
+    .right-section {
+      flex: none;
+      width: 100%;
+      min-width: auto;
     }
-}
+    /* Ajuste de padding en pantallas pequeñas */
+    .right-content {
+      padding: 20px;
+    }
+    .button-group {
+      flex-direction: column;
+    }
+    .button-group button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  

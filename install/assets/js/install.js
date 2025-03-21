@@ -56,7 +56,7 @@ $(document).ready(function(){
                                     .hide().fadeIn("slow");
                         // Redirigir después de 2 segundos
                         setTimeout(function(){
-                            window.location.href = "index.php";
+                            window.location.href = "./";
                         }, 2000);
                     } else {
                         $("#message").html("<p class='error'>" + response.message + "</p>")
