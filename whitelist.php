@@ -2,8 +2,8 @@
 
 session_start();
 
-if (isset($_SESSION['logged'])) {
-    // if (!isset($_SESSION['logged'])) {
+if (!isset($_SESSION['logged'])) {
+    $title = 'Iniciar sesión';
     $pagina = filter_input(INPUT_GET, 'pagina') ?: 'login';
     if ($pagina == 'login') {
         include_once 'view/pages/auth/login.php';
@@ -33,4 +33,9 @@ function includeDataAdmin()
     require 'view/navs/sidenav.php';
     require 'view/pages/admin/users.php';
     require 'view/js.php';
+    echo "
+    <footer>
+        <p>&copy; 2025 Gestión de Usuarios</p>
+    </footer>
+    ";
 }

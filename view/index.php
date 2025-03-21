@@ -11,11 +11,6 @@
     require_once('whitelist.php');
     ?>
     <title><?php echo $title; ?></title>
-
-
-    <footer>
-        <p>&copy; 2025 Gestión de Usuarios</p>
-    </footer>
 </body>
 
 </html>

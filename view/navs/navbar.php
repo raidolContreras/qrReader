@@ -1,3 +1,4 @@
+<?php $role = ($_SESSION["role"] == 'admin') ? 'Administrador': 'Moderador'; ?>
 <nav class="navbar">
     <div class="container-fluid">
         <button class="btn btn-light d-md-none" id="toggleSidebar">
@@ -14,7 +15,9 @@
                 <!-- Encabezado dentro del dropdown -->
                 <li class="dropdown-header">
                     <img src="assets/images/user-avatar.png" alt="Usuario" class="dropdown-avatar">
-                    <span>Hello, Jhon</span>
+                    <span><?= $_SESSION["nombre"] . ' ' . $_SESSION["apellidos"] ?></span>
+                    <!-- Rol -->
+                     <span><?= $role ?></span>
                 </li>
                 <!-- Opciones del menú (puedes ajustar el texto/íconos a tu gusto) -->
                 <li><a href="#"><i class="fas fa-user"></i> Perfil</a></li>

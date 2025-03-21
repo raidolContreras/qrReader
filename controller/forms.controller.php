@@ -2,16 +2,25 @@
 $dir = __DIR__ . '/../vendor/autoload.php';
 require $dir;
 
-class FormsController {
-    static public function ctrNewUsers($data) {
+class FormsController
+{
+    static public function ctrNewUsers($data)
+    {
         $result = FormsModel::mdlNewUsers($data);
+        return $result;
+    }
+
+    static public function ctrSearchUser($item, $value)
+    {
+        $result = FormsModel::mdlSearchUser($item, $value);
         return $result;
     }
 }
 
 class SecureVault
 {
-    static public function generateSecretKey() {
+    static public function generateSecretKey()
+    {
         $masterKey = bin2hex(random_bytes(32));
         return $masterKey;
     }
@@ -19,7 +28,6 @@ class SecureVault
     static public function encryptData($data, $tipo = 'name')
     {
         if (self::validarDato($data, $tipo)) {
-            // Cargar .env solo si no está cargado previamente
             if (!getenv('MASTER_KEY')) {
                 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
                 $dotenv->load();
@@ -30,9 +38,10 @@ class SecureVault
                 throw new Exception("La clave MASTER_KEY no está definida.");
             }
 
-            $iv = openssl_random_pseudo_bytes(16); // IV aleatorio
+            // Usar un IV fijo (no recomendado para producción)
+            $iv = str_repeat("0", 16);
             $encrypted = openssl_encrypt($data, 'AES-256-CBC', $key, 0, $iv);
-            return base64_encode($iv . $encrypted); // Guardamos IV + datos cifrados
+            return base64_encode($encrypted);
         } else {
             self::responseError("El dato no es válido.");
         }
@@ -51,11 +60,11 @@ class SecureVault
             throw new Exception("La clave MASTER_KEY no está definida.");
         }
 
-        $data = base64_decode($data); // Decodificar la cadena en Base64
-        $iv = substr($data, 0, 16); // Extraer los primeros 16 bytes (IV)
-        $encryptedData = substr($data, 16); // Extraer los datos encriptados
+        $encrypted = base64_decode($data); // Decodificar la cadena en Base64
+        // Usar el mismo IV fijo que en la encriptación
+        $iv = str_repeat("0", 16);
 
-        return openssl_decrypt($encryptedData, 'AES-256-CBC', $key, 0, $iv);
+        return openssl_decrypt($encrypted, 'AES-256-CBC', $key, 0, $iv);
     }
 
     static private function validarDato($dato, $tipo)
