@@ -1,0 +1,519 @@
+/* =======================
+   Variables CSS
+   ======================= */
+   :root {
+    --primary: #026f35;
+    --primary-dark: #12472b;
+    --white: #ffffff;
+    --background: #fff;
+    --text-color: #212529;
+    --border: #ced4da;
+    --gray: #dee2e6;
+    --light-bg: #f8f9fa;
+    --shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* =======================
+     Estilos generales de la tabla
+     ======================= */
+table.dataTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    background-color: var(--background);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+/* Encabezado de la tabla */
+table.dataTable thead th {
+    background-color: var(--primary);
+    color: var(--white);
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-dark);
+    padding: 12px;
+}
+
+/* Cuerpo de la tabla */
+table.dataTable tbody td {
+    background-color: var(--background);
+    border-bottom: 1px solid var(--gray);
+    padding: 12px;
+}
+
+table.dataTable tbody tr:hover {
+    background-color: var(--light-bg);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* =======================
+     Contenedores de DataTables
+     ======================= */
+.dataTables_wrapper {
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem 0;
+}
+
+/* Búsqueda (filter) */
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    margin-bottom: 1rem;
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5rem;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Cantidad de registros a mostrar (length) */
+.dataTables_wrapper .dataTables_length {
+    float: left;
+    margin-bottom: 1rem;
+}
+
+.dataTables_wrapper .dataTables_length label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    margin-left: 0.5rem;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--background);
+    outline: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.dataTables_wrapper .dataTables_length select:hover {
+    border-color: var(--primary);
+}
+
+/* Información (info) */
+.dataTables_wrapper .dataTables_info {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* =======================
+     Paginación
+     ======================= */
+.dataTables_wrapper .dataTables_paginate {
+    float: right;
+    margin-top: 0.5rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary) !important;
+    background-color: var(--background);
+    text-decoration: none !important;
+    border: 1px solid var(--primary);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: var(--primary);
+    color: var(--white) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    color: var(--white) !important;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+/* =======================
+     Botones de acción (Editar y Eliminar)
+     ======================= */
+.dataTables_wrapper .dataTables_actions {
+    text-align: center;
+}
+
+.dataTables_wrapper .dataTables_actions a {
+    display: inline-block;
+    padding: 6px;
+    margin: 0 5px;
+    font-size: 1.2rem;
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.dataTables_wrapper .dataTables_actions a:hover {
+    color: var(--primary-dark);
+}
+
+.dataTables_wrapper .dataTables_actions a i {
+    transition: transform 0.3s ease-in-out;
+}
+
+.dataTables_wrapper .dataTables_actions a:hover i {
+    transform: scale(1.1);
+}
+
+/* =======================
+   Estilos para .dt-layout-row
+   ======================= */
+.dt-layout-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--background-light);
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+}
+
+/* =======================
+   Elementos dentro de .dt-layout-row
+   ======================= */
+/* Contenedor de búsqueda */
+.dt-layout-row .dt-search {
+    display: flex;
+    max-width: 100%;
+}
+
+.dt-layout-row .dt-search label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--primary);
+    margin-right: 15px;
+}
+
+.dt-layout-row .dt-search input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.dt-layout-row .dt-search input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+/* Contenedor de selección de registros */
+.dt-layout-row .dt-length {
+    flex: 1 1 200px;
+    max-width: 100%;
+}
+
+.dt-layout-row .dt-length label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.dt-layout-row .dt-length select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    background-color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1em;
+}
+
+.dt-layout-row .dt-length select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+/* Contenedor de información */
+.dt-layout-row .dt-info {
+    flex: 1 1 100%;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6b7280;
+    padding: 0.5rem 0;
+}
+
+.dt-layout-cell.dt-layout-full {
+    width: 100%;
+}
+
+/* =======================
+   Estilos para .dt-paging-button
+   ======================= */
+.dt-paging-button {
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    background-color: #fff;
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    text-decoration: none;
+}
+
+/* Efecto hover */
+.dt-paging-button:hover:not(.disabled) {
+    background-color: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+/* Botón activo (página actual) */
+.dt-paging-button.current {
+    background-color: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+/* Botones deshabilitados */
+.dt-paging-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border-color: #e5e7eb;
+}
+
+.dt-paging-button.disabled:hover {
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border-color: #e5e7eb;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Botones de navegación (anterior/siguiente) */
+.dt-paging-button.previous,
+.dt-paging-button.next {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    color: var(--primary);
+    border: 2px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.dt-paging-button.previous:hover:not(.disabled),
+.dt-paging-button.next:hover:not(.disabled) {
+    background-color: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+.dt-paging-button.previous.disabled,
+.dt-paging-button.next.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border-color: #e5e7eb;
+}
+
+.dt-paging-button.previous.disabled:hover,
+.dt-paging-button.next.disabled:hover {
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border-color: #e5e7eb;
+    transform: none;
+    box-shadow: none;
+}
+
+/* =======================
+   Responsive Design - MODIFICADO
+   ======================= */
+@media (max-width: 768px) {
+    /* Contenedor principal para evitar scroll horizontal */
+    .main-content-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        position: relative;
+    }
+    
+    /* Estructura para el diseño móvil */
+    .dt-layout-row {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+    
+    /* Controles fijos */
+    .datatable-controls {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 1rem;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+    
+    /* Solo la tabla debe desplazarse horizontalmente */
+    .table-scroll-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 1rem;
+    }
+    
+    /* Asegurar que la tabla tome el espacio necesario */
+    table.dataTable {
+        width: auto;
+        min-width: 100%;
+    }
+    
+    /* Celdas de tabla con ancho mínimo para evitar compresión */
+    table.dataTable th,
+    table.dataTable td {
+        white-space: nowrap;
+    }
+    
+    /* Control de entrada de búsqueda y selector de registros */
+    .dt-layout-row .dt-search,
+    .dt-layout-row .dt-length,
+    .dataTables_filter,
+    .dataTables_length {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Evitar que entradas y selectores se desborden */
+    .dt-layout-row input,
+    .dt-layout-row select,
+    .dataTables_filter input,
+    .dataTables_length select {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Centrar la paginación y mantenerla contenida */
+    .dt-paging,
+    .dataTables_paginate {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 100%;
+        gap: 0.25rem;
+        padding: 0.5rem 0;
+        overflow-x: hidden;
+    }
+    
+    /* Reordenar elementos para mejor visualización */
+    .dt-layout-row .dt-info {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .dt-layout-row .dt-length,
+    .dt-layout-row .dt-search {
+        order: 1;
+    }
+    
+    .dt-layout-row .dt-actions {
+        order: 2;
+    }
+    
+    /* Envolver la tabla en un contenedor que permita desplazamiento horizontal */
+    .table-responsive {
+        overflow-x: auto;
+        max-width: 100%;
+        padding: 0;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Evitar que el contenedor de DataTables se desplace */
+    .dataTables_wrapper {
+        width: 100%;
+        overflow-x: hidden;
+        padding: 0;
+    }
+    
+    /* Ocultar el desbordamiento horizontal en todos los contenedores de control */
+    .dataTables_filter,
+    .dataTables_length,
+    .dataTables_paginate,
+    .dataTables_info {
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+    .dt-layout-table {
+        /* Barra de desplazamiento inferior */
+        overflow-x: auto;
+        overflow-y: auto;
+        border-collapse: collapse;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* Aplicar ancho máximo a todos los contenedores para evitar desbordamiento */
+.dt-layout-cell {
+    max-width: 100%;
+}

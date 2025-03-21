@@ -13,5 +13,6 @@
 <link href="assets/css/styleScan.css" rel="stylesheet">
 <link rel="icon" href="assets/images/favicon.ico" type="image/png">
 <meta name="theme-color" content="#175f0f">
-<link rel="stylesheet" href="assets/datatables/datatables.min.css">
+<!-- <link rel="stylesheet" href="assets/datatables/datatables.min.css"> -->
+<link rel="stylesheet" href="assets/css/datatable.css">
 <link rel="stylesheet" href="assets/css/dashboard.css">

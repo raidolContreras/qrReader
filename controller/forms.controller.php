@@ -15,6 +15,11 @@ class FormsController
         $result = FormsModel::mdlSearchUser($item, $value);
         return $result;
     }
+
+    static public function ctrGetUsers() {
+        $result = FormsModel::mdlGetUsers();
+        return $result;
+    }
 }
 
 class SecureVault

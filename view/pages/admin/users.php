@@ -18,6 +18,7 @@
     </div>
 </div>
 
+<!-- Modal para crear nuevo usuario -->
 <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -59,35 +60,56 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
+        // Simulamos la respuesta JSON recibida
         $('#usersTable').DataTable({
-            "data": [],
-            "columns": [{
-                    "data": "nombre"
+            "ajax": {
+                url: 'controller/selectAction.php',
+                type: 'POST',
+                data: {
+                    action: 'getUsers'
                 },
+                dataType: 'json',
+                dataSrc: '' // Esto le dice a DataTables que el array está en la raíz del JSON
+            },
+            columns: [
+                { data: 'nombre' },
+                { data: 'apellidos' },
+                { data: 'email' },
+                { data: 'role' },
                 {
-                    "data": "apellidos"
-                },
-                {
-                    "data": "email"
-                },
-                {
-                    "data": "role"
-                },
-                {
-                    "data": null,
-                    "render": function() {
-                        return '<button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button> ' +
-                            '<button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>';
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        return '<div class="action-buttons">' +
+                            '<button type="button" class="action-btn edit-btn tooltip-btn" data-id="' + row.id + '" data-tooltip="Editar registro">' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>' +
+                            '</button>' +
+                            '<button type="button" class="action-btn delete-btn tooltip-btn" data-id="' + row.id + '" data-tooltip="Eliminar registro">' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>' +
+                            '</button>' +
+                            // '<button type="button" class="action-btn view-btn tooltip-btn" data-id="' + row.id + '" data-tooltip="Ver detalles">' +
+                            // '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>' +
+                            // '</button>' +
+                            '</div>';
                     }
                 }
-            ]
+            ],
+            language: {
+                search: "Buscar:",
+                lengthMenu: "Mostrar _MENU_ filas",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ filas",
+                infoEmpty: "Mostrando 0 a 0 de 0 filas",
+                infoFiltered: "(filtrado de _MAX_ total filas)",
+                zeroRecords: "No se encontraron resultados"
+            }
         });
 
-        $('#newUserForm').on('submit', function(event) {
+
+        // Manejador para el envío del formulario de nuevo usuario
+        $('#newUserForm').on('submit', function (event) {
             event.preventDefault();
 
-            // Serializa el formulario y agrega el parámetro 'action'
+            // Serializa los datos del formulario y agrega el parámetro 'action'
             var formData = $(this).serializeArray();
             formData.push({
                 name: 'action',
@@ -99,20 +121,20 @@
                 method: 'POST',
                 data: formData,
                 dataType: 'json', // esperamos un JSON del servidor
-                success: function(response) {
+                success: function (response) {
                     if (response.error) {
                         alert(response.error);
                     } else {
+                        // Agregamos la nueva fila a la tabla y actualizamos la vista
                         table.row.add(response.data).draw();
                         $('#newUserForm')[0].reset();
                         $('#userModal').modal('hide');
                     }
                 },
-                error: function(error) {
+                error: function (error) {
                     console.error(error);
                 }
             });
         });
-
     });
 </script>

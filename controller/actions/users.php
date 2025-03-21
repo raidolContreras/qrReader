@@ -4,6 +4,9 @@ switch ($_POST["action"]) {
     case 'newUser':
         newUsers();
         break;
+    case 'getUsers':
+        getUsers();
+        break;
     case 'login':
         login();
         break;
@@ -59,4 +62,19 @@ function login() {
     } else {
         echo json_encode(['success'=> false, 'message'=> 'Error inesperado']);
     }
+}
+
+function getUsers() {
+    $users = FormsController::ctrGetUsers();
+    $data = [];
+    foreach ($users as $key => $user) {
+        $data[] = [
+            'id' => $user['id'],
+            'nombre' => SecureVault::decryptData($user['nombre']),
+            'apellidos' => SecureVault::decryptData($user['apellidos']),
+            'email' => SecureVault::decryptData($user['email']),
+            'role' => SecureVault::decryptData($user['role'])
+        ];
+    }
+    echo json_encode($data);
 }

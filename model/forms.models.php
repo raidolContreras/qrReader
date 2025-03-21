@@ -43,4 +43,15 @@ class FormsModel
 		$stmt = null;
 		return $result;
     }
+
+    static public function mdlGetUsers() {
+        $pdo = Conexion::conectar();
+        $sql = "SELECT * FROM users WHERE isActive = 1 ";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
 }

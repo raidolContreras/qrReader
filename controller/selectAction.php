@@ -6,6 +6,7 @@ require "../model/forms.models.php";
 // switch llego una peticion con un post llamado action
 switch ($_POST["action"]) {
     case 'newUser':
+    case 'getUsers':
     case 'login':
         require "actions/users.php";
         break;
