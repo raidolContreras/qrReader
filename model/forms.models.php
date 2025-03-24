@@ -54,4 +54,50 @@ class FormsModel
         $stmt = null;
         return $result;
     }
+
+    static public function mdlGetUser($id) {
+        $pdo = Conexion::conectar();
+        $sql = "SELECT * FROM users WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
+
+    static public function mdlEditUser($data) {
+        $pdo = Conexion::conectar();
+        $sql = "UPDATE users SET nombre = :nombre, apellidos = :apellidos, email = :email, role = :role WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":nombre", $data["nombre"], PDO::PARAM_STR);
+        $stmt->bindParam(":apellidos", $data["apellidos"], PDO::PARAM_STR);
+        $stmt->bindParam(":email", $data["email"], PDO::PARAM_STR);
+        $stmt->bindParam(":role", $data["role"], PDO::PARAM_STR);
+        $stmt->bindParam(":id", $data["id"], PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            $result = 'ok';
+        } else {
+            $result = $stmt->errorInfo();
+        }
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
+    
+    static public function mdlDeleteUser($id) {
+        $pdo = Conexion::conectar();
+        $sql = "UPDATE users SET isActive = 0 WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            $result = 'ok';
+        } else {
+            $result = $stmt->errorInfo();
+        }
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
 }

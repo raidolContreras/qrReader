@@ -517,3 +517,9 @@ table.dataTable tbody tr:hover {
 .dt-layout-cell {
     max-width: 100%;
 }
+
+table.dataTable tbody tr:hover td {
+    background-color: #d3e7e4;
+    /* transition: background-color 0.5s color 0.5s ease-in-out; */
+    transition: background-color 0.2s ease-in-out;
+}

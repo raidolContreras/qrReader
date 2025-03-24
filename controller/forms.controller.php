@@ -20,6 +20,21 @@ class FormsController
         $result = FormsModel::mdlGetUsers();
         return $result;
     }
+
+    static public function ctrGetUser($id) {
+        $result = FormsModel::mdlGetUser($id);
+        return $result;
+    }
+
+    static public function ctrEditUser($data) {
+        $result = FormsModel::mdlEditUser($data);
+        return $result;
+    }
+
+    static public function ctrDeleteUser($id) {
+        $result = FormsModel::mdlDeleteUser($id);
+        return $result;
+    }
 }
 
 class SecureVault

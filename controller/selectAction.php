@@ -8,6 +8,9 @@ switch ($_POST["action"]) {
     case 'newUser':
     case 'getUsers':
     case 'login':
+    case 'getUser':
+    case 'editUser':
+    case 'deleteUser':
         require "actions/users.php";
         break;
     default:
