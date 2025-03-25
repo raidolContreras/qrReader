@@ -21,8 +21,11 @@
                 </li>
                 <!-- Opciones del menú (puedes ajustar el texto/íconos a tu gusto) -->
                 <li><a href="#"><i class="fas fa-user"></i> Perfil</a></li>
-                <li><a href="#"><i class="fas fa-cog"></i> Configuración</a></li>
-                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                <?php if ($_SESSION["role"] == 'admin'):?>
+                    <li><a href="configuration"><i class="fas fa-cog"></i> Configuración</a></li>
+
+                <?php endif ?>
+                <li><a href="#" class="btn btn-danger logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
             </ul>
         </div>
     </div>

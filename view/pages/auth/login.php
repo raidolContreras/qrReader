@@ -4,6 +4,8 @@ if (isset($_SESSION['sesion'])) {
     exit();
 }
 ?>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <!-- Iconos de Font Awesome (opcional) -->
 <script src="assets/js/f4781c35cc.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="assets/css/login.css">

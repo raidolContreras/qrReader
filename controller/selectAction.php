@@ -16,4 +16,10 @@ switch ($_POST["action"]) {
     default:
         echo json_encode(["success" => false, "message" => "Acción no válida"]);
         break;
+    case 'editENV':
+        require "actions/env.php";
+        break;
+    case 'logout':
+        require "actions/logout.php";
+        break;
 }

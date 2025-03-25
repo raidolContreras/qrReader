@@ -299,3 +299,13 @@ footer {
   .tooltip.visible {
     opacity: 1;
   }
+
+  .btn-danger {
+    background-color: #e74c3c !important;
+    color: white !important;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }

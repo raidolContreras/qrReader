@@ -12,9 +12,9 @@ if (!isset($_SESSION['logged'])) {
         exit();
     }
 } else {
-    $pagina = filter_input(INPUT_GET, 'pagina') ?: 'Usuarios';
+    $pagina = filter_input(INPUT_GET, 'pagina') ?: 'users';
     $title = "Gestión de Usuarios";
-    includeDataAdmin();
+    includeDataAdmin($pagina);
     // if ($_SESSION['rol'] == 'admin') {
     // } else if ($_SESSION['rol'] == 'moderator') {
     // } else {
@@ -26,12 +26,12 @@ function includeError404()
     include 'error404.php';
 }
 
-function includeDataAdmin()
+function includeDataAdmin($pagina)
 {
     require 'view/css.php';
     require 'view/navs/navbar.php';
     require 'view/navs/sidenav.php';
-    require 'view/pages/admin/users.php';
+    require "view/pages/admin/$pagina.php";
     require 'view/js.php';
     echo "
     <footer>
