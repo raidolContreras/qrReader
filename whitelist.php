@@ -3,9 +3,9 @@
 session_start();
 
 if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
-    $pagina = $_GET['pagina'] ?? 'Users';
+    $pagina = $_GET['pagina'] ?? 'users';
 } elseif (isset($_SESSION['role']) && $_SESSION['role'] == 'moderador') {
-    $pagina = $_GET['pagina'] ?? 'Users';
+    $pagina = $_GET['pagina'] ?? 'users';
 } else {
     $pagina = $_GET['pagina'] ?? 'qrScan';
 }
@@ -16,12 +16,12 @@ $userNavs = [
 ];
 
 $moderadorNavs = [
-    'Users' => 'Usuarios'
+    'users' => 'Usuarios'
 ];
 
 $adminNavs = [
     'configuration' => 'Configuración',
-    'Users' => 'Lista de usuarios',
+    'users' => 'Lista de usuarios',
     'routes'=> 'Lista de rutas',
 ];
 
