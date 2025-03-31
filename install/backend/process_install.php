@@ -82,25 +82,34 @@ try {
         password VARCHAR(255) NOT NULL,
         role VARCHAR(50) NOT NULL,
         isActive TINYINT NOT NULL DEFAULT '1',
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
         PRIMARY KEY (id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
     $pdo->exec($sqlUsers);
 
-    $sqlScans = "CREATE TABLE IF NOT EXISTS `scans` (
-        `idScan` INT AUTO_INCREMENT PRIMARY KEY,
-        `matricula` INT(11) NOT NULL,
-        `nombre` VARCHAR(100) NOT NULL,
-        `apellidos` VARCHAR(100) NOT NULL,
-        `grupo` VARCHAR(50) NOT NULL,
-        `grado` INT(11) NOT NULL,
-        `nivel` VARCHAR(50) NOT NULL,
-        `oferta` VARCHAR(100) NOT NULL,
-        `idUser_scan` INT(11) NOT NULL,
-        `dateScan` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-        KEY `idUser_scan` (`idUser_scan`),
-        CONSTRAINT `fk_scans_users` FOREIGN KEY (`idUser_scan`) REFERENCES `users` (`id`) ON DELETE CASCADE
+    $sqlScans = "CREATE TABLE IF NOT EXISTS scans (
+        idScan INT AUTO_INCREMENT PRIMARY KEY,
+        matricula INT(11) NOT NULL,
+        nombre VARCHAR(100) NOT NULL,
+        apellidos VARCHAR(100) NOT NULL,
+        grupo VARCHAR(50) NOT NULL,
+        grado INT(11) NOT NULL,
+        nivel VARCHAR(50) NOT NULL,
+        oferta VARCHAR(100) NOT NULL,
+        idUser_scan INT(11) NOT NULL,
+        dateScan TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+        KEY idUser_scan (idUser_scan),
+        CONSTRAINT fk_scans_users FOREIGN KEY (idUser_scan) REFERENCES users (id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
     $pdo->exec($sqlScans);
+
+    $sqlRoutes = "CREATE TABLE IF NOT EXISTS routes (
+        idRoute INT AUTO_INCREMENT PRIMARY KEY,
+        nameRoute VARCHAR(100) NOT NULL,
+        isActive TINYINT NOT NULL DEFAULT '1',
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+    $pdo->exec($sqlRoutes);
 
     // Insertar el usuario administrador
     $sqlInsert = "INSERT INTO users (nombre, apellidos, email, password, role)

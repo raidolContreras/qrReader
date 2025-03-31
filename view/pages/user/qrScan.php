@@ -1,4 +1,3 @@
-
 <body>
   <!-- ENCABEZADO -->
   <header class="app-header">
@@ -65,33 +64,12 @@
     </a>
   </div>
 
-  <style>
-    .logout-button-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-    }
-    
-    .logout-btn {
-      padding: 8px 15px;
-      border-radius: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      font-size: 14px;
-      transition: all 0.3s ease;
-    }
-    
-    .logout-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    }
-    
-    @media (max-width: 768px) {
-      .logout-button-container {
-        display: none; /* Hide on mobile since you have it in the footer nav */
-      }
-    }
-  </style>
+  <!-- BOTÓN PARA LA PÁGINA DE RUTAS -->
+  <div class="routes-button-container">
+    <a href="routes" class="btn btn-success routes-btn">
+      <i class="fas fa-route"></i> Rutas
+    </a>
+  </div>
 
-<script src="assets/js/qrReader/html5-qrcode.min.js"></script>
-<script src="assets/js/qrReader/qrReader.js"></script>
+  <script src="assets/js/qrReader/html5-qrcode.min.js"></script>
+  <script src="assets/js/qrReader/qrReader.js"></script>
