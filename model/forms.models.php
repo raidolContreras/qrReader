@@ -128,4 +128,50 @@ class FormsModel
             return false; // Error en la consulta
         }
     }
+
+    static public function mdlNewRoute($nameRoute) {
+        $pdo = Conexion::conectar();
+        $sql = 'INSERT INTO routes (nameRoute, isActive) VALUES (:nameRoute, 1)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':nameRoute', $nameRoute, PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            $result = 'ok';
+        } else {
+            $result = $stmt->errorInfo();
+        }
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
+
+    static public function mdlEditRoute($idRoute, $nameRoute) {
+        $pdo = Conexion::conectar();
+        $sql = 'UPDATE routes SET nameRoute = :nameRoute WHERE idRoute = :idRoute AND isActive = 1';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':nameRoute', $nameRoute, PDO::PARAM_STR);
+        $stmt->bindParam(':idRoute', $idRoute, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            $result = 'ok';
+        } else {
+            $result = $stmt->errorInfo();
+        }
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
+
+    static public function mdlDeleteRoute($idRoute) {
+        $pdo = Conexion::conectar();
+        $sql = 'UPDATE routes SET isActive = 0 WHERE idRoute = :idRoute';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':idRoute', $idRoute, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            $result = 'ok';
+        } else {
+            $result = $stmt->errorInfo();
+        }
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
 }

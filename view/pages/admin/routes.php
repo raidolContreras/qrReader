@@ -15,22 +15,71 @@
     </div>
 </div>
 
+<!-- Modal para nueva ruta -->
+<div class="modal fade" id="routeModal" tabindex="-1" aria-labelledby="routeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="routeModalLabel">Nueva Ruta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="newRouteForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre de la ruta</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar ruta -->
+<div class="modal fade" id="editRouteModal" tabindex="-1" aria-labelledby="editRouteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRouteModalLabel">Editar Ruta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editRouteForm">
+                <div class="modal-body">
+                    <input type="hidden" id="editRouteId" name="idRoute">
+                    <div class="mb-3">
+                        <label for="editNombre" class="form-label">Nombre de la ruta</label>
+                        <input type="text" class="form-control" id="editNombre" name="nameRoute" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
-$(document).ready(() => {
-    // Instancia de DataTable
-    const table = $('#routesTable').DataTable({
-        ajax: {
-            url: 'controller/selectAction.php',
-            type: 'POST',
-            data: { action: 'getRoutes' },
-            dataType: 'json',
-            dataSrc: 'data' // El array está en la raíz del JSON
-        },
-        columns: [
-            { data: 'nameRoute' },
-            {
-                data: null,
-                render: (data, type, row) => `
+    $(document).ready(() => {
+        // Instancia de DataTable
+        const table = $('#routesTable').DataTable({
+            ajax: {
+                url: 'controller/selectAction.php',
+                type: 'POST',
+                data: { action: 'getRoutes' },
+                dataType: 'json',
+                dataSrc: 'data' // El array está en la raíz del JSON
+            },
+            columns: [
+                { data: 'nameRoute' },
+                {
+                    data: null,
+                    render: (data, type, row) => `
                     <div class="action-buttons">
                         <button type="button" class="action-btn edit-btn tooltip-btn" data-id="${row.idRoute}" data-tooltip="Editar ruta">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -48,107 +97,105 @@ $(document).ready(() => {
                         </button>
                     </div>
                 `
+                }
+            ],
+            language: {
+                search: "Buscar:",
+                lengthMenu: "Mostrar _MENU_ filas",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ filas",
+                infoEmpty: "Mostrando 0 a 0 de 0 filas",
+                infoFiltered: "(filtrado de _MAX_ total filas)",
+                zeroRecords: "No se encontraron resultados"
             }
-        ],
-        language: {
-            search: "Buscar:",
-            lengthMenu: "Mostrar _MENU_ filas",
-            info: "Mostrando _START_ a _END_ de _TOTAL_ filas",
-            infoEmpty: "Mostrando 0 a 0 de 0 filas",
-            infoFiltered: "(filtrado de _MAX_ total filas)",
-            zeroRecords: "No se encontraron resultados"
-        }
-    });
-
-    // Handler para el envío del formulario de nueva ruta
-    $('#newRouteForm').on('submit', function(event) {
-        event.preventDefault();
-        const formData = $(this).serializeArray();
-        formData.push({ name: 'action', value: 'newRoute' });
-        $.ajax({
-            url: 'controller/selectAction.php',
-            method: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: response => {
-                if (response.error) {
-                    alert(response.error);
-                } else {
-                    table.ajax.reload();
-                    $('#newRouteForm')[0].reset();
-                    $('#routeModal').modal('hide');
-                }
-            },
-            error: error => console.error(error)
         });
-    });
 
-    // Handler para el envío del formulario de edición
-    $('#editRouteForm').on('submit', function(event) {
-        event.preventDefault();
-        const formData = $(this).serializeArray();
-        formData.push({ name: 'action', value: 'editRoute' });
-        $.ajax({
-            url: 'controller/selectAction.php',
-            method: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: response => {
-                if (response.error) {
-                    alert(response.error);
-                } else {
-                    $('#editRouteForm')[0].reset();
-                    $('#editRouteModal').modal('hide');
-                    table.ajax.reload();
-                }
-            },
-            error: error => console.error(error)
-        });
-    });
-
-    // Manejador para el botón editar (delegado)
-    $('#routesTable').on('click', '.edit-btn', function() {
-        const routeId = $(this).data('id');
-        $.ajax({
-            url: 'controller/selectAction.php',
-            method: 'POST',
-            data: { action: 'getRoute', routeId },
-            dataType: 'json',
-            success: response => {
-                if (response.error) {
-                    alert(response.error);
-                } else {
-                    $('#editRouteId').val(response.data.id);
-                    $('#editNombre').val(response.data.nombre);
-                    $('#editOrigen').val(response.data.origen);
-                    $('#editDestino').val(response.data.destino);
-                    $('#editDescripcion').val(response.data.descripcion);
-                    $('#editRouteModal').modal('show');
-                }
-            },
-            error: error => console.error(error)
-        });
-    });
-
-    // Manejador para el botón eliminar (delegado)
-    $('#routesTable').on('click', '.delete-btn', function() {
-        const routeId = $(this).data('id');
-        if (confirm('¿Estás seguro de eliminar esta ruta?')) {
+        // Handler para el envío del formulario de nueva ruta
+        $('#newRouteForm').on('submit', function (event) {
+            event.preventDefault();
+            const formData = $(this).serializeArray();
+            formData.push({ name: 'action', value: 'newRoute' });
             $.ajax({
                 url: 'controller/selectAction.php',
                 method: 'POST',
-                data: { action: 'deleteRoute', routeId },
+                data: formData,
                 dataType: 'json',
                 success: response => {
                     if (response.error) {
                         alert(response.error);
                     } else {
                         table.ajax.reload();
+                        $('#newRouteForm')[0].reset();
+                        $('#routeModal').modal('hide');
                     }
                 },
                 error: error => console.error(error)
             });
-        }
+        });
+
+        // Handler para el envío del formulario de edición
+        $('#editRouteForm').on('submit', function (event) {
+            event.preventDefault();
+            const formData = $(this).serializeArray();
+            formData.push({ name: 'action', value: 'editRoute' });
+            $.ajax({
+                url: 'controller/selectAction.php',
+                method: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: response => {
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        $('#editRouteForm')[0].reset();
+                        $('#editRouteModal').modal('hide');
+                        table.ajax.reload();
+                    }
+                },
+                error: error => console.error(error)
+            });
+        });
+
+        // Manejador para el botón editar (delegado)
+        $('#routesTable').on('click', '.edit-btn', function () {
+            const idRoute = $(this).data('id');
+            $.ajax({
+                url: 'controller/selectAction.php',
+                method: 'POST',
+                data: { action: 'getRoute', idRoute },
+                dataType: 'json',
+                success: response => {
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        const route = response.data;
+                        $('#editRouteId').val(route.idRoute);
+                        $('#editNombre').val(route.nameRoute);
+                        $('#editRouteModal').modal('show');
+                    }
+                },
+                error: error => console.error(error)
+            });
+        });
+
+        // Manejador para el botón eliminar (delegado)
+        $('#routesTable').on('click', '.delete-btn', function () {
+            const idRoute = $(this).data('id');
+            if (confirm('¿Estás seguro de eliminar esta ruta?')) {
+                $.ajax({
+                    url: 'controller/selectAction.php',
+                    method: 'POST',
+                    data: { action: 'deleteRoute', idRoute },
+                    dataType: 'json',
+                    success: response => {
+                        if (response.error) {
+                            alert(response.error);
+                        } else {
+                            table.ajax.reload();
+                        }
+                    },
+                    error: error => console.error(error)
+                });
+            }
+        });
     });
-});
 </script>

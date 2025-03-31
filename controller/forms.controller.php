@@ -48,6 +48,21 @@ class FormsController
         $_SESSION['nameRoute'] = $result['nameRoute'];
         return $result;
     }
+
+    static public function ctrNewRoute($nameRoute) {
+        $result = FormsModel::mdlNewRoute($nameRoute);
+        return $result;
+    }
+
+    static public function ctrEditRoute($idRoute, $nameRoute) {
+        $result = FormsModel::mdlEditRoute($idRoute, $nameRoute);
+        return $result;
+    }
+
+    static public function ctrDeleteRoute($idRoute) {
+        $result = FormsModel::mdlDeleteRoute($idRoute);
+        return $result;
+    }
 }
 
 class SecureVault

@@ -23,7 +23,11 @@ switch ($_POST["action"]) {
         require "actions/logout.php";
         break;
     case 'getRoutes':
+    case 'getRoute':
     case 'selectRoute':
+    case 'newRoute':
+    case 'editRoute':
+    case 'deleteRoute':
         require "actions/routes.php";
         break;
 }
