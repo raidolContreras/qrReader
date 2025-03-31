@@ -11,39 +11,55 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
 }
 
 $userNavs = [
-    'qrScan'
+    'qrScan' => 'Lector de Qr',
+    'routes'=> 'Seleccionar una ruta',
 ];
 
 $moderadorNavs = [
-    'Users',
+    'Users' => 'Usuarios'
 ];
 
 $adminNavs = [
-    'configuration',
-    'Users'
+    'configuration' => 'Configuración',
+    'Users' => 'Lista de usuarios',
+    'routes'=> 'Lista de rutas',
 ];
 
 if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
     if ($_SESSION['role'] == 'admin') {
-        if (in_array($pagina, $adminNavs)) {
+        if (array_key_exists($pagina, $adminNavs)) {
+            $title = $adminNavs[$pagina];
             includeData($pagina, 'admin');
         } else {
             includeError404();
         }
     } elseif ($_SESSION['role'] == 'moderador') {
-        if (in_array($pagina, $moderadorNavs)) {
+        if (array_key_exists($pagina, $moderadorNavs)) {
+            $title = $moderadorNavs[$pagina];
             includeData($pagina, 'moderador');
         } else {
             includeError404();
         }
     } else {
-        if (in_array($pagina, $userNavs)) {
-            includeData($pagina, 'user');
+        if (array_key_exists($pagina, $userNavs)) {
+            if ($pagina == 'qrScan') {
+                if (isset($_SESSION['route'])) {
+                    $title = $userNavs[$pagina];
+                    includeDataNoNavs($pagina, 'user');
+                } else {
+                    header("Location: routes");
+                    exit();
+                }
+            } else {
+                $title = $userNavs[$pagina];
+                includeDataNoNavs($pagina, 'user');
+            }
         } else {
             includeError404();
         }
     }
 } elseif ($pagina == 'Login') {
+    $title = 'Iniciar sesión';
     include "view/pages/auth/login.php";
 } else {
     header("Location: Login");
@@ -55,16 +71,22 @@ function includeError404()
     include 'error404.php';
 }
 
-function includeData($pagina, $role)
+function includeData($pagina, $roleNav)
 {
     require 'view/css.php';
     require 'view/navs/navbar.php';
     require 'view/navs/sidenav.php';
-    require "view/pages/$role/$pagina.php";
+    require "view/pages/$roleNav/$pagina.php";
     require 'view/js.php';
     echo "
     <footer>
         <p>&copy; 2025 Gestión de Usuarios</p>
     </footer>
     ";
+}
+
+function includeDataNoNavs($pagina, $roleNav) {
+    require 'view/css.php';
+    require "view/pages/$roleNav/$pagina.php";
+    require 'view/js.php';
 }

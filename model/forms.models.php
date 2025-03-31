@@ -100,4 +100,32 @@ class FormsModel
         $stmt = null;
         return $result;
     }
+
+    static public function mdlGetRoutes() {
+        $pdo = Conexion::conectar();
+        $sql = 'SELECT * FROM routes WHERE isActive = 1';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
+
+    static public function mdlGetRoute($idRoute) {
+        $pdo = Conexion::conectar();
+        $sql = 'SELECT * FROM routes WHERE idRoute = :idRoute AND isActive = 1';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':idRoute', $idRoute, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            $result = $stmt->fetch();
+            $stmt->closeCursor();
+            $stmt = null;
+            return $result;
+        } else {
+            $stmt->closeCursor();
+            $stmt = null;
+            return false; // Error en la consulta
+        }
+    }
 }

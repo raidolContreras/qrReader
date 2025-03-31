@@ -35,6 +35,19 @@ class FormsController
         $result = FormsModel::mdlDeleteUser($id);
         return $result;
     }
+
+    static public function ctrGetRoutes() {
+        $result = FormsModel::mdlGetRoutes();
+        return $result;
+    }
+
+    static public function ctrGetRoute($idRoute) {
+        $result = FormsModel::mdlGetRoute($idRoute);
+        session_start();
+        $_SESSION['route'] = $result['idRoute'];
+        $_SESSION['nameRoute'] = $result['nameRoute'];
+        return $result;
+    }
 }
 
 class SecureVault
