@@ -1,31 +1,27 @@
 <?php
-
+// install.php
 header('Content-Type: application/json');
 
+// Incluir dependencias básicas y clases de encriptación
 require_once __DIR__ . "/../../controller/forms.controller.php";
 require_once __DIR__ . "/../../model/forms.models.php";
 
-$master_key = SecureVault::generateSecretKey();
-
-// Si ya existe el .env, enviamos un error y detenemos la ejecución
-if (file_exists(__DIR__ . '/../../.env')) {
-    echo json_encode([
-        "success" => false,
-        "message" => "El sistema ya ha sido instalado."
-    ]);
-    exit;
-}
+// Incluir migraciones y el migrator
+require_once __DIR__ . 'install/backend/migrations/AbstractMigration.php';
+require_once __DIR__ . 'install/backend/migrations//CreateUsersTable.php';
+require_once __DIR__ . 'install/backend/migrations//CreateRoutesTable.php';
+require_once __DIR__ . 'install/backend/migrations//CreateScansTable.php';
+require_once __DIR__ . 'install/backend/Migrator.php';
 
 // Recoger y sanitizar datos del formulario
-$host         = isset($_POST['host']) ? trim($_POST['host']) : "";
-$database     = isset($_POST['database']) ? trim($_POST['database']) : "";
-$user_name    = isset($_POST['user_name']) ? trim($_POST['user_name']) : "";
-$password     = isset($_POST['password']) ? trim($_POST['password']) : "";
-
-$admin_nombre     = isset($_POST['admin_nombre']) ? trim($_POST['admin_nombre']) : "";
-$admin_apellidos  = isset($_POST['admin_apellidos']) ? trim($_POST['admin_apellidos']) : "";
-$admin_email      = isset($_POST['admin_email']) ? trim($_POST['admin_email']) : "";
-$admin_password   = isset($_POST['admin_password']) ? trim($_POST['admin_password']) : "";
+$host            = isset($_POST['host']) ? trim($_POST['host']) : "";
+$database        = isset($_POST['database']) ? trim($_POST['database']) : "";
+$user_name       = isset($_POST['user_name']) ? trim($_POST['user_name']) : "";
+$password        = isset($_POST['password']) ? trim($_POST['password']) : "";
+$admin_nombre    = isset($_POST['admin_nombre']) ? trim($_POST['admin_nombre']) : "";
+$admin_apellidos = isset($_POST['admin_apellidos']) ? trim($_POST['admin_apellidos']) : "";
+$admin_email     = isset($_POST['admin_email']) ? trim($_POST['admin_email']) : "";
+$admin_password  = isset($_POST['admin_password']) ? trim($_POST['admin_password']) : "";
 
 // Validaciones mínimas
 if (empty($host) || empty($database) || empty($user_name) || empty($admin_nombre) || empty($admin_apellidos) || empty($admin_email) || empty($admin_password)) {
@@ -36,9 +32,18 @@ if (empty($host) || empty($database) || empty($user_name) || empty($admin_nombre
     exit;
 }
 
-// Crear el contenido del archivo .env
-$envContent = "HOST={$host}\nDATABASE={$database}\nUSER_NAME={$user_name}\nPASSWORD={$password}\nMASTER_KEY={$master_key}\n";
+// Si el archivo .env ya existe, se evita una doble instalación
+if (file_exists(__DIR__ . '/../../.env')) {
+    echo json_encode([
+        "success" => false,
+        "message" => "El sistema ya ha sido instalado."
+    ]);
+    exit;
+}
 
+// Generar master key y crear archivo .env
+$master_key = SecureVault::generateSecretKey();
+$envContent = "HOST={$host}\nDATABASE={$database}\nUSER_NAME={$user_name}\nPASSWORD={$password}\nMASTER_KEY={$master_key}\n";
 if (file_put_contents(__DIR__ . '/../../.env', $envContent) === false) {
     echo json_encode([
         "success" => false,
@@ -48,92 +53,64 @@ if (file_put_contents(__DIR__ . '/../../.env', $envContent) === false) {
 }
 
 try {
-
-    // encriptar datos
-    $admin_nombre = SecureVault::encryptData($admin_nombre, 'name');
-    $admin_apellidos = SecureVault::encryptData($admin_apellidos, 'name');
-    $admin_email = SecureVault::encryptData($admin_email, 'email');
-    $admin_password = SecureVault::encryptData($admin_password, 'password');
-    $admin_role = SecureVault::encryptData('admin', 'role');
-    
-    // Usuario normal de prueba
-    $user_nombre = SecureVault::encryptData('Prueba', 'name');
-    $user_apellidos = SecureVault::encryptData('Usuario', 'name');
-    $user_email = SecureVault::encryptData('usuario@prueba.com', 'email');
-    $user_password = SecureVault::encryptData('Unimo2025+', 'password');
-    $user_role = SecureVault::encryptData('usuario', 'role');
-
-    // Conectar al servidor MySQL (sin especificar la base de datos)
+    // Conectar al servidor MySQL (sin base de datos inicialmente)
     $pdo = new PDO("mysql:host={$host}", $user_name, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Crear la base de datos si no existe
+    // Crear la base de datos y seleccionarla
     $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$database}` CHARACTER SET utf8 COLLATE utf8_general_ci");
-
-    // Seleccionar la base de datos creada
     $pdo->exec("USE `{$database}`");
 
-    // Crear la tabla de usuarios
-    $sqlUsers = "CREATE TABLE IF NOT EXISTS users (
-        id INT(11) NOT NULL AUTO_INCREMENT,
-        nombre VARCHAR(100) NOT NULL,
-        apellidos VARCHAR(100) NOT NULL,
-        email VARCHAR(100) NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        role VARCHAR(50) NOT NULL,
-        isActive TINYINT NOT NULL DEFAULT '1',
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-        PRIMARY KEY (id)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-    $pdo->exec($sqlUsers);
+    // Inicializar el migrator y agregar migraciones
+    $migrator = new Migrator($pdo);
+    $migrator->addMigration(new CreateUsersTable($pdo));
+    $migrator->addMigration(new CreateRoutesTable($pdo));
+    $migrator->addMigration(new CreateScansTable($pdo));
 
-    $sqlScans = "CREATE TABLE IF NOT EXISTS scans (
-        idScan INT AUTO_INCREMENT PRIMARY KEY,
-        matricula INT(11) NOT NULL,
-        nombre VARCHAR(100) NOT NULL,
-        apellidos VARCHAR(100) NOT NULL,
-        grupo VARCHAR(50) NOT NULL,
-        grado INT(11) NOT NULL,
-        nivel VARCHAR(50) NOT NULL,
-        oferta VARCHAR(100) NOT NULL,
-        idUser_scan INT(11) NOT NULL,
-        dateScan TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-        KEY idUser_scan (idUser_scan),
-        CONSTRAINT fk_scans_users FOREIGN KEY (idUser_scan) REFERENCES users (id) ON DELETE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
-    $pdo->exec($sqlScans);
+    // Ejecutar todas las migraciones
+    $migrator->migrate();
 
-    $sqlRoutes = "CREATE TABLE IF NOT EXISTS routes (
-        idRoute INT AUTO_INCREMENT PRIMARY KEY,
-        nameRoute VARCHAR(100) NOT NULL,
-        isActive TINYINT NOT NULL DEFAULT '1',
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
-    $pdo->exec($sqlRoutes);
+    // === Seeder: Insertar datos iniciales ===
 
-    // Insertar el usuario administrador
+    // Encriptar datos para el administrador
+    $admin_nombre_enc    = SecureVault::encryptData($admin_nombre, 'name');
+    $admin_apellidos_enc = SecureVault::encryptData($admin_apellidos, 'name');
+    $admin_email_enc     = SecureVault::encryptData($admin_email, 'email');
+    $admin_password_enc  = SecureVault::encryptData($admin_password, 'password');
+    $admin_role_enc      = SecureVault::encryptData('admin', 'role');
+
+    // Encriptar datos para un usuario de prueba
+    $user_nombre_enc     = SecureVault::encryptData('Prueba', 'name');
+    $user_apellidos_enc  = SecureVault::encryptData('Usuario', 'name');
+    $user_email_enc      = SecureVault::encryptData('usuario@prueba.com', 'email');
+    $user_password_enc   = SecureVault::encryptData('Unimo2025+', 'password');
+    $user_role_enc       = SecureVault::encryptData('usuario', 'role');
+
     $sqlInsert = "INSERT INTO users (nombre, apellidos, email, password, role)
                   VALUES (:nombre, :apellidos, :email, :password, :role)";
+    
+    // Insertar administrador
     $stmt = $pdo->prepare($sqlInsert);
-    $stmt->bindParam(":nombre", $admin_nombre, PDO::PARAM_STR);
-    $stmt->bindParam(":apellidos", $admin_apellidos, PDO::PARAM_STR);
-    $stmt->bindParam(":email", $admin_email, PDO::PARAM_STR);
-    $passwordHash = password_hash($admin_password, PASSWORD_DEFAULT);
+    $stmt->bindParam(":nombre", $admin_nombre_enc, PDO::PARAM_STR);
+    $stmt->bindParam(":apellidos", $admin_apellidos_enc, PDO::PARAM_STR);
+    $stmt->bindParam(":email", $admin_email_enc, PDO::PARAM_STR);
+    $passwordHash = password_hash($admin_password_enc, PASSWORD_DEFAULT);
     $stmt->bindParam(":password", $passwordHash, PDO::PARAM_STR);
-    $stmt->bindParam(":role", $admin_role, PDO::PARAM_STR);
+    $stmt->bindParam(":role", $admin_role_enc, PDO::PARAM_STR);
     $stmt->execute();
     $stmt->closeCursor();
 
+    // Insertar usuario de prueba
     $stmt = $pdo->prepare($sqlInsert);
-    $stmt->bindParam(":nombre", $user_nombre, PDO::PARAM_STR);
-    $stmt->bindParam(":apellidos", $user_apellidos, PDO::PARAM_STR);
-    $stmt->bindParam(":email", $user_email, PDO::PARAM_STR);
-    $passwordHash = password_hash($user_password, PASSWORD_DEFAULT);
+    $stmt->bindParam(":nombre", $user_nombre_enc, PDO::PARAM_STR);
+    $stmt->bindParam(":apellidos", $user_apellidos_enc, PDO::PARAM_STR);
+    $stmt->bindParam(":email", $user_email_enc, PDO::PARAM_STR);
+    $passwordHash = password_hash($user_password_enc, PASSWORD_DEFAULT);
     $stmt->bindParam(":password", $passwordHash, PDO::PARAM_STR);
-    $stmt->bindParam(":role", $user_role, PDO::PARAM_STR);
+    $stmt->bindParam(":role", $user_role_enc, PDO::PARAM_STR);
     $stmt->execute();
     $stmt->closeCursor();
-    
+
     echo json_encode([
         "success" => true,
         "message" => "Instalación completada exitosamente. Redirigiendo..."

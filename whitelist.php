@@ -9,10 +9,11 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
 } else {
     $pagina = $_GET['pagina'] ?? 'qrScan';
 }
+$title = '';
 
 $userNavs = [
     'qrScan' => 'Lector de Qr',
-    'routes'=> 'Seleccionar una ruta',
+    'routes' => 'Seleccionar una ruta',
 ];
 
 $moderadorNavs = [
@@ -22,7 +23,8 @@ $moderadorNavs = [
 $adminNavs = [
     'configuration' => 'Configuración',
     'users' => 'Lista de usuarios',
-    'routes'=> 'Lista de rutas',
+    'routes' => 'Lista de rutas',
+    'analytics' => 'Analíticas',
 ];
 
 if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
@@ -55,6 +57,7 @@ if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
                 includeDataNoNavs($pagina, 'user');
             }
         } else {
+            $title = 'Error 404';
             includeError404();
         }
     }
@@ -85,7 +88,8 @@ function includeData($pagina, $roleNav)
     ";
 }
 
-function includeDataNoNavs($pagina, $roleNav) {
+function includeDataNoNavs($pagina, $roleNav)
+{
     require 'view/css.php';
     require "view/pages/$roleNav/$pagina.php";
     require 'view/js.php';

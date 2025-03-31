@@ -46,6 +46,11 @@ body {
     color: white;
 }
 
+.sidebar a.active {
+    background: linear-gradient(157deg, #114c13, #3f8e62);
+    color: white;
+}
+
 .navbar {
     background-color: #ffffff;
     padding: 10px 20px;

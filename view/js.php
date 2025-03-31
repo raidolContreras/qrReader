@@ -3,7 +3,6 @@
 <script src="assets/js/f4781c35cc.js" crossorigin="anonymous"></script>
 <script src="assets/datatables/datatables.min.js"></script>
 
-
 <script>
     $(document).ready(function () {
         $('#toggleSidebar').click(function () {
@@ -61,25 +60,25 @@
                 $('.tooltip').remove(); // Limpiar tooltips viejos al redibujar la tabla
             });
         }
-        
-    $('.logout').on('click', function(e) {
-        e.preventDefault(); // Evita que el enlace recargue o navegue
-        $.ajax({
-            url: 'controller/selectAction.php',
-            type: 'POST',
-            data: { action: 'logout' },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    window.location.href = response.redirect;
-                } else {
-                    alert(response.message);
+
+        $('.logout').on('click', function (e) {
+            e.preventDefault(); // Evita que el enlace recargue o navegue
+            $.ajax({
+                url: 'controller/selectAction.php',
+                type: 'POST',
+                data: { action: 'logout' },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status === 'success') {
+                        window.location.href = response.redirect;
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+            });
         });
     });
-});
 </script>
