@@ -6,7 +6,8 @@
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body p-4">
                         <h1 class="display-4 fw-bold mb-2">QR Analytics Dashboard</h1>
-                        <p class="lead opacity-8">Bienvenido al panel de análisis. Aquí puedes monitorear el uso del sistema de escaneo de QR.</p>
+                        <p class="lead opacity-8">Bienvenido al panel de análisis. Aquí puedes monitorear el uso del
+                            sistema de escaneo de QR.</p>
                     </div>
                 </div>
             </div>
@@ -81,12 +82,15 @@
                     <div class="card-body d-flex flex-column justify-content-center">
                         <canvas id="distribution-chart" height="250"></canvas>
                     </div>
+                    <div class="card-footer">
+                        <span id="card-footer-text" style="font-weight: bold;"></span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Log Table Card -->
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
@@ -118,24 +122,17 @@
         </div>
     </div>
 
+    <script src="assets/js/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function () {
+
             // Inicializar datos
-            document.getElementById('total-scans').textContent = '3,456';
-            document.getElementById('active-users').textContent = '25';
-            document.getElementById('last-scan').textContent = 'Hoy, 14:35';
-            
-            // Inicializar DataTable
-            // $('#scan-logs-table').DataTable({
-            //     language: {
-            //         url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-            //     },
-            //     responsive: true,
-            //     pageLength: 10
-            // });
+            $('#total-scans').text('3,456');
+            $('#active-users').text('25');
+            $('#last-scan').text('Hoy, 14:35');
 
             // Inicializar gráfico de tendencias
-            const trendCtx = document.getElementById('scan-trends-chart').getContext('2d');
+            const trendCtx = $('#scan-trends-chart')[0].getContext('2d');
             new Chart(trendCtx, {
                 type: 'line',
                 data: {
@@ -178,66 +175,122 @@
                 }
             });
 
-            // Inicializar gráfico de distribución
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+            function getRandolValue() {
+                return Math.floor(Math.random() * 10+1);
+            }
+
+            const camiones = [
+                { label: 'Camión 1', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
+                { label: 'Camión 2', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
+                { label: 'Camión 3', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
+                { label: 'Camión 4', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
+                { label: 'Camión 5', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
+                { label: 'Camión 6', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
+                { label: 'Camión 7', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' }
+            ];
+
+            const total = camiones.reduce((sum, c) => sum + c.valor, 0);
+
+            const datasets = camiones.map(c => ({
+                label: c.label,
+                data: [c.valor],
+                backgroundColor: [c.color],
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                borderRadius: 10,
+                cutout: c.cutout,
+                radius: c.radius,
+                circumference: (360 * c.valor) / total,
+                rotation: -90
+            }));
+
+            // Variable global para el texto central
+            let centerText = { label: '', value: '' };
+
+            // Plugin para mostrar texto en el centro
+            const centerTextPlugin = {
+                id: 'centerText',
+                beforeDraw(chart) {
+                    const { ctx, chartArea: { width, height } } = chart;
+                    ctx.save();
+                    ctx.font = 'bold 18px Segoe UI';
+                    ctx.fillStyle = '#333';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    if (centerText.label) {
+                        ctx.fillText(centerText.label, width / 2, height / 2 - 10);
+                        ctx.font = 'bold 20px Segoe UI';
+                        ctx.fillText(centerText.value, width / 2, height / 2 + 15);
+                    }
+                    ctx.restore();
+                }
+            };
+
             const distCtx = document.getElementById('distribution-chart').getContext('2d');
-            new Chart(distCtx, {
+
+            const chart = new Chart(distCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Aulas', 'Biblioteca', 'Cafetería', 'Laboratorios', 'Otros'],
-                    datasets: [{
-                        data: [45, 25, 15, 10, 5],
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(255, 206, 86, 0.8)',
-                            'rgba(153, 102, 255, 0.8)',
-                            'rgba(255, 159, 64, 0.8)'
-                        ],
-                        borderWidth: 1
-                    }]
+                    datasets: datasets
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onHover: (event, elements) => {
+                        // Cambia el cursor a pointer si se está pasando sobre algún elemento
+                        event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                    },
+                    onClick(evt, elements) {
+                        if (elements.length > 0) {
+                            const index = elements[0].datasetIndex;
+                            const dataset = chart.data.datasets[index];
+
+                            // En lugar de cambiar texto en el centro, lo imprimimos en el footer
+                            const footerElement = document.getElementById('card-footer-text');
+                            footerElement.textContent = `${dataset.label} - Cantidad: ${dataset.data[0]}`;
+                        }
+                    },
                     plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: ctx => ctx[0].dataset.label,
+                                label: ctx => `Cantidad: ${ctx.dataset.data[0]}`
+                            }
+                        },
                         legend: {
                             position: 'bottom',
                             labels: {
-                                boxWidth: 12
+                                generateLabels: function (chart) {
+                                    return chart.data.datasets.map((dataset, i) => ({
+                                        text: dataset.label,
+                                        fillStyle: dataset.backgroundColor[0],
+                                        strokeStyle: dataset.backgroundColor[0],
+                                        index: i
+                                    }));
+                                },
+                                color: '#333',
+                                font: {
+                                    size: 14
+                                },
+                                boxWidth: 14,
+                                usePointStyle: true
                             }
                         }
                     }
-                }
+                },
+                plugins: [centerTextPlugin]
             });
         });
 
-        function loadScanLogs() {
-            // Simulación de carga de datos
-            $('#scan-logs-table').DataTable().clear().destroy();
-            
-            // Datos de ejemplo que serían reemplazados por datos reales de la BD
-            const logData = [
-                ['2023-10-01 14:35', 'Juan Pérez', 'Aula 101'],
-                ['2023-10-01 14:40', 'María López', 'Biblioteca'],
-                ['2023-10-01 15:10', 'Carlos Ruiz', 'Laboratorio 3'],
-                ['2023-10-01 15:45', 'Ana García', 'Cafetería'],
-                ['2023-10-02 09:20', 'Pedro Sánchez', 'Aula 205'],
-                ['2023-10-02 10:15', 'Laura Martínez', 'Biblioteca'],
-                ['2023-10-02 11:30', 'Miguel Torres', 'Aula 101']
-            ];
-            
-            // Inicializar DataTable con los nuevos datos
-            $('#scan-logs-table').DataTable({
-                data: logData,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-                },
-                responsive: true,
-                pageLength: 10
-            });
-            
-            // Mostrar notificación
-            toastr.success('Datos de bitácora actualizados correctamente', 'Éxito');
-        }
+
     </script>
 </div>

@@ -29,7 +29,8 @@ switch ($_POST["action"]) {
         break;
     case 'newRoute':
         $nameRoute = $_POST['nombre'];
-        $result = FormsController::ctrNewRoute($nameRoute);
+        $colorRoute = getRandomColor();
+        $result = FormsController::ctrNewRoute($nameRoute, $colorRoute);
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Ruta creada con éxito']);
         } else {
@@ -55,4 +56,13 @@ switch ($_POST["action"]) {
             echo json_encode(['success' => false, 'message' => 'Error al eliminar la ruta']);
         }
         break;
+}
+
+function getRandomColor() {
+    $letters = '0123456789ABCDEF';
+    $color = '#';
+    for ($i = 0; $i < 6; $i++) {
+        $color .= $letters[mt_rand(0, 15)];
+    }
+    return $color;
 }

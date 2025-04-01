@@ -129,11 +129,12 @@ class FormsModel
         }
     }
 
-    static public function mdlNewRoute($nameRoute) {
+    static public function mdlNewRoute($nameRoute, $colorRoute) {
         $pdo = Conexion::conectar();
-        $sql = 'INSERT INTO routes (nameRoute, isActive) VALUES (:nameRoute, 1)';
+        $sql = 'INSERT INTO routes (nameRoute, color) VALUES (:nameRoute, :colorRoute)';
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':nameRoute', $nameRoute, PDO::PARAM_STR);
+        $stmt->bindParam(':colorRoute', $colorRoute, PDO::PARAM_STR);
         if ($stmt->execute()) {
             $result = 'ok';
         } else {
