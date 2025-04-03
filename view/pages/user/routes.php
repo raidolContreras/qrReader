@@ -13,14 +13,15 @@
         </div>
     </main>
 
+
     <!-- FOOTER NAVIGATION (solo en móviles) -->
     <footer class="app-footer">
         <nav class="footer-nav">
             <a href="qrScan" class="nav-item">
                 <i class="fas fa-qrcode"></i>
-                <span class="active-dot"></span> <!-- Punto indicador -->
+                <span class="active-dot"></span>
             </a>
-            <a href="routes" class="nav-item btn active">
+            <a href="routes" class="nav-item active">
                 <i class="fal fa-exchange-alt"></i>
                 <span class="active-dot"></span>
             </a>
