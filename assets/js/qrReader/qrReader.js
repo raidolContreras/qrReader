@@ -133,6 +133,7 @@ function initializeScanner() {
     )
     .show();
   $("#reader").show();
+  $("#html5-qrcode-button-camera-start").html('<i class="fas fa-camera"></i> Iniciar escaneo')
   $("#reader-div").hide();
 
   autoFocusTimer = setInterval(autoAdjustFocus, 2000);
@@ -353,3 +354,7 @@ function mostrarVCard(matricula) {
   });
   
 }
+
+
+
+$('#html5-qrcode-button-camera-start').html('<i class="fas fa-camera"></i> Iniciar escaneo');

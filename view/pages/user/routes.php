@@ -8,7 +8,7 @@
     </header>
 
     <!-- CONTENEDOR PRINCIPAL -->
-    <main class="container row">
+    <main class="container">
         <div class="reader-button-wrapper" class="col-12">
         </div>
     </main>
@@ -56,10 +56,10 @@
                             // Generate button for each route
                             response.data.forEach(route => {
                                 const button = $(`
-                            <button class="btn btn-primary route-button m-2" data-route-id="${route.idRoute}">
-                                <i class="fas fa-route me-2"></i>${route.nameRoute}
-                            </button>
-                        `);
+                                    <button class="btn btn-primary route-button m-2" data-route-id="${route.idRoute}">
+                                        <i class="fas fa-route me-2"></i>${route.nameRoute}
+                                    </button>
+                                `);
 
                                 // Add click event to handle route selection
                                 button.on('click', function() {

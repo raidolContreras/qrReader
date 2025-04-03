@@ -12,12 +12,13 @@
   --accent-color: #1a5d22;
   --button-bg: #1a5d22;
   --button-bg-hover: #13653b;
+  --button-danger: #dc3545;
 }
 
 /* ===== ESTILOS GENERALES ===== */
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-color);
+  background-color: #8c8c8c !important;
   color: var(--text-color);
   display: flex;
   flex-direction: column;
@@ -37,34 +38,24 @@ body {
 
 /* ==== CONTENEDOR PRINCIPAL ==== */
 .container {
-  flex: 1;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
   max-width: 500px;
+  margin: 20px auto;
+  padding: 1.5rem;
+  text-align: center;
   background: var(--container-bg);
   border-radius: 20px;
   box-shadow: var(--container-shadow);
-  padding: 1.5rem;
-  margin: 20px auto;
-  transition: transform 0.3s ease;
   position: relative;
   overflow: hidden;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
 }
 
-.container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(26, 93, 34, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
-  pointer-events: none;
-}
-
-.container h2 {
+.container h1 {
   font-size: 1.2rem;
   font-weight: 500;
   margin-bottom: 10px;
@@ -104,6 +95,7 @@ body {
   gap: 0.5rem;
   position: relative;
   overflow: hidden;
+  margin: 12px 0;
 }
 
 #start:active {
@@ -135,6 +127,7 @@ body {
   position: relative;
   padding: 0 40px;
   border: 1px solid silver;
+  align-items: center;
 }
 
 /* Imágenes en la zona de escaneo */
@@ -158,30 +151,57 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 20px 0;
   align-items: stretch;
 }
 
 /* ==== ANIMACIONES ==== */
 @keyframes floating {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+
+  40% {
+    transform: scale(1);
+  }
 }
 
 @keyframes slideDown {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* Bouncing dots */
@@ -190,9 +210,18 @@ body {
   margin-left: 2px;
   animation: bounce 1.4s infinite;
 }
-.dot:nth-child(1) { animation-delay: 0s; }
-.dot:nth-child(2) { animation-delay: 0.2s; }
-.dot:nth-child(3) { animation-delay: 0.4s; }
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
 /* ==== PIE DE APLICACIÓN (Footer) ==== */
 .app-footer {
@@ -214,14 +243,17 @@ img[alt="Info icon"] {
   color: rgba(0, 0, 0, 0.8);
   transition: color 0.3s ease;
 }
+
 .nav-item:hover,
 .nav-item.active {
   color: #14661b;
 }
+
 .nav-item i {
   font-size: 1.25rem;
   margin-bottom: 4px;
 }
+
 .nav-item span {
   font-size: 0.75rem;
   font-weight: 500;
@@ -237,6 +269,7 @@ img[alt="Info icon"] {
   font-weight: 500;
   min-height: 60px;
 }
+
 .route-button.active {
   background-color: #28a745;
   transform: scale(1.05);
@@ -255,12 +288,22 @@ img[alt="Info icon"] {
   transition: opacity 0.3s ease;
   z-index: 1000;
 }
+
 .toast-notification.show {
   opacity: 1;
 }
-.toast-success { background-color: #28a745; }
-.toast-error { background-color: #dc3545; }
-.toast-info { background-color: #17a2b8; }
+
+.toast-success {
+  background-color: #28a745;
+}
+
+.toast-error {
+  background-color: #dc3545;
+}
+
+.toast-info {
+  background-color: #17a2b8;
+}
 
 /* Contenedores de botones de acción */
 .logout-button-container,
@@ -269,8 +312,14 @@ img[alt="Info icon"] {
   top: 20px;
   z-index: 100;
 }
-.logout-button-container { right: 20px; }
-.routes-button-container { left: 20px; }
+
+.logout-button-container {
+  right: 20px;
+}
+
+.routes-button-container {
+  left: 20px;
+}
 
 .logout-btn,
 .routes-btn {
@@ -280,6 +329,7 @@ img[alt="Info icon"] {
   font-size: 14px;
   transition: all 0.3s ease;
 }
+
 .logout-btn:hover,
 .routes-btn:hover {
   transform: translateY(-2px);
@@ -298,6 +348,7 @@ img[alt="Info icon"] {
   background: #01643d;
   border-radius: 50%;
 }
+
 .nav-item.active .active-dot {
   display: block;
 }
@@ -312,14 +363,17 @@ img[alt="Info icon"] {
     justify-content: center;
     text-align: center;
   }
+
   .container {
     max-width: 900px;
   }
+
   .reader-button-wrapper {
     flex-direction: row;
     justify-content: center;
     align-items: center;
   }
+
   #start {
     width: auto;
     margin-top: 0;
@@ -333,6 +387,10 @@ img[alt="Info icon"] {
     align-items: center;
     gap: 1rem;
   }
+
+  .route-button {
+    width: calc(100% - 10px);
+  }
 }
 
 /* Footer en móviles (portrait) */
@@ -343,9 +401,9 @@ img[alt="Info icon"] {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--header-bg);
     padding: 12px 0;
   }
+
   .footer-nav {
     display: flex;
     justify-content: space-around;
@@ -353,8 +411,12 @@ img[alt="Info icon"] {
     max-width: 600px;
     margin: 0 auto;
   }
+
   .container {
     margin: 0 auto;
+    padding: 1rem;
+    max-width: 357px;
+    max-height: 43rem;
   }
 }
 
@@ -372,9 +434,11 @@ img[alt="Info icon"] {
     align-items: center;
     justify-content: center;
   }
+
   .app-header img {
     transform: rotate(-90deg);
   }
+
   .app-footer {
     position: fixed;
     top: 0;
@@ -387,21 +451,90 @@ img[alt="Info icon"] {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: var(--header-bg);
   }
+
   .footer-nav {
     flex-direction: column-reverse;
     justify-content: space-evenly;
     align-items: center;
     height: 100%;
     margin: 0;
+    display: flex;
+  }
+
+  .container {
+    margin: 19px auto;
+    padding: 1rem;
+    max-width: 645px !important;
+    max-height: 22rem;
+  }
+
+  .container h1 {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .reader-button-wrapper {
+    padding-top: 0;
+  }
+
+  .routes-btn,
+  .logout-btn {
+    display: none;
+  }
+
+  .route-button {
+    width: calc(30% - 10px);
+    margin: 5px 0;
+    height: 5em;
   }
 }
 
 /* Ocultar botones de acción en móviles */
 @media (max-width: 768px) {
+
   .logout-button-container,
   .routes-button-container {
     display: none;
   }
+}
+
+#html5-qrcode-anchor-scan-type-change {
+  display: none !important;
+}
+
+#html5-qrcode-button-camera-start {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: var(--button-bg);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#html5-qrcode-button-camera-stop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: var(--button-danger);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
 }

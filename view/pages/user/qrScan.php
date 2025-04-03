@@ -1,7 +1,7 @@
 <body>
   <!-- ENCABEZADO -->
   <header class="app-header">
-    <img src="assets/images/logo-color.png" alt="Logo" width="150">
+    <img src="assets/images/logo.png" alt="Logo" width="150">
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
