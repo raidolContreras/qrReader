@@ -63,6 +63,11 @@ class FormsController
         $result = FormsModel::mdlDeleteRoute($idRoute);
         return $result;
     }
+
+    static public function ctrRegisterStudent($data, $idUser, $route) {
+        $result = FormsModel::mdlRegisterStudent($data, $idUser, $route);
+        return $result;
+    }
 }
 
 class SecureVault

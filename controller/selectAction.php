@@ -30,4 +30,8 @@ switch ($_POST["action"]) {
     case 'deleteRoute':
         require "actions/routes.php";
         break;
+
+    case 'registerStudent':
+        require 'actions/registerStudent.php';
+        break;
 }

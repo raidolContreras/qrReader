@@ -18,7 +18,7 @@
 /* ===== ESTILOS GENERALES ===== */
 body {
   font-family: var(--font-family);
-  background-color: #8c8c8c !important;
+  background-color: #f1f1f1  !important;
   color: var(--text-color);
   display: flex;
   flex-direction: column;

@@ -175,4 +175,29 @@ class FormsModel
         $stmt = null;
         return $result;
     }
+
+    static public function mdlRegisterStudent($data, $idUser, $route) {
+        $pdo = Conexion::conectar();
+        $sql = "INSERT INTO scans (matricula, nombre, apellidos, grupo, grado, nivel, oferta, idUser_scan, routeScan) 
+                VALUES (:matricula, :nombre, :apellidos, :grupo, :grado, :nivel, :oferta, :idUser, :routeScan)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":matricula", $data["matricula"], PDO::PARAM_STR);
+        $stmt->bindParam(":nombre", $data["nombre"], PDO::PARAM_STR);
+        $stmt->bindParam(":apellidos", $data["apellidos"], PDO::PARAM_STR);
+        $stmt->bindParam(":grupo", $data["grupo"], PDO::PARAM_STR);
+        $stmt->bindParam(":grado", $data["grado"], PDO::PARAM_STR);
+        $stmt->bindParam(":nivel", $data["nivel"], PDO::PARAM_STR);
+        $stmt->bindParam(":oferta", $data["oferta"], PDO::PARAM_STR);
+        $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
+        $stmt->bindParam(":routeScan", $route, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            $result = true;
+        } else {
+            $result = false;
+        }
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
 }

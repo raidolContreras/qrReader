@@ -60,6 +60,7 @@ function login() {
         if (password_verify($password, $searchUser['password'])) {
             session_start();
             $_SESSION["logged"] = true;
+            $_SESSION["idUser"] = $searchUser["id"];
             $_SESSION["nombre"] = SecureVault::decryptData($searchUser["nombre"]);
             $_SESSION["apellidos"] = SecureVault::decryptData($searchUser["apellidos"]);
             $_SESSION["email"] = SecureVault::decryptData($searchUser["email"]);

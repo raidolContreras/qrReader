@@ -11,6 +11,16 @@ let autoFocusTimer = null;
 let initialPinchDistance = null;
 let initialZoom = currentZoom;
 
+// Variables para el escáner QR
+let MATRICULA = "";
+let NOMBRE = "";
+let PATERNO = "";
+let MATERNO = "";
+let NIVEL = "";
+let GRADO = "";
+let GRUPO = "";
+let oferta = "";
+
 function onScanSuccess(decodedText, decodedResult) {
   const validQrRegex =
     /^https:\/\/sse\.unimontrer\.edu\.mx\/valides\.aspx\?matricula=(\d+)$/;
@@ -265,7 +275,7 @@ function mostrarVCard(matricula) {
     },
     success: function (response) {
       const data = typeof response === "string" ? JSON.parse(response) : response;
-  
+
       // Construimos el HTML con un estilo tipo "vCard"
       const htmlContent = `
         <div class="vcard-container" style="position: relative; background-color: #f8f9fa;">
@@ -336,10 +346,20 @@ function mostrarVCard(matricula) {
           </div>
         </div>
       `;
-  
+
+      // Asignar a variables de qr
+      MATRICULA = data.MATRICULA;
+      NOMBRE = data.NOMBRE;
+      PATERNO = data.PATERNO;
+      MATERNO = data.MATERNO;
+      NIVEL = data.NIVEL;
+      GRADO = data.GRADO;
+      GRUPO = data.GRUPO;
+      oferta = data.oferta;
+
       // Inyectamos en modalResult
       $("#modalResult").html(htmlContent);
-  
+
       // Abrimos el modal ya con todo listo
       $("#resultModal").modal("show");
     },
@@ -352,9 +372,38 @@ function mostrarVCard(matricula) {
       $("#resultModal").modal("show");
     },
   });
-  
+
 }
 
-
-
 $('#html5-qrcode-button-camera-start').html('<i class="fas fa-camera"></i> Iniciar escaneo');
+
+$('#confirmResult').click(() => {
+  const studentData = {
+    action: "registerStudent",
+    matricula: MATRICULA,
+    nombre: NOMBRE,
+    apellidos: MATERNO !== "" ? PATERNO + ' ' + MATERNO : PATERNO,
+    grupo: GRUPO,
+    grado: GRADO,
+    nivel: NIVEL,
+    oferta: oferta,
+  };
+
+  // Enviar los datos al servidor o procesarlos
+  $.ajax({
+    url: "controller/selectAction.php",
+    method: "POST",
+    data: studentData,
+    dataType: "json",
+    success: function (response) {
+      if (response.success) {
+        $("#resultModal").modal("hide");
+      } else {
+        alert("Error al registrar los datos: " + response.message);
+      }
+    },
+    error: function (xhr, status, error) {
+      alert("Error al enviar los datos: " + error);
+    },
+  });
+});

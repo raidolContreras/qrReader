@@ -1,7 +1,7 @@
 <body>
   <!-- ENCABEZADO -->
   <header class="app-header">
-    <img src="assets/images/logo.png" alt="Logo" width="150">
+    <img src="assets/images/logo-color.png" alt="Logo" width="150">
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
@@ -20,7 +20,7 @@
   </main>
 
   <!-- MODAL DE RESULTADOS -->
-  <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+  <div class="modal fade" data-bs-backdrop="static" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
       <div class="modal-content border-0" style="overflow: hidden; border-radius: 20px;">
         <!-- Encabezado oculto para diseño personalizado -->
@@ -29,7 +29,8 @@
           <div id="modalResult"></div>
         </div>
         <div class="modal-footer border-0 justify-content-center">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" id="confirmResult">Ingresar</button>
         </div>
       </div>
     </div>
