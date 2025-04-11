@@ -11,7 +11,7 @@ require_once __DIR__ . '/migrations/AbstractMigration.php';
 require_once __DIR__ . '/migrations//CreateUsersTable.php';
 require_once __DIR__ . '/migrations//CreateRoutesTable.php';
 require_once __DIR__ . '/migrations//CreateScansTable.php';
-require_once __DIR__ . 'Migrator.php';
+require_once __DIR__ . '/Migrator.php';
 
 // Recoger y sanitizar datos del formulario
 $host            = isset($_POST['host']) ? trim($_POST['host']) : "";
