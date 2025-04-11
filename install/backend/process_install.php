@@ -7,11 +7,11 @@ require_once __DIR__ . "/../../controller/forms.controller.php";
 require_once __DIR__ . "/../../model/forms.models.php";
 
 // Incluir migraciones y el migrator
-require_once __DIR__ . 'install/backend/migrations/AbstractMigration.php';
-require_once __DIR__ . 'install/backend/migrations//CreateUsersTable.php';
-require_once __DIR__ . 'install/backend/migrations//CreateRoutesTable.php';
-require_once __DIR__ . 'install/backend/migrations//CreateScansTable.php';
-require_once __DIR__ . 'install/backend/Migrator.php';
+require_once __DIR__ . 'migrations/AbstractMigration.php';
+require_once __DIR__ . 'migrations//CreateUsersTable.php';
+require_once __DIR__ . 'migrations//CreateRoutesTable.php';
+require_once __DIR__ . 'migrations//CreateScansTable.php';
+require_once __DIR__ . 'Migrator.php';
 
 // Recoger y sanitizar datos del formulario
 $host            = isset($_POST['host']) ? trim($_POST['host']) : "";
