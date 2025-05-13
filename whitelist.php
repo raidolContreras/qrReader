@@ -70,7 +70,7 @@ function includeData($pagina, $roleNav)
     require 'view/js.php';
     echo "
     <footer>
-        <p>&copy; 2025 Gestión de Usuarios</p>
+        <p>&copy; 2025 Universidad Monterrey - Software Lector de QR</p>
     </footer>
     ";
 }
