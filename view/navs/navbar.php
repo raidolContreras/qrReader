@@ -1,4 +1,4 @@
-<?php $role = ($_SESSION["role"] == 'admin') ? 'Administrador' : (($_SESSION["role"] == 'moderador') ? 'Moderador' : 'Usuario'); ?>
+<?php $role = ($_SESSION["role"] == 'admin') ? 'Administrador' :  'Usuario'; ?>
 <nav class="navbar">
     <div class="container-fluid">
         <button class="btn btn-light d-md-none" id="toggleSidebar">

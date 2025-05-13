@@ -4,8 +4,6 @@ session_start();
 
 if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     $pagina = $_GET['pagina'] ?? 'users';
-} elseif (isset($_SESSION['role']) && $_SESSION['role'] == 'moderador') {
-    $pagina = $_GET['pagina'] ?? 'users';
 } else {
     $pagina = $_GET['pagina'] ?? 'qrScan';
 }
@@ -14,10 +12,6 @@ $title = '';
 $userNavs = [
     'qrScan' => 'Lector de Qr',
     'routes' => 'Seleccionar una ruta',
-];
-
-$moderadorNavs = [
-    'users' => 'Usuarios'
 ];
 
 $adminNavs = [
@@ -32,13 +26,6 @@ if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
         if (array_key_exists($pagina, $adminNavs)) {
             $title = $adminNavs[$pagina];
             includeData($pagina, 'admin');
-        } else {
-            includeError404();
-        }
-    } elseif ($_SESSION['role'] == 'moderador') {
-        if (array_key_exists($pagina, $moderadorNavs)) {
-            $title = $moderadorNavs[$pagina];
-            includeData($pagina, 'moderador');
         } else {
             includeError404();
         }

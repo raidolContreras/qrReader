@@ -217,7 +217,7 @@ class SecureVault
                 break;
 
             case 'role':
-                $rolesPermitidos = ['admin', 'usuario', 'moderador'];
+                $rolesPermitidos = ['admin', 'usuario'];
                 if (!in_array($dato, $rolesPermitidos)) {
                     self::responseError("El rol no es válido.");
                 }

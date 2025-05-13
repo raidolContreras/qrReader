@@ -47,7 +47,6 @@
                         <label class="form-label">Rol</label>
                         <select name="role" id="role" class="form-select">
                             <option value="admin">Admin</option>
-                            <option value="moderador">Moderador</option>
                             <option value="usuario">Usuario</option>
                         </select>
                     </div>
@@ -86,7 +85,6 @@
                         <label class="form-label">Rol</label>
                         <select name="role" id="editRole" class="form-select">
                             <option value="admin">Admin</option>
-                            <option value="moderador">Moderador</option>
                             <option value="usuario">Usuario</option>
                         </select>
                     </div>
