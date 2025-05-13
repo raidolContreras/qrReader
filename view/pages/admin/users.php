@@ -46,8 +46,8 @@
                     <div class="mb-3">
                         <label class="form-label">Rol</label>
                         <select name="role" id="role" class="form-select">
-                            <option value="admin">Admin</option>
-                            <option value="usuario">Usuario</option>
+                            <option value="admin">Administrador</option>
+                            <option value="usuario">Escáner QR</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -84,8 +84,8 @@
                     <div class="mb-3">
                         <label class="form-label">Rol</label>
                         <select name="role" id="editRole" class="form-select">
-                            <option value="admin">Admin</option>
-                            <option value="usuario">Usuario</option>
+                            <option value="admin">Administrador</option>
+                            <option value="usuario">Escáner QR</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -113,7 +113,17 @@ $(document).ready(() => {
                 render: data => `${data.nombre} ${data.apellidos}`
             },
             { data: 'email' },
-            { data: 'role' },
+            { 
+                data: 'role',
+                render: role => {
+                    if (role === 'admin') {
+                        return '<span class="badge bg-primary">Administrador</span>';
+                    } else if (role === 'usuario') {
+                        return '<span class="badge bg-secondary">Escáner QR</span>';
+                    }
+                    return '<span class="badge bg-dark">Desconocido</span>';
+                }
+            },
             {
                 data: null,
                 render: (data, type, row) => `
