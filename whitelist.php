@@ -3,7 +3,7 @@
 session_start();
 
 if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
-    $pagina = $_GET['pagina'] ?? 'users';
+    $pagina = $_GET['pagina'] ?? 'analytics';
 } else {
     $pagina = $_GET['pagina'] ?? 'qrScan';
 }
