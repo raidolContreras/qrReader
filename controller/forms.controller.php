@@ -49,8 +49,8 @@ class FormsController
         return $result;
     }
 
-    static public function ctrNewRoute($nameRoute, $colorRoute) {
-        $result = FormsModel::mdlNewRoute($nameRoute, $colorRoute);
+    static public function ctrNewRoute($nameRoute) {
+        $result = FormsModel::mdlNewRoute($nameRoute);
         return $result;
     }
 

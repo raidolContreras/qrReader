@@ -29,8 +29,7 @@ switch ($_POST["action"]) {
         break;
     case 'newRoute':
         $nameRoute = $_POST['nombre'];
-        $colorRoute = getRandomColor();
-        $result = FormsController::ctrNewRoute($nameRoute, $colorRoute);
+        $result = FormsController::ctrNewRoute($nameRoute);
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Ruta creada con éxito']);
         } else {

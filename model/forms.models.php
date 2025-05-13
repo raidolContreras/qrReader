@@ -129,12 +129,14 @@ class FormsModel
         }
     }
 
-    static public function mdlNewRoute($nameRoute, $colorRoute) {
+    static public function mdlNewRoute($nameRoute) {
         $pdo = Conexion::conectar();
-        $sql = 'INSERT INTO routes (nameRoute, color) VALUES (:nameRoute, :colorRoute)';
+        date_default_timezone_set('America/Mexico_City');
+        $created_at = date('Y-m-d H:i:s');
+        $sql = 'INSERT INTO routes (nameRoute, created_at) VALUES (:nameRoute, :created_at)';
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':nameRoute', $nameRoute, PDO::PARAM_STR);
-        $stmt->bindParam(':colorRoute', $colorRoute, PDO::PARAM_STR);
+        $stmt->bindParam(':created_at', $created_at, PDO::PARAM_STR);
         if ($stmt->execute()) {
             $result = 'ok';
         } else {
@@ -178,8 +180,11 @@ class FormsModel
 
     static public function mdlRegisterStudent($data, $idUser, $route) {
         $pdo = Conexion::conectar();
-        $sql = "INSERT INTO scans (matricula, nombre, apellidos, grupo, grado, nivel, oferta, idUser_scan, routeScan) 
-                VALUES (:matricula, :nombre, :apellidos, :grupo, :grado, :nivel, :oferta, :idUser, :routeScan)";
+        
+        date_default_timezone_set('America/Mexico_City');
+        $dateScan = date('Y-m-d H:i:s');
+        $sql = "INSERT INTO scans (matricula, nombre, apellidos, grupo, grado, nivel, oferta, idUser_scan, routeScan, dateScan) 
+                VALUES (:matricula, :nombre, :apellidos, :grupo, :grado, :nivel, :oferta, :idUser, :routeScan, :dateScan)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(":matricula", $data["matricula"], PDO::PARAM_STR);
         $stmt->bindParam(":nombre", $data["nombre"], PDO::PARAM_STR);
@@ -190,6 +195,7 @@ class FormsModel
         $stmt->bindParam(":oferta", $data["oferta"], PDO::PARAM_STR);
         $stmt->bindParam(":idUser", $idUser, PDO::PARAM_INT);
         $stmt->bindParam(":routeScan", $route, PDO::PARAM_INT);
+        $stmt->bindParam(":dateScan", $dateScan, PDO::PARAM_STR);
 
         if ($stmt->execute()) {
             $result = true;
