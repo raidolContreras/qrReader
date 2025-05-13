@@ -155,8 +155,8 @@ class SecureVault
 
                 // Validación: Solo se permiten letras y espacios
                 // Esto evita números y símbolos extraños.
-                if (!empty($dato) && !preg_match('/^[a-zA-Z\s]+$/', $dato)) {
-                    $errores[] = "El campo no puede contener números o símbolos extraños.";
+                if (!empty($dato) && !preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/', $dato)) {
+                    $errores[] = "El campo no puede contener números o símbolos extraños, pero puede incluir acentos, eñes y diéresis.";
                 }
 
                 // Si se detectan errores, se envía una respuesta JSON con todos los mensajes
