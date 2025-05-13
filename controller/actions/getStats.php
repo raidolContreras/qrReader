@@ -16,6 +16,7 @@ switch ($_POST["action"]) {
         $logs = FormsController::ctrGetLogsScans();
         foreach ($logs as &$log) {
             $log['nombreUsuario'] = SecureVault::decryptData($log['nombreUsuario']);
+            $log['apellidosUsuario'] = SecureVault::decryptData($log['apellidosUsuario']);
         }
         
         if ($logs) {

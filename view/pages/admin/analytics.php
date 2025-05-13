@@ -353,7 +353,10 @@
                         data: 'grupo'
                     },
                     {
-                        data: 'nombreUsuario'
+                        data: null,
+                        render: (data, type, row) => {
+                            return `${row.nombreUsuario} ${row.apellidosUsuario}`;
+                        }
                     },
                     {
                         data: 'nameRoute'

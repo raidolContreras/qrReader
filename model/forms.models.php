@@ -264,7 +264,7 @@ class FormsModel
 
     static public function mdlGetLogsScans() {
         $pdo = Conexion::conectar();
-        $sql = "SELECT s.*, u.nombre AS nombreUsuario, r.nameRoute FROM scans s LEFT JOIN users u ON s.idUser_scan = u.id LEFT JOIN routes r ON r.idRoute = s.routeScan ORDER BY dateScan DESC;";
+        $sql = "SELECT s.*, u.nombre AS nombreUsuario, u.apellidos AS apellidosUsuario, r.nameRoute FROM scans s LEFT JOIN users u ON s.idUser_scan = u.id LEFT JOIN routes r ON r.idRoute = s.routeScan ORDER BY dateScan DESC;";
         $stmt = $pdo->prepare($sql);
         if ($stmt->execute()) {
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
