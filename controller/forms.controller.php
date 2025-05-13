@@ -68,6 +68,26 @@ class FormsController
         $result = FormsModel::mdlRegisterStudent($data, $idUser, $route);
         return $result;
     }
+
+    static public function ctrGetStats() {
+        $result = FormsModel::mdlGetStats();
+        return $result;
+    }
+
+    static public function ctrGetStatsByScans() {
+        $result = FormsModel::mdlGetStatsByScans();
+        return $result;
+    }
+
+    static public function ctrGetStatsByRoutes() {
+        $result = FormsModel::mdlGetStatsByRoutes();
+        return $result;
+    }
+
+    static public function ctrGetLogsScans() {
+        $result = FormsModel::mdlGetLogsScans();
+        return $result;
+    }
 }
 
 class SecureVault

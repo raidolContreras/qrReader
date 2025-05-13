@@ -34,4 +34,9 @@ switch ($_POST["action"]) {
     case 'registerStudent':
         require 'actions/registerStudent.php';
         break;
+
+    case 'getStats':
+    case 'getLogsScans':
+        require 'actions/getStats.php';
+        break;
 }

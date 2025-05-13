@@ -200,4 +200,81 @@ class FormsModel
         $stmt = null;
         return $result;
     }
+
+    static  public function mdlGetStats() {
+        $pdo = Conexion::conectar();
+        $sql = "SELECT 
+                (SELECT SUM(1) FROM scans) AS totalScans,
+                (SELECT COUNT(*) FROM users WHERE isActive = 1) AS activeUsers,
+                (SELECT MAX(dateScan) FROM scans) AS lastScanTime;";
+        $stmt = $pdo->prepare($sql);
+        if ($stmt->execute()) {
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+            $stmt = null;
+            return $result;
+        } else {
+            return false; // Error en la consulta
+        }
+    }
+
+    static public function mdlGetStatsByScans() {
+        $pdo = Conexion::conectar();
+        $sql = "SELECT 
+                    DAYNAME(dateScan) AS day, 
+                    COUNT(*) AS total 
+                FROM scans 
+                WHERE WEEK(dateScan) = WEEK(CURDATE()) 
+                GROUP BY DAYNAME(dateScan) 
+                ORDER BY FIELD(DAYNAME(dateScan), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')";
+        $stmt = $pdo->prepare($sql);
+        if ($stmt->execute()) {
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+            $stmt = null;
+            return $result;
+        } else {
+            $stmt->closeCursor();
+            $stmt = null;
+            return false; // Error en la consulta
+        }
+    }
+
+    static public function mdlGetStatsByRoutes() {
+        $pdo = Conexion::conectar();
+        $sql = "SELECT 
+                    r.nameRoute AS route, 
+                    COUNT(s.routeScan) AS total 
+                FROM scans s 
+                JOIN routes r ON s.routeScan = r.idRoute 
+                WHERE s.dateScan >= DATE_SUB(NOW(), INTERVAL 1 WEEK) 
+                GROUP BY r.nameRoute";
+        $stmt = $pdo->prepare($sql);
+        if ($stmt->execute()) {
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+            $stmt = null;
+            return $result;
+        } else {
+            $stmt->closeCursor();
+            $stmt = null;
+            return false; // Error en la consulta
+        }
+    }
+
+    static public function mdlGetLogsScans() {
+        $pdo = Conexion::conectar();
+        $sql = "SELECT s.*, u.nombre AS nombreUsuario, r.nameRoute FROM scans s LEFT JOIN users u ON s.idUser_scan = u.id LEFT JOIN routes r ON r.idRoute = s.routeScan ORDER BY dateScan DESC;";
+        $stmt = $pdo->prepare($sql);
+        if ($stmt->execute()) {
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
+            $stmt = null;
+            return $result;
+        } else {
+            $stmt->closeCursor();
+            $stmt = null;
+            return false; // Error en la consulta
+        }
+    }
 }

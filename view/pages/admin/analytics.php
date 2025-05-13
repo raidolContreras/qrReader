@@ -5,7 +5,7 @@
             <div class="col-12">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body p-4">
-                        <h1 class="display-4 fw-bold mb-2">QR Analytics Dashboard</h1>
+                        <h1 class="fw-bold mb-2">QR Analytics Dashboard</h1>
                         <p class="lead opacity-8">Bienvenido al panel de análisis. Aquí puedes monitorear el uso del
                             sistema de escaneo de QR.</p>
                     </div>
@@ -104,16 +104,16 @@
                             <table id="scan-logs-table" class="table table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Fecha</th>
+                                        <th>#</th>
+                                        <th>Matrícula</th>
+                                        <th>Nombre</th>
+                                        <th>Apellidos</th>
+                                        <th>Grupo</th>
                                         <th>Usuario</th>
                                         <th>Ruta</th>
+                                        <th>Fecha y hora</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="5" class="text-center">Cargando datos...</td>
-                                    </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -124,57 +124,156 @@
 
     <script src="assets/js/chart.js"></script>
     <script>
-        $(document).ready(function () {
-
-            // Inicializar datos
-            $('#total-scans').text('3,456');
-            $('#active-users').text('25');
-            $('#last-scan').text('Hoy, 14:35');
-
+        $(document).ready(function() {
             // Inicializar gráfico de tendencias
             const trendCtx = $('#scan-trends-chart')[0].getContext('2d');
-            new Chart(trendCtx, {
-                type: 'line',
+
+            $.ajax({
+                url: 'controller/selectAction.php',
+                type: 'POST',
                 data: {
-                    labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
-                    datasets: [{
-                        label: 'Escaneos por Día',
-                        data: [50, 75, 60, 90, 120, 85, 40],
-                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: 'rgba(54, 162, 235, 1)',
-                        pointBorderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }]
+                    action: 'getStats'
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                drawBorder: false
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        const data = response.data;
+                        $('#total-scans').text(data.totalScans);
+                        $('#active-users').text(data.activeUsers);
+                        const lastScanDate = new Date(data.lastScanTime);
+                        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                        const formattedDate = lastScanDate.toLocaleDateString('es-ES', options);
+                        $('#last-scan').text(formattedDate);
+
+                        const qrStats = response.qrStats;
+
+                        // Orden fijo de los días (en inglés)
+                        const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                        const labels = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                        const statsMap = Object.fromEntries(qrStats.map(item => [item.day, item.total]));
+                        const orderedTotals = daysOrder.map(day => statsMap[day] || 0);
+
+                        new Chart(trendCtx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Escaneos por Día',
+                                    data: orderedTotals,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 2,
+                                    pointBackgroundColor: '#ffffff',
+                                    pointBorderColor: 'rgba(54, 162, 235, 1)',
+                                    pointBorderWidth: 2,
+                                    tension: 0.4,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'top'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            drawBorder: false
+                                        },
+                                        ticks: {
+                                            stepSize: 1
+                                        }
+                                    },
+                                    x: {
+                                        grid: {
+                                            display: false
+                                        }
+                                    }
+                                }
                             }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
+                        });
+
+                        // ================== CAMIONES / RUTAS ===================
+                        const routesStats = response.routesStats;
+                        const total = routesStats.reduce((sum, r) => sum + r.total, 0);
+
+                        const datasets = routesStats.map(r => ({
+                            label: r.route,
+                            data: [r.total],
+                            backgroundColor: [getRandomColor()],
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            borderRadius: 10,
+                            cutout: '80%',
+                            radius: '100%',
+                            circumference: (360 * r.total) / total,
+                            rotation: -90
+                        }));
+
+                        const distCtx = document.getElementById('distribution-chart').getContext('2d');
+
+                        const chart = new Chart(distCtx, {
+                            type: 'doughnut',
+                            data: {
+                                datasets: datasets
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                onHover: (event, elements) => {
+                                    event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                                },
+                                onClick(evt, elements) {
+                                    if (elements.length > 0) {
+                                        const index = elements[0].datasetIndex;
+                                        const dataset = chart.data.datasets[index];
+                                        const footerElement = document.getElementById('card-footer-text');
+                                        footerElement.textContent = `${dataset.label} - Cantidad: ${dataset.data[0]}`;
+                                    }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            title: ctx => ctx[0].dataset.label,
+                                            label: ctx => `Cantidad: ${ctx.dataset.data[0]}`
+                                        }
+                                    },
+                                    legend: {
+                                        position: 'bottom',
+                                        labels: {
+                                            generateLabels: function(chart) {
+                                                return chart.data.datasets.map((dataset, i) => ({
+                                                    text: dataset.label,
+                                                    fillStyle: dataset.backgroundColor[0],
+                                                    strokeStyle: dataset.backgroundColor[0],
+                                                    index: i
+                                                }));
+                                            },
+                                            color: '#333',
+                                            font: {
+                                                size: 14
+                                            },
+                                            boxWidth: 14,
+                                            usePointStyle: true
+                                        }
+                                    }
+                                }
+                            },
+                            plugins: [centerTextPlugin]
+                        });
                     }
+                },
+                error: function() {
+                    console.error('Error al cargar los datos de estadísticas.');
                 }
             });
 
+            // Función para colores aleatorios
             function getRandomColor() {
                 const letters = '0123456789ABCDEF';
                 let color = '#';
@@ -184,113 +283,92 @@
                 return color;
             }
 
-            function getRandolValue() {
-                return Math.floor(Math.random() * 10+1);
-            }
-
-            const camiones = [
-                { label: 'Camión 1', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
-                { label: 'Camión 2', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
-                { label: 'Camión 3', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
-                { label: 'Camión 4', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
-                { label: 'Camión 5', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
-                { label: 'Camión 6', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' },
-                { label: 'Camión 7', valor: getRandolValue(), color: getRandomColor(), cutout: '80%', radius: '100%' }
-            ];
-
-            const total = camiones.reduce((sum, c) => sum + c.valor, 0);
-
-            const datasets = camiones.map(c => ({
-                label: c.label,
-                data: [c.valor],
-                backgroundColor: [c.color],
-                borderWidth: 2,
-                borderColor: '#ffffff',
-                borderRadius: 10,
-                cutout: c.cutout,
-                radius: c.radius,
-                circumference: (360 * c.valor) / total,
-                rotation: -90
-            }));
-
-            // Variable global para el texto central
-            let centerText = { label: '', value: '' };
-
             // Plugin para mostrar texto en el centro
             const centerTextPlugin = {
                 id: 'centerText',
                 beforeDraw(chart) {
-                    const { ctx, chartArea: { width, height } } = chart;
+                    const {
+                        ctx,
+                        chartArea: {
+                            width,
+                            height
+                        }
+                    } = chart;
                     ctx.save();
                     ctx.font = 'bold 18px Segoe UI';
                     ctx.fillStyle = '#333';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    if (centerText.label) {
-                        ctx.fillText(centerText.label, width / 2, height / 2 - 10);
+                    if (chart.config._config.plugins && chart.config._config.plugins.length) {
+                        ctx.fillText(centerText.label || '', width / 2, height / 2 - 10);
                         ctx.font = 'bold 20px Segoe UI';
-                        ctx.fillText(centerText.value, width / 2, height / 2 + 15);
+                        ctx.fillText(centerText.value || '', width / 2, height / 2 + 15);
                     }
                     ctx.restore();
                 }
             };
 
-            const distCtx = document.getElementById('distribution-chart').getContext('2d');
+            // Variable opcional si usas texto dinámico en centro (puedes quitar si no se usa)
+            let centerText = {
+                label: '',
+                value: ''
+            };
 
-            const chart = new Chart(distCtx, {
-                type: 'doughnut',
-                data: {
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    onHover: (event, elements) => {
-                        // Cambia el cursor a pointer si se está pasando sobre algún elemento
-                        event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
-                    },
-                    onClick(evt, elements) {
-                        if (elements.length > 0) {
-                            const index = elements[0].datasetIndex;
-                            const dataset = chart.data.datasets[index];
+            // Cargar logs de escaneos con datatables
+            loadScanLogs();
+        });
 
-                            // En lugar de cambiar texto en el centro, lo imprimimos en el footer
-                            const footerElement = document.getElementById('card-footer-text');
-                            footerElement.textContent = `${dataset.label} - Cantidad: ${dataset.data[0]}`;
-                        }
+        function loadScanLogs() {
+            $('#scan-logs-table').DataTable({
+                destroy: true,
+                ajax: {
+                    url: 'controller/selectAction.php',
+                    type: 'POST',
+                    data: {
+                        action: 'getLogsScans'
                     },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                title: ctx => ctx[0].dataset.label,
-                                label: ctx => `Cantidad: ${ctx.dataset.data[0]}`
-                            }
-                        },
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                generateLabels: function (chart) {
-                                    return chart.data.datasets.map((dataset, i) => ({
-                                        text: dataset.label,
-                                        fillStyle: dataset.backgroundColor[0],
-                                        strokeStyle: dataset.backgroundColor[0],
-                                        index: i
-                                    }));
-                                },
-                                color: '#333',
-                                font: {
-                                    size: 14
-                                },
-                                boxWidth: 14,
-                                usePointStyle: true
-                            }
+                    dataSrc: function(json) {
+                        if (json.success) {
+                            return json.data;
+                        } else {
+                            alert('Error al cargar los logs.');
+                            return [];
                         }
                     }
                 },
-                plugins: [centerTextPlugin]
+                columns: [{
+                        data: null,
+                        render: (data, type, row, meta) => meta.row + 1
+                    },
+                    {
+                        data: 'matricula'
+                    },
+                    {
+                        data: 'nombre'
+                    },
+                    {
+                        data: 'apellidos'
+                    },
+                    {
+                        data: 'grupo'
+                    },
+                    {
+                        data: 'nombreUsuario'
+                    },
+                    {
+                        data: 'nameRoute'
+                    },
+                    {
+                        data: 'dateScan'
+                    }
+                ],
+                order: [
+                    [7, 'desc']
+                ],
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json'
+                }
             });
-        });
-
-
+        }
     </script>
 </div>
