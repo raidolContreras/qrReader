@@ -352,7 +352,7 @@ function mostrarVCard(matricula) {
             </div>
             <div class="d-grid gap-2 mx-auto">
               <p class="text-muted mb-3" style="font-size: 0.9rem;">
-                Ubicación de acceso: ${nameRoute}
+                ${nameRoute}
               </p>
             </div>
             <!-- Fecha y hora actual -->
