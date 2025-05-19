@@ -2,21 +2,37 @@
   <!-- ENCABEZADO -->
   <header class="app-header">
     <img src="assets/images/logo-color.png" alt="Logo" width="150">
+
+    <!-- BOTÓN DE CERRAR SESIÓN -->
+    <div class="logout-button-container">
+      <a href="#" class="btn btn-danger logout-btn logout">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </a>
+    </div>
+
+    <!-- BOTÓN PARA LA PÁGINA DE RUTAS -->
+    <div class="routes-button-container">
+      <a href="routes" class="btn btn-success routes-btn">
+        <i class="fas fa-route"></i> Rutas
+      </a>
+    </div>
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="container row">
+    <h1 id="routeName">Punto de registro: <?= $_SESSION['nameRoute']; ?></h1>
     <div class="reader-button-wrapper" class="col-12">
       <div id="reader" style="display: none;"></div>
       <!-- <p id="qr-result"></p> -->
       <div id="reader-div">
-        <img width="250" src="assets/images/scan-qr.gif" alt="Escaneo basado en cámara" style="opacity: 1;">
         <button id="start">
-          <i class="fas fa-camera"></i> Iniciar escaneo
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <img src="assets/images/qr-icon.png" alt="QR" style="width: 150px; height: 150px; margin-bottom: 8px;">
+              <span>Iniciar escaneo</span>
+            </div>
         </button>
       </div>
     </div>
-    <h1><?= $_SESSION['nameRoute']; ?></h1>
   </main>
 
   <!-- MODAL DE RESULTADOS -->
@@ -57,20 +73,6 @@
       </a>
     </nav>
   </footer>
-
-  <!-- BOTÓN DE CERRAR SESIÓN -->
-  <div class="logout-button-container">
-    <a href="#" class="btn btn-danger logout-btn logout">
-      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-    </a>
-  </div>
-
-  <!-- BOTÓN PARA LA PÁGINA DE RUTAS -->
-  <div class="routes-button-container">
-    <a href="routes" class="btn btn-success routes-btn">
-      <i class="fas fa-route"></i> Rutas
-    </a>
-  </div>
 
   <script src="assets/js/qrReader/html5-qrcode.min.js"></script>
   <script src="assets/js/qrReader/qrReader.js"></script>

@@ -1,5 +1,13 @@
 
 $(document).ready(() => {
+
+    // Inicializamos Select2
+    $('#encargado, #editEncargado').select2({
+        placeholder: "Selecciona los usuarios responsables",
+        allowClear: true,
+        width: '100%'
+    });
+
     // Instancia de DataTable
     const table = $('#routesTable').DataTable({
         ajax: {
@@ -7,27 +15,77 @@ $(document).ready(() => {
             type: 'POST',
             data: { action: 'getRoutes' },
             dataType: 'json',
-            dataSrc: 'data' // El array está en la raíz del JSON
+            dataSrc: function (json) {
+                if (json.success === false && json.message === "No se encontraron rutas") {
+                    $('#routesTable tbody').html(
+                        '<tr><td colspan="3" class="text-center">No se encontraron rutas</td></tr>'
+                    );
+                    return [];
+                }
+                // json.data ya es un array de rutas, cada una con un sub-array users
+                return json.data || [];
+            }
         },
         columns: [
-            { data: 'nameRoute' },
+            // 0. enumerador
             {
                 data: null,
+                title: '#',
+                render: (data, type, row, meta) => {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            // 1. Nombre de la ruta
+            {
+                data: 'nameRoute',
+                title: 'Ruta'
+            },
+            // 2. Lista de usuarios (nombre, apellidos y rol)
+            {
+                data: 'users',
+                title: 'Encargados',
+                render: (users, type, row) => {
+                    return users
+                        .map(u => `${u.nombre} ${u.apellidos} (${u.role})`)
+                        .join('<br>');
+                }
+            },
+            {
+                data: 'registerType',
+                render: (type) => {
+                    switch (type) {
+                        case 1:
+                            return 'Acceso peatonal';
+                        case 2:
+                            return 'Vehicular';
+                        case 3:
+                            return 'Autobús escolar';
+                        default:
+                            return 'Desconocido';
+                    }
+                }
+            },
+            // 3. Botones de acción
+            {
+                data: null,
+                orderable: false,
+                searchable: false,
+                title: 'Acciones',
                 render: (data, type, row) => `
                 <div class="action-buttons">
-                    <button type="button" class="action-btn edit-btn tooltip-btn" data-id="${row.idRoute}" data-tooltip="Editar ruta">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
+                    <button 
+                        type="button" 
+                        class="action-btn edit-btn tooltip-btn" 
+                        data-id="${row.idRoute}" 
+                        data-tooltip="Editar ruta">
+                        <i class="fas fa-edit"></i>
                     </button>
-                    <button type="button" class="action-btn delete-btn tooltip-btn" data-id="${row.idRoute}" data-tooltip="Eliminar ruta">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            <line x1="10" y1="11" x2="10" y2="17"></line>
-                            <line x1="14" y1="11" x2="14" y2="17"></line>
-                        </svg>
+                    <button 
+                        type="button" 
+                        class="action-btn delete-btn tooltip-btn" 
+                        data-id="${row.idRoute}" 
+                        data-tooltip="Eliminar ruta">
+                        <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
             `
@@ -38,10 +96,11 @@ $(document).ready(() => {
             lengthMenu: "Mostrar _MENU_ filas",
             info: "Mostrando _START_ a _END_ de _TOTAL_ filas",
             infoEmpty: "Mostrando 0 a 0 de 0 filas",
-            infoFiltered: "(filtrado de _MAX_ total filas)",
+            infoFiltered: "(filtrado de _MAX_ filas totales)",
             zeroRecords: "No se encontraron resultados"
         }
     });
+
 
     // Handler para el envío del formulario de nueva ruta
     $('#newRouteForm').on('submit', function (event) {
@@ -104,6 +163,12 @@ $(document).ready(() => {
                     const route = response.data;
                     $('#editRouteId').val(route.idRoute);
                     $('#editNombre').val(route.nameRoute);
+                    $('#editTipoRegistro').val(route.registerType).trigger('change');
+
+                    // Seleccionar automáticamente los encargados en el select2
+                    const userIds = (route.users || []).map(u => u.userId);
+                    $('#editEncargado').val(userIds).trigger('change');
+
                     $('#editRouteModal').modal('show');
                 }
             },

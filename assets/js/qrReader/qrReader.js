@@ -37,6 +37,12 @@ function onScanSuccess(decodedText, decodedResult) {
     mostrarVCard(matricula);
     // Detenemos el escáner
     let stopButton = $("#html5-qrcode-button-camera-stop");
+    $(stopButton).on("click", function () {
+      html5QrcodeScanner.clear();
+      $("#reader").hide();
+      $("#reader-div").show();
+      $("#html5-qrcode-button-camera-start").html('<i class="fas fa-camera"></i> Iniciar escaneo');
+    });
     if (stopButton.length) {
       stopButton.click();
     }
@@ -275,6 +281,7 @@ function mostrarVCard(matricula) {
     },
     success: function (response) {
       const data = typeof response === "string" ? JSON.parse(response) : response;
+      const nameRoute = $("#routeName").text();
 
       // Construimos el HTML con un estilo tipo "vCard"
       const htmlContent = `
@@ -282,35 +289,35 @@ function mostrarVCard(matricula) {
           
           <!-- Encabezado curvo con logo -->
           <div
-            class="vcard-header"
-            style="
-              height: 120px;
-              background: linear-gradient(135deg, rgb(73, 245, 159), rgb(21, 97, 52));
-              clip-path: ellipse(120% 100% at 50% 0%);
-              position: relative; 
-              z-index: 10;
-            "
+        class="vcard-header"
+        style="
+          height: 120px;
+          background: linear-gradient(135deg, rgb(73, 245, 159), rgb(21, 97, 52));
+          clip-path: ellipse(120% 100% at 50% 0%);
+          position: relative; 
+          z-index: 10;
+        "
           >
-            <!-- LOGO con posición absoluta -->
-            <img 
-              src="assets/images/logo.png" 
-              alt="Logo" 
-              style="
-                position: absolute; 
-                top: 10px; 
-                right: 15px;
-                width: 120px; 
-                height: auto;
-              "
-            />
+        <!-- LOGO con posición absoluta -->
+        <img 
+          src="assets/images/logo.png" 
+          alt="Logo" 
+          style="
+            position: absolute; 
+            top: 10px; 
+            right: 15px;
+            width: 120px; 
+            height: auto;
+          "
+        />
           </div>
-  
+      
           <!-- Contenido de la tarjeta -->
           <div class="vcard-body text-center p-3" style="margin-top: -60px;">
-            <!-- Foto circular -->
-            <img
-              src="https://sse.unimontrer.edu.mx/images/FOTOSESTUDIANTE/${data.MATRICULA}.jpg"
-              alt="Foto de ${data.NOMBRE}"
+        <!-- Foto circular -->
+        <img
+          src="https://sse.unimontrer.edu.mx/images/FOTOSESTUDIANTE/${data.MATRICULA}.jpg"
+          alt="Foto de ${data.NOMBRE}"
               onerror="this.src='https://via.placeholder.com/150?text=Sin+Foto'"
               class="rounded-circle border border-2"
               style="
@@ -341,6 +348,37 @@ function mostrarVCard(matricula) {
             <div class="d-grid gap-2 mx-auto">
               <p class="text-muted mb-3" style="font-size: 0.9rem;">
                 Acuerdo: ${data.acuerdo} | Clave: ${data.clave}
+              </p>
+            </div>
+            <div class="d-grid gap-2 mx-auto">
+              <p class="text-muted mb-3" style="font-size: 0.9rem;">
+                Ubicación de acceso: ${nameRoute}
+              </p>
+            </div>
+            <!-- Fecha y hora actual -->
+            <div class="mt-3">
+              <p class="text-muted mb-3" style="font-size: 0.9rem;">
+                ${(() => {
+          const meses = [
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+          ];
+          const dias = [
+            "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
+          ];
+          const now = new Date();
+          const diaSemana = dias[now.getDay()];
+          const dia = now.getDate().toString().padStart(2, "0");
+          const mes = meses[now.getMonth()];
+          const año = now.getFullYear();
+          let horas = now.getHours();
+          const minutos = now.getMinutes().toString().padStart(2, "0");
+          const ampm = horas >= 12 ? "pm" : "am";
+          horas = horas % 12;
+          horas = horas ? horas : 12;
+          const horasStr = horas.toString().padStart(2, "0");
+          return `${diaSemana} ${dia} de ${mes} del ${año}<br>${horasStr}:${minutos} ${ampm}`;
+        })()}
               </p>
             </div>
           </div>
@@ -398,6 +436,10 @@ $('#confirmResult').click(() => {
     success: function (response) {
       if (response.success) {
         $("#resultModal").modal("hide");
+        if (html5QrcodeScanner) {
+          html5QrcodeScanner.clear();
+          initializeScanner();
+        }
       } else {
         alert("Error al registrar los datos: " + response.message);
       }

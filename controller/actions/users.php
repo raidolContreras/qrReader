@@ -16,17 +16,27 @@ switch ($_POST["action"]) {
     case 'editUser':
         editUser();
         break;
+    case 'suspendUser':
+        suspendUser();
+        break;
+    case 'reactivateUser':
+        reactivateUser();
+        break;
     case 'deleteUser':
         deleteUser();
         break;
+    case 'resetPassword':
+        resetPassword();
+        break;
 }
 
-function newUsers() {
+function newUsers()
+{
     // Encriptar datos después de validarlos
     $nombre   = SecureVault::encryptData($_POST['nombre'], 'name');
     $apellidos = SecureVault::encryptData($_POST['apellidos'], 'name');
     $email    = SecureVault::encryptData($_POST['email'], 'email');
-    
+
     $password = SecureVault::encryptData($_POST['password'], 'password');
 
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -34,23 +44,24 @@ function newUsers() {
     $role     = SecureVault::encryptData($_POST['role'], 'role');
 
     $data = array(
-        'nombre'=> $nombre,
-        'apellidos'=> $apellidos,
-        'email'=> $email,
-        'password'=> $passwordHash,
-        'role'=> $role
+        'nombre' => $nombre,
+        'apellidos' => $apellidos,
+        'email' => $email,
+        'password' => $passwordHash,
+        'role' => $role
     );
-    
+
     // Guardar datos en la base de datos
     $saveUsers = FormsController::ctrNewUsers($data);
     if ($saveUsers == 'ok') {
-        echo json_encode(['status'=> 'success', 'message'=> 'Usuario Creado']);
+        echo json_encode(['status' => 'success', 'message' => 'Usuario Creado']);
     } else {
-        echo json_encode(['status'=> 'error', 'message' => $saveUsers]) ;
+        echo json_encode(['status' => 'error', 'message' => $saveUsers]);
     }
 }
 
-function login() {
+function login()
+{
     $email    = SecureVault::encryptData($_POST['email'], 'email');
     $password = SecureVault::encryptData($_POST['password'], 'password');
 
@@ -65,16 +76,17 @@ function login() {
             $_SESSION["apellidos"] = SecureVault::decryptData($searchUser["apellidos"]);
             $_SESSION["email"] = SecureVault::decryptData($searchUser["email"]);
             $_SESSION["role"] = SecureVault::decryptData($searchUser["role"]);
-            echo json_encode(['success'=> true, 'message'=> 'Login Correcto']);
+            echo json_encode(['success' => true, 'message' => 'Login Correcto']);
         } else {
-            echo json_encode(['success'=> false, 'message'=> 'Contraseña incorrecta']);
+            echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta']);
         }
     } else {
-        echo json_encode(['success'=> false, 'message'=> 'Error inesperado']);
+        echo json_encode(['success' => false, 'message' => 'Error inesperado']);
     }
 }
 
-function getUsers() {
+function getUsers()
+{
     $users = FormsController::ctrGetUsers();
     $data = [];
     foreach ($users as $key => $user) {
@@ -83,13 +95,15 @@ function getUsers() {
             'nombre' => SecureVault::decryptData($user['nombre']),
             'apellidos' => SecureVault::decryptData($user['apellidos']),
             'email' => SecureVault::decryptData($user['email']),
-            'role' => SecureVault::decryptData($user['role'])
+            'role' => SecureVault::decryptData($user['role']),
+            'isActive' => $user['isActive'],
         ];
     }
     echo json_encode($data);
 }
 
-function getUser() {
+function getUser()
+{
     $id = $_POST['userId'];
     $user = FormsController::ctrGetUser($id);
     $data = [
@@ -99,38 +113,79 @@ function getUser() {
         'email' => SecureVault::decryptData($user['email']),
         'role' => SecureVault::decryptData($user['role'])
     ];
-    
+
     // json message success and data
-    echo json_encode(['success'=> true, 'data'=> $data]);
+    echo json_encode(['success' => true, 'data' => $data]);
 }
 
-function editUser() {
+function editUser()
+{
     $id       = $_POST['id'];
     $nombre   = SecureVault::encryptData($_POST['nombre'], 'name');
     $apellidos = SecureVault::encryptData($_POST['apellidos'], 'name');
     $email    = SecureVault::encryptData($_POST['email'], 'email');
     $role     = SecureVault::encryptData($_POST['role'], 'role');
     $data = array(
-        'id'=> $id,
-        'nombre'=> $nombre,
-        'apellidos'=> $apellidos,
-        'email'=> $email,
-        'role'=> $role
+        'id' => $id,
+        'nombre' => $nombre,
+        'apellidos' => $apellidos,
+        'email' => $email,
+        'role' => $role
     );
     $editUser = FormsController::ctrEditUser($data);
     if ($editUser == 'ok') {
-        echo json_encode(['success'=> true, 'message'=> 'Usuario Editado']);
+        echo json_encode(['success' => true, 'message' => 'Usuario Editado']);
     } else {
-        echo json_encode(['success'=> false, 'message' => $editUser]);
+        echo json_encode(['success' => false, 'message' => $editUser]);
     }
 }
 
-function deleteUser() {
+function suspendUser()
+{
+    $id = $_POST['userId'];
+    $suspendUser = FormsController::ctrSuspendUser($id);
+    if ($suspendUser == 'ok') {
+        echo json_encode(['success' => true, 'message' => 'Usuario Suspendido']);
+    } else {
+        echo json_encode(['success' => false, 'message' => $suspendUser]);
+    }
+}
+
+function reactivateUser()
+{
+    $id = $_POST['userId'];
+    $reactivateUser = FormsController::ctrReactivateUser($id);
+    if ($reactivateUser == 'ok') {
+        echo json_encode(['success' => true, 'message' => 'Usuario Reactivado']);
+    } else {
+        echo json_encode(['success' => false, 'message' => $reactivateUser]);
+    }
+}
+
+function deleteUser()
+{
     $id = $_POST['userId'];
     $deleteUser = FormsController::ctrDeleteUser($id);
     if ($deleteUser == 'ok') {
-        echo json_encode(['success'=> true, 'message'=> 'Usuario Eliminado']);
+        echo json_encode(['success' => true, 'message' => 'Usuario Eliminado']);
     } else {
-        echo json_encode(['success'=> false, 'message' => $deleteUser]);
+        echo json_encode(['success' => false, 'message' => $deleteUser]);
+    }
+}
+
+function resetPassword()
+{
+    $id = $_POST['id'];
+    $newPassword = SecureVault::encryptData($_POST['password'], 'password');
+    $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+    $data = array(
+        'id' => $id,
+        'password' => $passwordHash
+    );
+    $resetPassword = FormsController::ctrResetPassword($data);
+    if ($resetPassword == 'ok') {
+        echo json_encode(['success' => true, 'message' => 'Contraseña Reestablecida']);
+    } else {
+        echo json_encode(['success' => false, 'message' => $resetPassword]);
     }
 }

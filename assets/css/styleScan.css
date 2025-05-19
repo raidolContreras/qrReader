@@ -18,7 +18,7 @@
 /* ===== ESTILOS GENERALES ===== */
 body {
   font-family: var(--font-family);
-  background-color: #f1f1f1  !important;
+  background-color: #f1f1f1 !important;
   color: var(--text-color);
   display: flex;
   flex-direction: column;
@@ -42,17 +42,22 @@ body {
   align-items: center;
   justify-content: center;
   flex: 1;
-  max-width: 500px;
+  width: 500px;
   margin: 20px auto;
   padding: 1.5rem;
   text-align: center;
   background: var(--container-bg);
   border-radius: 20px;
   box-shadow: var(--container-shadow);
-  position: relative;
   overflow: hidden;
   overflow-y: auto;
   transition: transform 0.3s ease;
+  min-height: 22rem;
+  max-height: 45rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .container h1 {
@@ -361,6 +366,7 @@ img[alt="Info icon"] {
     align-items: center;
     justify-content: center;
     text-align: center;
+    flex-direction: column;
   }
 
   .container {
@@ -375,7 +381,6 @@ img[alt="Info icon"] {
 
   #start {
     width: auto;
-    margin-top: 0;
   }
 }
 
@@ -415,7 +420,11 @@ img[alt="Info icon"] {
     margin: 0 auto;
     padding: 1rem;
     max-width: 357px;
-    max-height: 43rem;
+    max-height: 27rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 

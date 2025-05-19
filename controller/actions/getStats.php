@@ -18,11 +18,7 @@ switch ($_POST["action"]) {
             $log['nombreUsuario'] = SecureVault::decryptData($log['nombreUsuario']);
             $log['apellidosUsuario'] = SecureVault::decryptData($log['apellidosUsuario']);
         }
-        
-        if ($logs) {
             echo json_encode(['success' => true, 'data' => $logs]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Error al obtener logs']);
-        }
+        
         break;
 }

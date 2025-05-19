@@ -7,10 +7,14 @@ require "../model/forms.models.php";
 switch ($_POST["action"]) {
     case 'newUser':
     case 'getUsers':
+    case 'getUsersToRoute':
     case 'login':
     case 'getUser':
     case 'editUser':
+    case 'suspendUser':
+    case 'reactivateUser':
     case 'deleteUser':
+    case 'resetPassword':
         require "actions/users.php";
         break;
     default:
@@ -23,6 +27,7 @@ switch ($_POST["action"]) {
         require "actions/logout.php";
         break;
     case 'getRoutes':
+    case 'getRoutesToScan':
     case 'getRoute':
     case 'selectRoute':
     case 'newRoute':

@@ -225,9 +225,9 @@ footer {
     display: flex;
     gap: 8px;
     justify-content: center;
-  }
-  
-  .action-btn {
+}
+
+.action-btn {
     border: none;
     width: 36px;
     height: 36px;
@@ -238,43 +238,43 @@ footer {
     transition: all 0.2s ease;
     cursor: pointer;
     position: relative;
-  }
-  
-  .edit-btn {
-    background-color: #3498db;
+}
+
+.edit-btn {
+    background-color: #0d5031;
     color: white;
-  }
-  
-  .edit-btn:hover {
-    background-color: #2980b9;
+}
+
+.edit-btn:hover {
+    background-color: #0a3621;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
-  }
-  
-  .delete-btn {
-    background-color: #e74c3c;
+}
+
+.delete-btn {
+    background-color: #d6210d;
     color: white;
-  }
-  
-  .delete-btn:hover {
+}
+
+.delete-btn:hover {
     background-color: #c0392b;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
-  }
-  
-  .view-btn {
+}
+
+.view-btn {
     background-color: #2ecc71;
     color: white;
-  }
-  
-  .view-btn:hover {
+}
+
+.view-btn:hover {
     background-color: #27ae60;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
-  }
-  
-  /* Estilos para el tooltip */
-  .tooltip {
+}
+
+/* Estilos para el tooltip */
+.tooltip {
     position: absolute;
     background-color: #333;
     color: #fff;
@@ -289,9 +289,9 @@ footer {
     bottom: 45px;
     left: 50%;
     transform: translateX(-50%);
-  }
-  
-  .tooltip::after {
+}
+
+.tooltip::after {
     content: '';
     position: absolute;
     top: 100%;
@@ -300,8 +300,41 @@ footer {
     border-width: 5px;
     border-style: solid;
     border-color: #333 transparent transparent transparent;
-  }
-  
-  .tooltip.visible {
+}
+
+.tooltip.visible {
     opacity: 1;
-  }
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    height: 60px !important;
+    color: #292d32 !important;
+    border: 1px solid #F1F5FF !important;
+    background-color: #F1F5FF !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    padding: 10px 20px !important;
+    width: 100% !important;
+    transition: all ease 0.5s !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    height: 60px !important;
+    color: #292d32 !important;
+    border: 1px solid #F1F5FF !important;
+    background-color: #F1F5FF !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    padding: 10px 20px !important;
+    width: 100% !important;
+    transition: all ease 0.5s !important;
+}
+
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #F1F5FF !important;
+}
+
+.select2-container {
+    z-index: 9999 !important;
+}

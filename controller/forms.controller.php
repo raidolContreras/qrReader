@@ -16,75 +16,182 @@ class FormsController
         return $result;
     }
 
-    static public function ctrGetUsers() {
+    static public function ctrGetUsers()
+    {
         $result = FormsModel::mdlGetUsers();
         return $result;
     }
 
-    static public function ctrGetUser($id) {
+    static public function ctrGetUsersByRoute()
+    {
+        $result = FormsModel::mdlGetUsers();
+        $users = [];
+        foreach ($result as $user) {
+            if (SecureVault::decryptData($user['role']) != 'admin') {
+                $users[] = [
+                    'id' => $user['id'],
+                    'nombre' => SecureVault::decryptData($user['nombre']),
+                    'apellidos' => SecureVault::decryptData($user['apellidos']),
+                    'email' => SecureVault::decryptData($user['email']),
+                    'role' => SecureVault::decryptData($user['role']),
+                    'isActive' => $user['isActive'],
+                ];
+            }
+        }
+        return $users;
+    }
+
+    static public function ctrGetUser($id)
+    {
         $result = FormsModel::mdlGetUser($id);
         return $result;
     }
 
-    static public function ctrEditUser($data) {
+    static public function ctrEditUser($data)
+    {
         $result = FormsModel::mdlEditUser($data);
         return $result;
     }
 
-    static public function ctrDeleteUser($id) {
+    static public function ctrSuspendUser($id)
+    {
+        $result = FormsModel::mdlSuspendUser($id);
+        return $result;
+    }
+
+    static public function ctrReactivateUser($id)
+    {
+        $result = FormsModel::mdlReactivateUser($id);
+        return $result;
+    }
+
+    static public function ctrDeleteUser($id)
+    {
         $result = FormsModel::mdlDeleteUser($id);
         return $result;
     }
 
-    static public function ctrGetRoutes() {
-        $result = FormsModel::mdlGetRoutes();
+    static public function ctrResetPassword($data)
+    {
+        $result = FormsModel::mdlResetPassword($data);
         return $result;
     }
 
-    static public function ctrGetRoute($idRoute) {
+    static public function ctrGetRoutes()
+    {
+        // 1) Traemos el array plano
+        $flat = FormsModel::mdlGetUsersByRoute();
+
+        // 2) Lo agrupamos por ruta
+        $grouped = [];
+        foreach ($flat as $row) {
+            $id = $row['idRoute'];
+
+            // Si aún no existe la ruta, la inicializamos
+            if (!isset($grouped[$id])) {
+                $grouped[$id] = [
+                    'idRoute'   => $row['idRoute'],
+                    'nameRoute' => $row['nameRoute'],
+                    'registerType' => $row['registerType'],
+                    'isActive'  => (int) $row['isActive'],
+                    'created_at' => $row['created_at'],
+                    'users'     => []
+                ];
+            }
+
+            // Añadimos el usuario descifrado al array de usuarios
+            $grouped[$id]['users'][] = [
+                'id'        => $row['userId'],
+                'nombre'    => SecureVault::decryptData($row['nombre']),
+                'apellidos' => SecureVault::decryptData($row['apellidos']),
+                'role'      => SecureVault::decryptData($row['role']),
+            ];
+        }
+
+        // 3) Reindexamos para que sea un array numérico
+        $routes = array_values($grouped);
+
+        // 4) Devolvemos el JSON con la estructura esperada
+        return [
+            'success' => true,
+            'data'    => $routes
+        ];
+    }
+
+    static public function ctrGetRoutesToScan($idUser)
+    {
+        $result = FormsModel::mdlGetUsersByRouteOrRoutesByUser($idUser, null);
+        return $result;
+    }
+
+    static public function ctrGetRoute($idRoute)
+    {
         $result = FormsModel::mdlGetRoute($idRoute);
-        session_start();
-        $_SESSION['route'] = $result['idRoute'];
-        $_SESSION['nameRoute'] = $result['nameRoute'];
+        $result['users'] = FormsModel::mdlGetUsersByRouteOrRoutesByUser(null, $idRoute);
+        foreach ($result['users'] as $key => $user) {
+            $result['users'][$key]['nombre'] = SecureVault::decryptData($user['nombre']);
+            $result['users'][$key]['apellidos'] = SecureVault::decryptData($user['apellidos']);
+            $result['users'][$key]['role'] = SecureVault::decryptData($user['role']);
+        }
         return $result;
     }
 
-    static public function ctrNewRoute($nameRoute) {
-        $result = FormsModel::mdlNewRoute($nameRoute);
+    static public function ctrNewRoute($nameRoute, $registerType)
+    {
+        $result = FormsModel::mdlNewRoute($nameRoute, $registerType);
         return $result;
     }
 
-    static public function ctrEditRoute($idRoute, $nameRoute) {
-        $result = FormsModel::mdlEditRoute($idRoute, $nameRoute);
+    static public function ctrAssignUserToRoute($idUser, $idRoute)
+    {
+        $result = FormsModel::mdlAssignUserToRoute($idUser, $idRoute);
         return $result;
     }
 
-    static public function ctrDeleteRoute($idRoute) {
+    static public function ctrUpdateRouteUsers($idRoute, $encargados)
+    {
+        $result = FormsModel::mdlUpdateRouteUsers($idRoute, $encargados);
+        return $result;
+    }
+
+    static public function ctrEditRoute($idRoute, $nameRoute, $registerType)
+    {
+        $result = FormsModel::mdlEditRoute($idRoute, $nameRoute, $registerType);
+        return $result;
+    }
+
+    static public function ctrDeleteRoute($idRoute)
+    {
         $result = FormsModel::mdlDeleteRoute($idRoute);
         return $result;
     }
 
-    static public function ctrRegisterStudent($data, $idUser, $route) {
+    static public function ctrRegisterStudent($data, $idUser, $route)
+    {
         $result = FormsModel::mdlRegisterStudent($data, $idUser, $route);
         return $result;
     }
 
-    static public function ctrGetStats() {
+    static public function ctrGetStats()
+    {
         $result = FormsModel::mdlGetStats();
         return $result;
     }
 
-    static public function ctrGetStatsByScans() {
+    static public function ctrGetStatsByScans()
+    {
         $result = FormsModel::mdlGetStatsByScans();
         return $result;
     }
 
-    static public function ctrGetStatsByRoutes() {
+    static public function ctrGetStatsByRoutes()
+    {
         $result = FormsModel::mdlGetStatsByRoutes();
         return $result;
     }
 
-    static public function ctrGetLogsScans() {
+    static public function ctrGetLogsScans()
+    {
         $result = FormsModel::mdlGetLogsScans();
         return $result;
     }
@@ -217,7 +324,7 @@ class SecureVault
                 break;
 
             case 'role':
-                $rolesPermitidos = ['admin', 'usuario'];
+                $rolesPermitidos = ['admin', 'coordinador', 'chofer'];
                 if (!in_array($dato, $rolesPermitidos)) {
                     self::responseError("El rol no es válido.");
                 }

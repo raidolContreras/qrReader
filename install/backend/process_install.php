@@ -82,9 +82,16 @@ try {
     // Encriptar datos para un usuario de prueba
     $user_nombre_enc     = SecureVault::encryptData('Prueba', 'name');
     $user_apellidos_enc  = SecureVault::encryptData('Usuario', 'name');
-    $user_email_enc      = SecureVault::encryptData('usuario@prueba.com', 'email');
+    $user_email_enc      = SecureVault::encryptData('chofer@prueba.com', 'email');
     $user_password_enc   = SecureVault::encryptData('Unimo2025+', 'password');
-    $user_role_enc       = SecureVault::encryptData('usuario', 'role');
+    $user_role_enc       = SecureVault::encryptData('chofer', 'role');
+
+    // Encriptar datos para un segundo usuario de prueba (coordinador)
+    $user2_nombre_enc     = SecureVault::encryptData('Coordinador', 'name');
+    $user2_apellidos_enc  = SecureVault::encryptData('Ejemplo', 'name');
+    $user2_email_enc      = SecureVault::encryptData('coordinador@prueba.com', 'email');
+    $user2_password_enc   = SecureVault::encryptData('Unimo2025+', 'password');
+    $user2_role_enc       = SecureVault::encryptData('coordinador', 'role');
 
     $sqlInsert = "INSERT INTO users (nombre, apellidos, email, password, role)
                   VALUES (:nombre, :apellidos, :email, :password, :role)";
@@ -108,6 +115,17 @@ try {
     $passwordHash = password_hash($user_password_enc, PASSWORD_DEFAULT);
     $stmt->bindParam(":password", $passwordHash, PDO::PARAM_STR);
     $stmt->bindParam(":role", $user_role_enc, PDO::PARAM_STR);
+    $stmt->execute();
+    $stmt->closeCursor();
+
+    // Insertar segundo usuario de prueba (coordinador)
+    $stmt = $pdo->prepare($sqlInsert);
+    $stmt->bindParam(":nombre", $user2_nombre_enc, PDO::PARAM_STR);
+    $stmt->bindParam(":apellidos", $user2_apellidos_enc, PDO::PARAM_STR);
+    $stmt->bindParam(":email", $user2_email_enc, PDO::PARAM_STR);
+    $passwordHash = password_hash($user2_password_enc, PASSWORD_DEFAULT);
+    $stmt->bindParam(":password", $passwordHash, PDO::PARAM_STR);
+    $stmt->bindParam(":role", $user2_role_enc, PDO::PARAM_STR);
     $stmt->execute();
     $stmt->closeCursor();
 

@@ -15,7 +15,7 @@
 
         <!-- Stats Cards Row -->
         <div class="row mb-4">
-            <div class="col-md-4 mb-4 mb-md-0">
+            <div class="col-md-4 mb-w4 mb-md-0">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -95,7 +95,7 @@
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                         <h5 class="mb-0 fw-bold">Bitácora de Escaneos</h5>
-                        <button class="btn btn-primary btn-sm" onclick="loadScanLogs()">
+                        <button class="btn btn-success btn-sm" onclick="loadScanLogs()">
                             <i class="fas fa-sync-alt me-2"></i>Actualizar
                         </button>
                     </div>

@@ -38,7 +38,7 @@ if (isset($envVars['MASTER_KEY'])) {
                         value="<?php echo htmlspecialchars($value); ?>">
                 </div>
             <?php endforeach; ?>
-            <button type="submit" class="btn btn-primary mt-3">Actualizar</button>
+            <button type="submit" class="btn btn-success mt-3">Actualizar</button>
         </form>
         <div id="result" class="mt-3"></div>
     </div>

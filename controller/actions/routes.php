@@ -3,11 +3,7 @@
 switch ($_POST["action"]) {
     case 'getRoutes':
         $routes = FormsController::ctrGetRoutes();
-        if ($routes) {
-            echo json_encode(['success' => true, 'data' => $routes]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'No se encontraron rutas']);
-        }
+        echo json_encode($routes);
         break;
     case 'getRoute':
         $idRoute = $_POST['idRoute'];
@@ -21,6 +17,10 @@ switch ($_POST["action"]) {
     case 'selectRoute':
         $idRoute = $_POST['routeId'];
         $route = FormsController::ctrGetRoute($idRoute);
+        session_start();
+        $_SESSION['route'] = $route['idRoute'];
+        $_SESSION['nameRoute'] = $route['nameRoute'];
+        $_SESSION['registerType'] = $route['registerType'];
         if ($route) {
             echo json_encode(['success' => true, 'data' => $route]);
         } else {
@@ -29,8 +29,14 @@ switch ($_POST["action"]) {
         break;
     case 'newRoute':
         $nameRoute = $_POST['nombre'];
-        $result = FormsController::ctrNewRoute($nameRoute);
+        $encargados = $_POST['encargado'];
+        $tipoRegistro = $_POST['tipoRegistro'];
+        $result = FormsController::ctrNewRoute($nameRoute, $tipoRegistro);
         if ($result) {
+            $idRoute = $result;
+            foreach ($encargados as $idUser) {
+                FormsController::ctrAssignUserToRoute($idUser, $idRoute);
+            }
             echo json_encode(['success' => true, 'message' => 'Ruta creada con éxito']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Error al crear la ruta']);
@@ -39,8 +45,11 @@ switch ($_POST["action"]) {
     case 'editRoute':
         $idRoute = $_POST['idRoute'];
         $nameRoute = $_POST['nameRoute'];
-        $result = FormsController::ctrEditRoute($idRoute, $nameRoute);
+        $tipoRegistro = $_POST['tipoRegistro'];
+        $result = FormsController::ctrEditRoute($idRoute, $nameRoute, $tipoRegistro);
         if ($result) {
+            $encargados = $_POST['encargado'];
+            FormsController::ctrUpdateRouteUsers($idRoute, $encargados);
             echo json_encode(['success' => true, 'message' => 'Ruta editada con éxito']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Error al editar la ruta']);
@@ -53,6 +62,15 @@ switch ($_POST["action"]) {
             echo json_encode(['success' => true, 'message' => 'Ruta eliminada con éxito']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Error al eliminar la ruta']);
+        }
+        break;
+    case 'getRoutesToScan':
+        $idUser = $_POST['idUser'];
+        $routes = FormsController::ctrGetRoutesToScan($idUser);
+        if ($routes) {
+            echo json_encode(['success' => true, 'data' => $routes]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No hay rutas disponibles']);
         }
         break;
 }
