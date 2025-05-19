@@ -433,19 +433,34 @@ class FormsModel
     }
 
     static public function mdlGetLogsScans()
-    {
-        $pdo = Conexion::conectar();
-        $sql = "SELECT s.*, u.nombre AS nombreUsuario, u.apellidos AS apellidosUsuario, r.nameRoute FROM scans s LEFT JOIN users u ON s.idUser_scan = u.id LEFT JOIN pointregisters r ON r.idRoute = s.routeScan ORDER BY dateScan DESC;";
-        $stmt = $pdo->prepare($sql);
-        if ($stmt->execute()) {
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $stmt->closeCursor();
-            $stmt = null;
-            return $result;
-        } else {
-            $stmt->closeCursor();
-            $stmt = null;
-            return false; // Error en la consulta
-        }
-    }
+{
+    $pdo = Conexion::conectar();
+
+    /*  Alias que coinciden con los headers de tu tabla            */
+    $sql = "
+        SELECT
+            s.idScan,
+            s.matricula,
+            s.nombre,
+            s.apellidos,
+            CONCAT(s.grado, ' ', s.grupo)          AS grado_grupo,
+            DATE_FORMAT(s.dateScan,'%Y-%m-%d %H:%i:%s') AS fecha_hora,
+            r.nameRoute                            AS medio_transporte,
+            r.nameRoute                            AS ubicacion,
+            u.role,
+            u.nombre  AS nombreUsuario,
+            u.apellidos AS apellidosUsuario
+        FROM scans s
+        LEFT JOIN users          u ON u.id      = s.idUser_scan
+        LEFT JOIN pointregisters r ON r.idRoute = s.pointregisterscan
+        ORDER BY s.dateScan DESC;
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $rows;
+}
+
 }

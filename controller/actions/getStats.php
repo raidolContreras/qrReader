@@ -17,6 +17,7 @@ switch ($_POST["action"]) {
         foreach ($logs as &$log) {
             $log['nombreUsuario'] = SecureVault::decryptData($log['nombreUsuario']);
             $log['apellidosUsuario'] = SecureVault::decryptData($log['apellidosUsuario']);
+            $log['role'] = SecureVault::decryptData($log['role']);
         }
             echo json_encode(['success' => true, 'data' => $logs]);
         

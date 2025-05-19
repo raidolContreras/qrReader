@@ -11,6 +11,6 @@
 
     <a class="mb-1 <?php echo $currentPage == 'analytics' ? 'active' : ''; ?>" href="analytics"><i
             class="fas fa-chart-line"></i> Analíticas</a>
-    <a class="mb-1 <?php echo $currentPage == 'qrScan' ? 'active' : ''; ?>" href="qrScan"><i class="fas fa-users"></i>
-        Usuarios</a>
+    <a class="mb-1 <?php echo $currentPage == 'qrScan' ? 'active' : ''; ?>" href="qrScan"><i class="fas fa-qrcode"></i>
+        Escaner QR</a>
 </div>

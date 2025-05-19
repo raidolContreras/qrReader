@@ -1,106 +1,105 @@
+<style>
+    /* --- DataTables: alineación de botones + buscador --- */
+    .dataTables_wrapper .dt-buttons {
+        display: flex;
+        gap: .5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0;
+    }
+
+    .dataTables_wrapper .dt-buttons .btn {
+        padding: .45rem 1rem;
+    }
+
+    .dataTables_wrapper .dt-search {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        flex-wrap: wrap;
+    }
+
+    .dataTables_wrapper .dt-search label {
+        margin-bottom: 0;
+        font-weight: 500;
+        gap: .5rem;
+    }
+
+    .dataTables_wrapper .dt-search input[type="search"].dt-input {
+        width: 220px;
+    }
+
+    @media (max-width: 575.98px) {
+
+        .dataTables_wrapper .dt-search,
+        .dataTables_wrapper .dt-buttons {
+            width: 100%;
+            justify-content: flex-start;
+            margin-top: .5rem;
+        }
+
+        .dataTables_wrapper .dt-search input[type="search"].dt-input {
+            width: 100%;
+        }
+    }
+
+    /* Ajuste para los filtros encima de la tabla */
+    .filter-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .filter-group .form-group {
+        min-width: 150px;
+    }
+</style>
+
 <div class="content">
     <div class="container-fluid py-4">
-        <!-- Dashboard Header -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <h1 class="fw-bold mb-2">QR Analytics Dashboard</h1>
-                        <p class="lead opacity-8">Bienvenido al panel de análisis. Aquí puedes monitorear el uso del
-                            sistema de escaneo de QR.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats Cards Row -->
-        <div class="row mb-4">
-            <div class="col-md-4 mb-w4 mb-md-0">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
-                                <i class="fas fa-qrcode text-primary fs-4"></i>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-0">Total de Escaneos</p>
-                                <h3 class="fw-bold mb-0" id="total-scans">Cargando...</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4 mb-md-0">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
-                                <i class="fas fa-users text-success fs-4"></i>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-0">Usuarios Activos</p>
-                                <h3 class="fw-bold mb-0" id="active-users">Cargando...</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3">
-                                <i class="fas fa-clock text-info fs-4"></i>
-                            </div>
-                            <div>
-                                <p class="text-muted mb-0">Último Escaneo</p>
-                                <h3 class="fw-bold mb-0" id="last-scan">Cargando...</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="row mb-4">
-            <div class="col-lg-8 mb-4 mb-lg-0">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white py-3">
-                        <h5 class="mb-0 fw-bold">Estadísticas de Escaneos</h5>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="scan-trends-chart" height="250"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white py-3">
-                        <h5 class="mb-0 fw-bold">Distribución</h5>
-                    </div>
-                    <div class="card-body d-flex flex-column justify-content-center">
-                        <canvas id="distribution-chart" height="250"></canvas>
-                    </div>
-                    <div class="card-footer">
-                        <span id="card-footer-text" style="font-weight: bold;"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Log Table Card -->
         <div class="row mb-5">
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                        <h5 class="mb-0 fw-bold">Bitácora de Escaneos</h5>
-                        <button class="btn btn-success btn-sm" onclick="loadScanLogs()">
-                            <i class="fas fa-sync-alt me-2"></i>Actualizar
-                        </button>
+
+                        <!-- filtros con SELECT dinámicos -->
+                        <div class="filter-group mb-3">
+                            <div class="form-group">
+                                <label for="filter-fecha" class="form-label">Filtrar por Fecha:</label>
+                                <select id="filter-fecha" class="form-select">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="filter-medio" class="form-label">Filtrar por Medio:</label>
+                                <select id="filter-medio" class="form-select">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="filter-ubicacion" class="form-label">Filtrar por Ubicación:</label>
+                                <select id="filter-ubicacion" class="form-select">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="filter-grado" class="form-label">Filtrar por Grado/Grupo:</label>
+                                <select id="filter-grado" class="form-select">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
+                            <h5 class="mb-0 fw-bold">Bitácora de Escaneos</h5>
+                            <button class="btn btn-success btn-sm" onclick="table.ajax.reload()">
+                                <i class="fas fa-sync-alt me-1"></i>Actualizar
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card-body">
-                        <div id="log-container" class="table-responsive">
+                        <div class="table-responsive">
                             <table id="scan-logs-table" class="table table-striped table-hover">
                                 <thead>
                                     <tr>
@@ -108,9 +107,10 @@
                                         <th>Matrícula</th>
                                         <th>Nombre</th>
                                         <th>Apellidos</th>
-                                        <th>Grupo</th>
-                                        <th>Usuario</th>
-                                        <th>Ruta</th>
+                                        <th>Grado y Grupo</th>
+                                        <th>Registrado por</th>
+                                        <th>Medio de transporte</th>
+                                        <th>Ubicación</th>
                                         <th>Fecha y hora</th>
                                     </tr>
                                 </thead>
@@ -118,260 +118,122 @@
                         </div>
                     </div>
                 </div>
+                <!-- End Log Table Card -->
             </div>
         </div>
+        <!-- End Row -->
     </div>
-
-    <script src="assets/js/chart.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Inicializar gráfico de tendencias
-            const trendCtx = $('#scan-trends-chart')[0].getContext('2d');
-
-            $.ajax({
-                url: 'controller/selectAction.php',
-                type: 'POST',
-                data: {
-                    action: 'getStats'
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        const data = response.data;
-                        $('#total-scans').text(data.totalScans);
-                        $('#active-users').text(data.activeUsers);
-                        const lastScanDate = new Date(data.lastScanTime);
-                        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-                        const formattedDate = lastScanDate.toLocaleDateString('es-ES', options);
-                        $('#last-scan').text(formattedDate);
-
-                        const qrStats = response.qrStats;
-
-                        // Orden fijo de los días (en inglés)
-                        const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                        const labels = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-                        const statsMap = Object.fromEntries(qrStats.map(item => [item.day, item.total]));
-                        const orderedTotals = daysOrder.map(day => statsMap[day] || 0);
-
-                        new Chart(trendCtx, {
-                            type: 'line',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'Escaneos por Día',
-                                    data: orderedTotals,
-                                    backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    borderWidth: 2,
-                                    pointBackgroundColor: '#ffffff',
-                                    pointBorderColor: 'rgba(54, 162, 235, 1)',
-                                    pointBorderWidth: 2,
-                                    tension: 0.4,
-                                    fill: true
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        display: true,
-                                        position: 'top'
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        grid: {
-                                            drawBorder: false
-                                        },
-                                        ticks: {
-                                            stepSize: 1
-                                        }
-                                    },
-                                    x: {
-                                        grid: {
-                                            display: false
-                                        }
-                                    }
-                                }
-                            }
-                        });
-
-                        // ================== CAMIONES / RUTAS ===================
-                        const routesStats = response.routesStats;
-                        const total = routesStats.reduce((sum, r) => sum + r.total, 0);
-
-                        const datasets = routesStats.map(r => ({
-                            label: r.route,
-                            data: [r.total],
-                            backgroundColor: [getRandomColor()],
-                            borderWidth: 2,
-                            borderColor: '#ffffff',
-                            borderRadius: 10,
-                            cutout: '80%',
-                            radius: '100%',
-                            circumference: (360 * r.total) / total,
-                            rotation: -90
-                        }));
-
-                        const distCtx = document.getElementById('distribution-chart').getContext('2d');
-
-                        const chart = new Chart(distCtx, {
-                            type: 'doughnut',
-                            data: {
-                                datasets: datasets
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                onHover: (event, elements) => {
-                                    event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
-                                },
-                                onClick(evt, elements) {
-                                    if (elements.length > 0) {
-                                        const index = elements[0].datasetIndex;
-                                        const dataset = chart.data.datasets[index];
-                                        const footerElement = document.getElementById('card-footer-text');
-                                        footerElement.textContent = `${dataset.label} - Cantidad: ${dataset.data[0]}`;
-                                    }
-                                },
-                                plugins: {
-                                    tooltip: {
-                                        callbacks: {
-                                            title: ctx => ctx[0].dataset.label,
-                                            label: ctx => `Cantidad: ${ctx.dataset.data[0]}`
-                                        }
-                                    },
-                                    legend: {
-                                        position: 'bottom',
-                                        labels: {
-                                            generateLabels: function(chart) {
-                                                return chart.data.datasets.map((dataset, i) => ({
-                                                    text: dataset.label,
-                                                    fillStyle: dataset.backgroundColor[0],
-                                                    strokeStyle: dataset.backgroundColor[0],
-                                                    index: i
-                                                }));
-                                            },
-                                            color: '#333',
-                                            font: {
-                                                size: 14
-                                            },
-                                            boxWidth: 14,
-                                            usePointStyle: true
-                                        }
-                                    }
-                                }
-                            },
-                            plugins: [centerTextPlugin]
-                        });
-                    }
-                },
-                error: function() {
-                    console.error('Error al cargar los datos de estadísticas.');
-                }
-            });
-
-            // Función para colores aleatorios
-            function getRandomColor() {
-                const letters = '0123456789ABCDEF';
-                let color = '#';
-                for (let i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-                return color;
-            }
-
-            // Plugin para mostrar texto en el centro
-            const centerTextPlugin = {
-                id: 'centerText',
-                beforeDraw(chart) {
-                    const {
-                        ctx,
-                        chartArea: {
-                            width,
-                            height
-                        }
-                    } = chart;
-                    ctx.save();
-                    ctx.font = 'bold 18px Segoe UI';
-                    ctx.fillStyle = '#333';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    if (chart.config._config.plugins && chart.config._config.plugins.length) {
-                        ctx.fillText(centerText.label || '', width / 2, height / 2 - 10);
-                        ctx.font = 'bold 20px Segoe UI';
-                        ctx.fillText(centerText.value || '', width / 2, height / 2 + 15);
-                    }
-                    ctx.restore();
-                }
-            };
-
-            // Variable opcional si usas texto dinámico en centro (puedes quitar si no se usa)
-            let centerText = {
-                label: '',
-                value: ''
-            };
-
-            // Cargar logs de escaneos con datatables
-            loadScanLogs();
-        });
-
-        function loadScanLogs() {
-            $('#scan-logs-table').DataTable({
-                destroy: true,
-                ajax: {
-                    url: 'controller/selectAction.php',
-                    type: 'POST',
-                    data: {
-                        action: 'getLogsScans'
-                    },
-                    dataSrc: function(json) {
-                        if (json.success) {
-                            return json.data;
-                        } else {
-                            alert('Error al cargar los logs.');
-                            return [];
-                        }
-                    }
-                },
-                columns: [{
-                        data: null,
-                        render: (data, type, row, meta) => meta.row + 1
-                    },
-                    {
-                        data: 'matricula'
-                    },
-                    {
-                        data: 'nombre'
-                    },
-                    {
-                        data: 'apellidos'
-                    },
-                    {
-                        data: 'grupo'
-                    },
-                    {
-                        data: null,
-                        render: (data, type, row) => {
-                            return `${row.nombreUsuario} ${row.apellidosUsuario}`;
-                        }
-                    },
-                    {
-                        data: 'nameRoute'
-                    },
-                    {
-                        data: 'dateScan'
-                    }
-                ],
-                order: [
-                    [7, 'desc']
-                ],
-                language: {
-                    url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json'
-                }
-            });
-        }
-    </script>
 </div>
+<script>
+  // Función global para capitalizar la primera letra
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  $(document).ready(function() {
+    // Inicializamos DataTable
+    const table = $('#scan-logs-table').DataTable({
+      dom:
+        "<'row mb-3'<'col-12 d-flex flex-wrap align-items-start'<'dt-buttons'B><'dt-search'f>>>" +
+        "t" +
+        "<'row mt-2'<'col-12 col-md-6'i><'col-12 col-md-6'p>>",
+      buttons: [
+        { extend: 'excelHtml5', text: 'Excel', className: 'btn btn-success btn-sm' },
+        { extend: 'pdfHtml5',   text: 'PDF',   className: 'btn btn-danger  btn-sm' }
+      ],
+      processing: true,
+      serverSide: false,
+      deferRender: true,
+
+      ajax: {
+        url: 'controller/selectAction.php',
+        type: 'POST',
+        data: { action: 'getLogsScans' },
+        dataSrc: json => json.success ? json.data : []
+      },
+
+      columns: [
+        { data: null, render: (d, t, r, m) => m.row + 1 },
+        { data: 'matricula' },
+        { data: 'nombre' },
+        { data: 'apellidos' },
+        { data: 'grado_grupo' },
+        { data: null, render: d => `${d.nombreUsuario} ${d.apellidosUsuario}` },
+        { data: 'medio_transporte' },
+        { data: null, render: d => d.role === 'chofer' ? 'Las Americas' : d.ubicacion },
+        {
+          data: 'fecha_hora',
+          render: function(data, type) {
+            if (type === 'display' || type === 'filter') {
+              const dt = new Date(data);
+              const opcionesFecha = {
+                weekday: 'long',
+                day:     'numeric',
+                month:   'long',
+                year:    'numeric'
+              };
+              const fechaStr = dt.toLocaleDateString('es-ES', opcionesFecha);
+              const horaStr  = dt.toLocaleTimeString('es-ES', {
+                hour:   'numeric',
+                minute: '2-digit',
+                hour12: true
+              });
+              return capitalize(fechaStr) + ', ' + horaStr;
+            }
+            return data;
+          }
+        }
+      ],
+
+      order: [[8, 'desc']],
+      language: { url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json' },
+
+      initComplete: function() {
+        const api  = this.api();
+        const data = api.rows({ search: 'applied' }).data().toArray();
+        const unique = arr => [...new Set(arr)].sort();
+
+        const fechasRaw      = unique(data.map(r => r.fecha_hora));
+        const medios         = unique(data.map(r => r.medio_transporte));
+        const ubicacionesRaw = unique(data.map(r => r.role === 'chofer' ? 'Las Americas' : r.ubicacion));
+        const grados         = unique(data.map(r => r.grado_grupo));
+
+        // Rellenar cada <select> usando la nueva función
+        fillSelect('#filter-fecha',      fechasRaw,      true);
+        fillSelect('#filter-medio',      medios,         false);
+        fillSelect('#filter-ubicacion',  ubicacionesRaw, false);
+        fillSelect('#filter-grado',      grados,         false);
+      }
+    });
+
+    /**
+     * Rellena un <select> dado con opciones.
+     * Si isFecha es true, usa el texto formateado como value y label,
+     * para que el .search() coincida con lo que muestra la celda.
+     */
+    function fillSelect(selector, list, isFecha) {
+      const $sel = $(selector).empty().append('<option value="">Todos</option>');
+      list.forEach(val => {
+        if (isFecha) {
+          const dt = new Date(val);
+          const fechaLabel = dt.toLocaleDateString('es-ES', {
+            weekday: 'long',
+            day:     'numeric',
+            month:   'long',
+            year:    'numeric'
+          });
+          const label = capitalize(fechaLabel);
+          $sel.append(`<option value="${label}">${label}</option>`);
+        } else {
+          $sel.append(`<option value="${val}">${val}</option>`);
+        }
+      });
+    }
+
+    // Listeners para filtrar en tiempo real
+    $('#filter-fecha').on('change',     () => table.column(8).search($('#filter-fecha').val()).draw());
+    $('#filter-medio').on('change',     () => table.column(6).search($('#filter-medio').val()).draw());
+    $('#filter-ubicacion').on('change', () => table.column(7).search($('#filter-ubicacion').val()).draw());
+    $('#filter-grado').on('change',     () => table.column(4).search($('#filter-grado').val()).draw());
+  });
+</script>

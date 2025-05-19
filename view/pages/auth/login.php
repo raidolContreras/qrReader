@@ -49,10 +49,6 @@ if (isset($_SESSION['sesion'])) {
         </div>
         <button type="submit">Ingresar</button>
     </form>
-
-    <div class="extra-links">
-        <a href="#">¿Olvidaste tu contraseña?</a>
-    </div>
 </div>
 
 <!-- Scripts para el login -->
