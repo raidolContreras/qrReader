@@ -445,6 +445,7 @@ class FormsModel
             s.apellidos,
             CONCAT(s.grado, ' ', s.grupo)          AS grado_grupo,
             DATE_FORMAT(s.dateScan,'%Y-%m-%d %H:%i:%s') AS fecha_hora,
+            r.registerType,
             r.nameRoute                            AS medio_transporte,
             r.nameRoute                            AS ubicacion,
             u.role,

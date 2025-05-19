@@ -160,7 +160,13 @@
         { data: 'grado_grupo' },
         { data: null, render: d => `${d.nombreUsuario} ${d.apellidosUsuario}` },
         { data: 'medio_transporte' },
-        { data: null, render: d => d.role === 'chofer' ? 'Las Americas' : d.ubicacion },
+        { 
+          data: null, 
+          render: d => 
+            d.role === 'chofer' 
+              ? 'Las Americas' 
+              : ((d.role === 'coordinador' && d.registerType === 3)  ? 'Campus Lázaro Cárdenas' : d.ubicacion) 
+        },
         {
           data: 'fecha_hora',
           render: function(data, type) {
