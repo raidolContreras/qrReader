@@ -8,7 +8,7 @@ $users = FormsController::ctrGetUsersByRoute();
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <div class="content">
     <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#routeModal">
-        <i class="fas fa-plus"></i> Nueva punto de registro
+        <i class="fas fa-plus"></i> Nuevo punto de registro
     </button>
     <div class="table-responsive">
         <table id="routesTable" class="table table-striped">
