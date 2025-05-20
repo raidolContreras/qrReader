@@ -38,7 +38,7 @@ $(document).ready(() => {
             // 1. Nombre de la ruta
             {
                 data: 'nameRoute',
-                title: 'Ruta'
+                title: 'Punto de registro'
             },
             // 2. Lista de usuarios (nombre, apellidos y rol)
             {
