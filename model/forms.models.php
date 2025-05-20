@@ -443,7 +443,7 @@ class FormsModel
             s.matricula,
             s.nombre,
             s.apellidos,
-            CONCAT(s.grupo)          AS grado_grupo,
+            CONCAT(s.grado, ' ', s.grupo)          AS grado_grupo,
             DATE_FORMAT(s.dateScan,'%Y-%m-%d %H:%i:%s') AS fecha_hora,
             r.registerType,
             r.nameRoute                            AS medio_transporte,
