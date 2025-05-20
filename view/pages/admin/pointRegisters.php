@@ -31,13 +31,13 @@ $users = FormsController::ctrGetUsersByRoute();
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="routeModalLabel">Nueva Ruta</h5>
+                <h5 class="modal-title" id="routeModalLabel">Nueva punto de registro</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="newRouteForm">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre de la ruta</label>
+                        <label for="nombre" class="form-label">Nombre del punto de registro</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del punto de acceso" required>
                     </div>
                     <div class="mb-3">
@@ -73,14 +73,14 @@ $users = FormsController::ctrGetUsersByRoute();
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editRouteModalLabel">Editar Ruta</h5>
+        <h5 class="modal-title" id="editRouteModalLabel">Editar punto de registro</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="editRouteForm">
         <div class="modal-body">
           <input type="hidden" id="editRouteId" name="idRoute">
           <div class="mb-3">
-            <label for="editNombre" class="form-label">Nombre de la ruta</label>
+            <label for="editNombre" class="form-label">Nombre del punto de registro</label>
             <input type="text" class="form-control" id="editNombre" name="nameRoute" required>
           </div>
           <div class="mb-3">
