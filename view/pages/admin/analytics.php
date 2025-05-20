@@ -61,6 +61,7 @@
       <div class="col-12">
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+              <h5 class="mb-0 fw-bold">Bitácora de Escaneos</h5>
 
             <!-- filtros con SELECT dinámicos -->
             <div class="filter-group mb-3">
@@ -91,7 +92,6 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
-              <h5 class="mb-0 fw-bold">Bitácora de Escaneos</h5>
               <button class="btn btn-success btn-sm" onclick="table.ajax.reload()">
                 <i class="fas fa-sync-alt me-1"></i>Actualizar
               </button>
