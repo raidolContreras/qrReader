@@ -109,7 +109,7 @@
                     <th>Apellidos</th>
                     <th>Grado y Grupo</th>
                     <th>Registrado por</th>
-                    <th>Medio de transporte</th>
+                    <th>Punto de acceso</th>
                     <th>Ubicación</th>
                     <th>Fecha y hora</th>
                   </tr>
