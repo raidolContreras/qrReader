@@ -3,8 +3,8 @@
 session_start();
 if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     $pagina = $_GET['pagina'] ?? 'analytics';
-} elseif(isset($_SESSION['role']) && $_SESSION['role'] == 'coordinador') {
-    $pagina = $_GET['pagina'] ?? 'analytics';
+} elseif(isset($_SESSION['role']) && $_SESSION['role'] == 'vigilante') {
+    $pagina = $_GET['pagina'] ?? 'qrScan';
 } else {
     $pagina = $_GET['pagina'] ?? 'qrScan';
 }
@@ -15,9 +15,8 @@ $choferNavs = [
     'routes' => 'Seleccionar una ruta',
 ];
 
-$coordinatorNavs = [
-    'qrScan' => 'Lector de Qr',
-    'analytics' => 'Analíticas',
+$vigilanteNavs = [
+    'qrScan' => 'Lector de Qr'
 ];
 
 $adminNavs = [
@@ -25,6 +24,7 @@ $adminNavs = [
     'users' => 'Lista de usuarios',
     'pointRegisters' => 'Puntos de registro',
     'analytics' => 'Analíticas',
+    'buses' => 'Autobuses',
 ];
 
 if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
@@ -35,10 +35,10 @@ if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
         } else {
             includeError404();
         }
-    } elseif ($_SESSION['role'] == 'coordinador') {
-        if (array_key_exists($pagina, $coordinatorNavs)) {
-            $title = $coordinatorNavs[$pagina];
-            includeDataCoordinador($pagina, 'coordinador');
+    } elseif ($_SESSION['role'] == 'vigilante') {
+        if (array_key_exists($pagina, $vigilanteNavs)) {
+            $title = $vigilanteNavs[$pagina];
+            includeDataVigilante($pagina, 'vigilante');
         } else {
             includeError404();
         }
@@ -47,14 +47,14 @@ if (isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
             if ($pagina == 'qrScan') {
                 if (isset($_SESSION['route'])) {
                     $title = $choferNavs[$pagina];
-                    includeDataNoNavs($pagina, 'chofer');
+                    includeDataVigilante($pagina, 'chofer');
                 } else {
                     header("Location: routes");
                     exit();
                 }
             } else {
                 $title = $choferNavs[$pagina];
-                includeDataNoNavs($pagina, 'chofer');
+                includeDataVigilante($pagina, 'chofer');
             }
         } else {
             $title = 'Error 404';
@@ -83,11 +83,11 @@ function includeData($pagina, $roleNav)
     require 'view/js.php';
 }
 
-function includeDataCoordinador($pagina, $roleNav)
+function includeDataVigilante($pagina, $roleNav)
 {
     require 'view/css.php';
     require 'view/navs/navbar.php';
-    require 'view/navs/sidenavCoordinador.php';
+    require 'view/navs/sidenavVigilante.php';
     require "view/pages/$roleNav/$pagina.php";
     require 'view/js.php';
 }

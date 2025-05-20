@@ -464,4 +464,32 @@ class FormsModel
     return $rows;
 }
 
+    static public function mdlNewBus($numberBus)
+    {
+        $pdo = Conexion::conectar();
+        $sql = "INSERT INTO buses (numberBus) VALUES (:numberBus)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":numberBus", $numberBus, PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            $result = 'ok';
+        } else {
+            $result = $stmt->errorInfo();
+        }
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
+
+    static public function mdlGetBuses()
+    {
+        $pdo = Conexion::conectar();
+        $sql = "SELECT * FROM buses";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        $stmt = null;
+        return $result;
+    }
+
 }

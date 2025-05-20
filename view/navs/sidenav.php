@@ -15,4 +15,5 @@
         Usuarios</a>
     <a class="mb-1 <?php echo $currentPage == 'pointRegisters' ? 'active' : ''; ?>" href="pointRegisters"><i
             class="fas fa-exchange-alt"></i> Puntos de Registro</a>
+    <!-- <a class="mb-1 <?php  //echo $currentPage == 'buses' ? 'active' : ''; ?>" href="buses"><i class="fas fa-bus"></i> Buses</a> -->
 </div>

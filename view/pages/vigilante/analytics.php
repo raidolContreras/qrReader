@@ -192,7 +192,7 @@
           data: null,
           render: d =>
             d.role === 'chofer' ?
-            'Las Americas' : ((d.role === 'coordinador' && d.registerType === 3) ? 'Campus Lázaro Cárdenas' : d.ubicacion)
+            'Las Américas' : ((d.role === 'coordinador' && d.registerType === 3) ? 'Campus Lázaro Cárdenas' : d.ubicacion)
         },
         {
           data: 'fecha_hora',
@@ -256,7 +256,7 @@
         fillSelect('#filter-medio', unique(data.map(r => r.medio_transporte)));
         fillSelect('#filter-ubicacion', unique(data.map(r =>
           r.role === 'chofer' ?
-          'Las Americas' :
+          'Las Américas' :
           ((r.role === 'coordinador' && r.registerType === 3) ?
             'Campus Lázaro Cárdenas' :
             r.ubicacion)

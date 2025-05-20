@@ -48,7 +48,7 @@
                     <div class="mb-3">
                         <label class="form-label">Rol</label>
                         <select name="role" id="role" class="form-select">
-                            <option value="coordinador">Coordinador</option>
+                            <option value="vigilante">Vigilante</option>
                             <option value="chofer">Chofer</option>
                             <option value="admin">Administrador</option>
                         </select>
@@ -88,7 +88,7 @@
                         <label class="form-label">Rol</label>
                         <select name="role" id="editRole" class="form-select">
                             <option value="admin">Administrador</option>
-                            <option value="coordinador">Coordinador</option>
+                            <option value="vigilante">Vigilante</option>
                             <option value="chofer">Chofer</option>
                         </select>
                     </div>
@@ -126,8 +126,8 @@ $(document).ready(() => {
                 render: role => {
                     if (role === 'admin') {
                         return '<span class="badge bg-success">Administrador</span>';
-                    } else if (role === 'coordinador') {
-                        return '<span class="badge bg-secondary">Coordinador</span>';
+                    } else if (role === 'vigilante') {
+                        return '<span class="badge bg-secondary">Vigilante</span>';
                     } else if (role === 'chofer') {
                         return '<span class="badge bg-secondary">Chofer</span>';
                     }

@@ -127,26 +127,10 @@
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="app-header">
-    <img src="assets/images/logo-color.png" alt="UNIMO">
-  </header>
-
-  <!-- Botón Logout -->
-  <button class="logout-fab logout"><i class="fas fa-sign-out-alt"></i><span>Cerrar</span></button>
-    <input type="hidden" id="idUser" value="<?php echo $_SESSION['idUser']; ?>">
-  <!-- Grid de rutas -->
   <main>
     <section id="routesWrapper" class="routes-wrapper">
     </section>
   </main>
-
-  <!-- Navegación inferior -->
-  <nav class="bottom-nav">
-    <a href="qrScan"   class="nav-item"><i class="fas fa-qrcode"></i></a>
-    <a href="routes"   class="nav-item active"><i class="fas fa-route"></i><span class="dot"></span></a>
-    <a href="#"        class="nav-item logout"><i class="fas fa-sign-out-alt"></i></a>
-  </nav>
 
   <!-- jQuery para peticiones rápidas -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

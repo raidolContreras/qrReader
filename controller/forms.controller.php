@@ -195,6 +195,18 @@ class FormsController
         $result = FormsModel::mdlGetLogsScans();
         return $result;
     }
+
+    static public function ctrNewBus($numero) {
+        $result = FormsModel::mdlNewBus($numero);
+        return $result;
+    }
+
+    static public function ctrGetBuses() {
+        $result = FormsModel::mdlGetBuses();
+        return $result;
+    }
+
+
 }
 
 class SecureVault
@@ -324,7 +336,7 @@ class SecureVault
                 break;
 
             case 'role':
-                $rolesPermitidos = ['admin', 'coordinador', 'chofer'];
+                $rolesPermitidos = ['admin', 'vigilante', 'chofer'];
                 if (!in_array($dato, $rolesPermitidos)) {
                     self::responseError("El rol no es válido.");
                 }

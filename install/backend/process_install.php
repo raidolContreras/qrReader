@@ -86,12 +86,12 @@ try {
     $user_password_enc   = SecureVault::encryptData('Unimo2025+', 'password');
     $user_role_enc       = SecureVault::encryptData('chofer', 'role');
 
-    // Encriptar datos para un segundo usuario de prueba (coordinador)
-    $user2_nombre_enc     = SecureVault::encryptData('Coordinador', 'name');
+    // Encriptar datos para un segundo usuario de prueba (vigilante)
+    $user2_nombre_enc     = SecureVault::encryptData('Vigilante', 'name');
     $user2_apellidos_enc  = SecureVault::encryptData('Ejemplo', 'name');
-    $user2_email_enc      = SecureVault::encryptData('coordinador@prueba.com', 'email');
+    $user2_email_enc      = SecureVault::encryptData('vigilante@prueba.com', 'email');
     $user2_password_enc   = SecureVault::encryptData('Unimo2025+', 'password');
-    $user2_role_enc       = SecureVault::encryptData('coordinador', 'role');
+    $user2_role_enc       = SecureVault::encryptData('vigilante', 'role');
 
     $sqlInsert = "INSERT INTO users (nombre, apellidos, email, password, role)
                   VALUES (:nombre, :apellidos, :email, :password, :role)";
@@ -118,7 +118,7 @@ try {
     $stmt->execute();
     $stmt->closeCursor();
 
-    // Insertar segundo usuario de prueba (coordinador)
+    // Insertar segundo usuario de prueba (vigilante)
     $stmt = $pdo->prepare($sqlInsert);
     $stmt->bindParam(":nombre", $user2_nombre_enc, PDO::PARAM_STR);
     $stmt->bindParam(":apellidos", $user2_apellidos_enc, PDO::PARAM_STR);
