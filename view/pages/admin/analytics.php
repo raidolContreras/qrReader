@@ -201,7 +201,13 @@
 
         const fechasRaw      = unique(data.map(r => r.fecha_hora));
         const medios         = unique(data.map(r => r.medio_transporte));
-        const ubicacionesRaw = unique(data.map(r => r.role === 'chofer' ? 'Las Americas' : r.ubicacion));
+        const ubicacionesRaw = unique(
+          data.map(r => 
+            r.role === 'chofer'
+              ? 'Las Americas'
+              : ((r.role === 'coordinador' && r.registerType === 3) ? 'Campus Lázaro Cárdenas' : r.ubicacion)
+          )
+        );
         const grados         = unique(data.map(r => r.grado_grupo));
 
         // Rellenar cada <select> usando la nueva función
