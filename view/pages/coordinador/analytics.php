@@ -195,27 +195,41 @@
       language: { url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json' },
 
       initComplete: function() {
-        const api  = this.api();
-        const data = api.rows({ search: 'applied' }).data().toArray();
-        const unique = arr => [...new Set(arr)].sort();
+  const api  = this.api();
+  const data = api.rows({ search: 'applied' }).data().toArray();
+  const unique = arr => [...new Set(arr)].sort();
 
-        const fechasRaw      = unique(data.map(r => r.fecha_hora));
-        const medios         = unique(data.map(r => r.medio_transporte));
-        const ubicacionesRaw = unique(
-          data.map(r => 
-            r.role === 'chofer'
-              ? 'Las Americas'
-              : ((r.role === 'coordinador' && r.registerType === 3) ? 'Campus Lázaro Cárdenas' : r.ubicacion)
-          )
-        );
-        const grados         = unique(data.map(r => r.grado_grupo));
+  // 1. Definimos la forma en que queremos el label
+  const opcionesFecha = {
+    weekday: 'long',
+    day:     'numeric',
+    month:   'long',
+    year:    'numeric'
+  };
 
-        // Rellenar cada <select> usando la nueva función
-        fillSelect('#filter-fecha',      fechasRaw,      true);
-        fillSelect('#filter-medio',      medios,         false);
-        fillSelect('#filter-ubicacion',  ubicacionesRaw, false);
-        fillSelect('#filter-grado',      grados,         false);
-      }
+  // 2. Mapear cada registro a su label (sin hora) y luego uniquear
+  const fechasLabels = unique(
+    data.map(r => {
+      const dt = new Date(r.fecha_hora);
+      // toLocaleDateString ya quita la hora
+      const lbl = dt.toLocaleDateString('es-ES', opcionesFecha);
+      // capitalizar la primera letra
+      return lbl.charAt(0).toUpperCase() + lbl.slice(1);
+    })
+  );
+
+  // Rellenar los selects (ahora ya no necesitamos 'isFecha')
+  fillSelect('#filter-fecha',     fechasLabels);
+  fillSelect('#filter-medio',     unique(data.map(r => r.medio_transporte)));
+  fillSelect('#filter-ubicacion', unique(data.map(r =>
+    r.role === 'chofer'
+      ? 'Las Americas'
+      : ((r.role === 'coordinador' && r.registerType === 3)
+          ? 'Campus Lázaro Cárdenas'
+          : r.ubicacion)
+  )));
+  fillSelect('#filter-grado',     unique(data.map(r => r.grado_grupo)));
+},
     });
 
     /**
